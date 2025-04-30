@@ -22,6 +22,10 @@ async function login(username, password) {
 
 async function getData(token, method) {
   try {
+    let date = new Date();
+    const customDate = new Date(2024, 3, 30, 10, 30, 0);
+    console.log('Current date:' + customDate);
+
     const response = await fetch(`/api/healthConnect/get/${method}`, {
       method: 'POST',
       headers: {
@@ -29,6 +33,7 @@ async function getData(token, method) {
       },
       body: JSON.stringify({
         accessToken: token,
+        lastSyncedAt: customDate,
         queries: {}
       })
     });

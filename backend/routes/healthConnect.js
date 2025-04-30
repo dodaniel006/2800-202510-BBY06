@@ -23,7 +23,11 @@ router.post('/login', async (req, res) => {
 
 router.post('/get/:method', async (req, res) => {
   const { method } = req.params;
-  const { accessToken, queries } = req.body;
+  const { accessToken, queries = {}, lastSyncedAt } = req.body;
+
+  if (lastSyncedAt) {
+    queries.start = { ...(queries.start || {}), $gt: lastSyncedAt };
+  }
 
   try {
     const response = await fetch(`https://healthapi.yehorskudilov.com/api/v2/fetch/${method}`, {
@@ -42,6 +46,7 @@ router.post('/get/:method', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 
