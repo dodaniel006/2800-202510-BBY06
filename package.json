@@ -12,11 +12,11 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
-  "main": "index.js",
+  "type": "module",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js",
-    "server": "nodemon index.js",
+    "start": "node app.js",
+    "server": "nodemon app.js",
     "client": "browser-sync start --proxy localhost:8100 --files '*.html, *.css' --port 8100 --no-ui --no-notify\"",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
