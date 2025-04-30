@@ -5,6 +5,14 @@
 
 ---
 
+## Team Members
+- David Martinez (A)
+- Jacob Lebl (B)
+- Yehor Skudilov (A)
+- Daniel Do (A)
+- Hazel Fullijames (A)
+
+
 ## Features
 
 Example:
