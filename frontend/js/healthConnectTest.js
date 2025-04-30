@@ -43,31 +43,42 @@ async function getData(token, method) {
 }
 
 
-function displayResults(array) {
+function displayResults(data) {
   const container = document.getElementById('results-container');
   container.innerHTML = ""; // Clear existing
 
-  if (!Array.isArray(array)) {
-    container.innerText = 'Expected an array but got:\n' + JSON.stringify(array, null, 2);
-    console.error('displayResults expected array, got:', array);
-    return;
-  }
+  const renderObject = (obj, indent = 0) => {
+    const pad = '&nbsp;'.repeat(indent * 2);
+    let html = '';
 
-  array.forEach(item => {
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === 'object' && value !== null) {
+        html += `${pad}<strong>${key}:</strong><br>${renderObject(value, indent + 1)}`;
+      } else {
+        html += `${pad}<strong>${key}:</strong> ${value}<br>`;
+      }
+    }
+
+    return html;
+  };
+
+  if (Array.isArray(data)) {
+    data.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.style.marginBottom = '1em';
+      div.innerHTML = `<strong>Item ${index + 1}:</strong><br>` + renderObject(item) + `<hr>`;
+      container.appendChild(div);
+    });
+  } else if (typeof data === 'object' && data !== null) {
     const div = document.createElement('div');
-    div.style.marginBottom = '1em';
-
-    div.innerHTML = `
-      <strong>App:</strong> ${item.app} <br>
-      <strong>Count:</strong> ${item.data?.count ?? 'N/A'} <br>
-      <strong>Start:</strong> ${item.start} <br>
-      <strong>End:</strong> ${item.end} <br>
-      <hr>
-    `;
-
+    div.innerHTML = renderObject(data);
     container.appendChild(div);
-  });
+  } else {
+    container.innerText = String(data);
+  }
 }
+
 
 
 
