@@ -32,6 +32,10 @@ app.get('/about', (req, res) => {
 res.sendFile(path.join(__dirname, 'frontend/views/about.html'))
 })
 
+app.get('/test', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/views/healthConnectTest.html'))
+  })
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
