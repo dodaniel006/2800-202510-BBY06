@@ -17,7 +17,7 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "client": "browser-sync start --proxy localhost:8000 --files '*.html, *.css' --port 8000 --no-ui --no-notify\"",
+    "client": "browser-sync start --proxy localhost:8100 --files '*.html, *.css' --port 8100 --no-ui --no-notify\"",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
