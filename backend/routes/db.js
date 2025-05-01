@@ -1,7 +1,6 @@
 
 import { Router } from 'express';
-import connectToMongo from '../config/db.js'; // Adjust the path as necessary
-
+import connectToMongo from '../config/db.js';
 const router = Router();
 
 
