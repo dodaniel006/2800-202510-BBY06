@@ -75,6 +75,27 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/login", (req, res) => {
+  res.render("login", {
+    title: "Login",
+    pageCSS: "/css/login.css",
+    pageJS: "/js/login.js",
+    showNav: false,
+    showFooter: false
+  });
+});
+
+
+app.get("/register", (req, res) => {
+  res.render("register", {
+    title: "Register",
+    pageCSS: "/css/register.css",
+    pageJS: "/js/register.js",
+    showNav: false,
+    showFooter: false
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
