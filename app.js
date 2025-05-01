@@ -4,6 +4,7 @@ import fs from "fs";
 import { fileURLToPath } from 'url';
 import expressLayouts from "express-ejs-layouts";
 
+//route imports
 import healthConnect from './backend/routes/healthConnect.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,7 +19,7 @@ app.use(express.json());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "frontend/views"));
 app.use(expressLayouts);
-app.set("layout", "layouts/default"); // views/layout.ejs
+app.set("layout", "layouts/default");
 app.use(express.static(path.join(__dirname, "frontend")));
 
 //Frontend
@@ -64,7 +65,7 @@ fs.readdirSync(autoRouteDir).forEach(file => {
   }
 });
 
-
+//Manual param routes
 app.get("/", (req, res) => {
   res.render("index", {
     title: "Index",
