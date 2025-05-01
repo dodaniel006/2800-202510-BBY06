@@ -47,8 +47,4 @@ router.post('/get/:method', async (req, res) => {
   }
 });
 
-
-
-
-
 export default router;

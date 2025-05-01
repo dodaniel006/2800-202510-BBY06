@@ -14,15 +14,16 @@
   "author": "",
   "type": "module",
   "main": "app.js",
-"scripts": {
-  "start": "node app.js",
-  "server": "nodemon app.js",
-"client": "browser-sync start --proxy localhost:8100 --files \"frontend/views/**/*.html, frontend/js/**/*.js, frontend/css/**/*.css\" --port 3000",
-  "dev": "concurrently \"npm run server\" \"npm run client\""
-},
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "browser-sync start --proxy localhost:8100 --files \"frontend/views/**/*.html, frontend/js/**/*.js, frontend/css/**/*.css\" --port 3000",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
   "dependencies": {
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongodb": "^6.16.0"
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",
