@@ -47,6 +47,33 @@ async function getData(token, method) {
   }
 }
 
+async function getAllData(token) {
+  try {
+    const customDate = new Date(2024, 3, 30, 10, 30, 0); // April is month 3 (0-based)
+    console.log('Custom date:', customDate);
+
+    const response = await fetch('/api/healthConnect/getAll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        accessToken: token,
+        lastSyncedAt: customDate,
+        queries: {}
+      })
+    });
+
+    const data = await response.json();
+    console.log('All health data:', data);
+    return data;
+  } catch (err) {
+    console.error('Fetch error:', err);
+    return null;
+  }
+}
+
+
 
 function displayResults(data) {
   const container = document.getElementById('results-container');
@@ -84,6 +111,31 @@ function displayResults(data) {
   }
 }
 
+async function syncAllHealthData(token) {
+  try {
+    const customDate = new Date(2024, 3, 30, 10, 30, 0); // April 30, 2024 10:30:00
+    console.log("Syncing since:", customDate.toISOString());
+
+    const response = await fetch('/api/db/syncAll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        accessToken: token,
+        lastSyncedAt: customDate.toISOString(),
+        queries: {} // optional filters
+      })
+    });
+
+    const result = await response.json();
+    console.log("Sync results:", result);
+    return result;
+  } catch (err) {
+    console.error('Sync failed:', err);
+    return null;
+  }
+}
 
 
 
@@ -100,16 +152,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = await login(username, password); // await is now valid
     console.log('Token:', token); // Log the token for debugging
     if (token) {
-      let data = await getData(token, method); // Call your data fetcher
+      let data
+      if(method == "GetAll"){
+        data = await getAllData(token);
+        syncAllHealthData(token); // Call your data fetcher
+      }
+      else{
+         data = await getData(token, method); // Call your data fetcher
+
+      }
       displayResults(data); // Display the results
     } else {
       console.error('Login failed — no token received');
     }
   });
 });
-
-
-fetch('/api/healthConnect/test')
-  .then(res => res.json())
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
