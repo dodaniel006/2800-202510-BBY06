@@ -8,6 +8,9 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/html/main.html')
 })
+app.get('/game', (req, res) => {
+  res.sendFile(__dirname + '/public/game/index.html')
+})
 app.get('/about', (req, res) => {
   res.sendFile(__dirname + '/public/html/about.html')
 })
