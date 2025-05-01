@@ -1,0 +1,42 @@
+<main class="container">
+  <h1 class="display-4">Enter your food for the day here</h1>
+  <form>
+    <div class="mb-3">
+      <label for="inputFood" class="form-label">What did you eat?</label>
+      <input
+        type="text"
+        class="form-control"
+        id="foodInput"
+        aria-describedby="foodHelp"
+        placeholder="Enter food item"
+      />
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label for="calorieInput" class="form-label">Calorie</label>
+        <input
+          type="number"
+          class="form-control"
+          id="calorieInput"
+          min="0"
+          max="10000"
+        />
+      </div>
+      <div class="col">
+        <label for="quantityInput" class="form-label">Quantity</label>
+        <input
+          type="number"
+          class="form-control"
+          id="quantityInput"
+          min="0"
+          max="10000"
+        />
+      </div>
+      <div class="col d-flex align-items-end mx-auto">
+        <button type="submit" class="btn btn-primary">Add</button>
+      </div>
+    </div>
+    <div class="mb-3"></div>
+  </form>
+</main>
