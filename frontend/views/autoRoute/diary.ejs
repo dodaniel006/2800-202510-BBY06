@@ -1,16 +1,14 @@
 <main class="container">
   <h1 class="display-4">Enter your food for the day here</h1>
   <form>
-    <div class="mb-3">
-      <label for="inputFood" class="form-label">What did you eat?</label>
-      <input
-        type="text"
-        class="form-control"
-        id="foodInput"
-        aria-describedby="foodHelp"
-        placeholder="Enter food item"
-      />
-    </div>
+    <label for="inputFood" class="form-label">What did you eat?</label>
+    <input
+      type="text"
+      class="form-control"
+      id="foodInput"
+      placeholder="Enter food item..."
+      aria-describedby="foodHelp"
+    />
 
     <div class="row">
       <div class="col">
@@ -21,6 +19,8 @@
           id="calorieInput"
           min="0"
           max="10000"
+          placeholder="e.g. 100..."
+          aria-describedby="calorieHelp"
         />
       </div>
       <div class="col">
@@ -31,12 +31,24 @@
           id="quantityInput"
           min="0"
           max="10000"
+          placeholder="e.g. 1, 2..."
+          aria-describedby="quantityHelp"
         />
       </div>
       <div class="col d-flex align-items-end mx-auto">
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" id="addFoodItem" class="btn btn-primary">
+          Add
+        </button>
       </div>
     </div>
-    <div class="mb-3"></div>
   </form>
+
+  <div class="col mb-3 mt-3 foodWindow">
+    <ul id="foodList" class="bb-bg-wallet-green-glow">
+      <li class="foodItem py-3">
+        <span id="details1" class="px-3"> 4x Apple </span>
+        <span id="details2" class="px-3 foodItemCalorie">1500</span>
+      </li>
+    </ul>
+  </div>
 </main>
