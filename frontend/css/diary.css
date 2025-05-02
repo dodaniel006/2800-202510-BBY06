@@ -1,3 +1,7 @@
+body {
+  overflow-x: hidden;
+}
+
 .foodWindow {
   height: 40vh;
   border: 1px solid #000;
@@ -9,12 +13,19 @@
 }
 
 .foodItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   list-style-type: none;
-  padding-left: 0;
-  padding-bottom: 2px;
+  padding: 0px;
+  height: 60px;
   border-bottom: 1px solid rgb(75, 75, 75);
 }
 
-.foodItemCalorie {
-  float: right;
+.deleteItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: rgb(0, 0, 0);
 }
