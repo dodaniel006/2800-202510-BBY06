@@ -1,0 +1,13 @@
+.resizer { 
+    display: flex; 
+    margin-left: auto; 
+    margin-right: auto;
+    padding: 0; 
+    height: 51vw;
+    width: 50vw;
+    overflow: hidden 
+}
+    .resizer > .resized { 
+        flex-grow: 1; 
+        border: 0 
+    }

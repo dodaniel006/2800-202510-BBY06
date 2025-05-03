@@ -1,0 +1,136 @@
+:root {
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray-dark: #1a1f1a;   
+  --color-gray-light: #e4f2e6;  
+
+
+  --wallet-green: #6ef07f;            
+  --wallet-green-dark: #3ca856;       
+  --wallet-green-light: #98f9a4;       
+  --wallet-green-glow: #baffc2;        
+
+  --chart-green: #2ee65f;             
+
+  --bg-primary: var(--wallet-green-dark);     
+  --bg-surface: #2f6644;                        
+  --bg-surface-tr: #2f6644cc;                   
+
+  --text-primary: #ffffff;
+  --text-muted: #d1f8dc;
+
+  --glow-green: 0 0 12px var(--wallet-green-glow);
+  --glow-green-strong: 0 0 25px var(--wallet-green-glow);
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+footer {
+  text-align: center;
+  padding: 0.5rem 1rem;
+}
+
+
+body {
+  display: grid;
+
+}
+
+nav {
+  padding: 1rem;
+}
+
+.profile-nav{
+  text-decoration: none;
+  padding: 5pt 10pt;
+  width: 90%;
+  margin: auto;
+  text-align: start;
+  display: block;
+  border-radius: 8pt !important;
+  color: var(--color-white);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-link{
+  border-radius: 8pt;
+}
+
+.nav-link:hover{
+  background-color: var(--color-white) !important;
+  color: black !important;
+}
+.nav-link{
+  color : var(--color-white) !important;
+}
+
+.active-link{
+  background-color: var(--color-white) !important;
+  color: black !important;
+}
+
+
+.profile-nav:hover {
+  background-color: var(--color-white) !important;
+  color: black !important;
+}
+
+
+footer {
+  text-align: center;
+  padding: 0.5rem 1rem;
+}
+
+/* === TEXT COLORS === */
+.bb-text-black               { color: var(--color-black) !important; }
+.bb-text-white               { color: var(--color-white) !important; }
+.bb-text-gray-dark           { color: var(--color-gray-dark) !important; }
+.bb-text-gray-light          { color: var(--color-gray-light) !important; }
+
+.bb-text-wallet-green        { color: var(--wallet-green) !important; }
+.bb-text-wallet-green-dark   { color: var(--wallet-green-dark) !important; }
+.bb-text-wallet-green-light  { color: var(--wallet-green-light) !important; }
+.bb-text-wallet-green-glow   { color: var(--wallet-green-glow) !important; }
+.bb-text-chart-green         { color: var(--chart-green) !important; }
+
+.bb-text-primary             { color: var(--text-primary) !important; }
+.bb-text-muted               { color: var(--text-muted) !important; }
+
+.bb-text-surface             { color: var(--bg-surface) !important; }
+
+/* === BACKGROUND COLORS === */
+.bb-bg-black                 { background-color: var(--color-black) !important; }
+.bb-bg-white                 { background-color: var(--color-white) !important; }
+.bb-bg-gray-dark             { background-color: var(--color-gray-dark) !important; }
+.bb-bg-gray-light            { background-color: var(--color-gray-light) !important; }
+
+.bb-bg-wallet-green          { background-color: var(--wallet-green) !important; }
+.bb-bg-wallet-green-dark     { background-color: var(--wallet-green-dark) !important; }
+.bb-bg-wallet-green-light    { background-color: var(--wallet-green-light) !important; }
+.bb-bg-wallet-green-glow     { background-color: var(--wallet-green-glow) !important; }
+.bb-bg-chart-green           { background-color: var(--chart-green) !important; }
+
+.bb-bg-primary               { background-color: var(--bg-primary) !important; }
+.bb-bg-surface               { background-color: var(--bg-surface) !important; }
+.bb-bg-surface-tr            { background-color: var(--bg-surface-tr) !important; }
+
+/* === GLOW EFFECTS === */
+.bb-glow-green               { box-shadow: var(--glow-green) !important; }
+.bb-glow-green-strong        { box-shadow: var(--glow-green-strong) !important; }

@@ -1,0 +1,48 @@
+<h2>Get Health Data</h2>
+  <form id="login-form">
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <select id="method" required>
+        <option value="" disabled selected>Select method</option>
+        <option value="GetAll">*GetAll</option>
+        <option value="activeCaloriesBurned">Active Calories Burned</option>
+        <option value="basalBodyTemperature">Basal Body Temperature</option>
+        <option value="basalMetabolicRate">Basal Metabolic Rate</option>
+        <option value="bloodGlucose">Blood Glucose</option>
+        <option value="bloodPressure">Blood Pressure</option>
+        <option value="bodyFat">Body Fat</option>
+        <option value="bodyTemperature">Body Temperature</option>
+        <option value="boneMass">Bone Mass</option>
+        <option value="cervicalMucus">Cervical Mucus</option>
+        <option value="distance">Distance</option>
+        <option value="exerciseSession">Exercise</option>
+        <option value="elevationGained">Elevation Gained</option>
+        <option value="floorsClimbed">Floors Climbed</option>
+        <option value="heartRate">Heart Rate</option>
+        <option value="height">Height</option>
+        <option value="hydration">Hydration</option>
+        <option value="leanBodyMass">Lean Body Mass</option>
+        <option value="menstruationFlow">Menstruation Flow</option>
+        <option value="menstruationPeriod">Menstruation Period</option>
+        <option value="nutrition">Nutrition</option>
+        <option value="ovulationTest">Ovulation Test</option>
+        <option value="oxygenSaturation">Oxygen Saturation</option>
+        <option value="power">Power</option>
+        <option value="respiratoryRate">Respiratory Rate</option>
+        <option value="restingHeartRate">Resting Heart Rate</option>
+        <option value="sleepSession">Sleep</option>
+        <option value="speed">Speed</option>
+        <option value="steps">Steps</option>
+        <option value="stepsCadence">Steps Cadence</option>
+        <option value="totalCaloriesBurned">Total Calories Burned</option>
+        <option value="vo2Max">VO2 Max</option>
+        <option value="weight">Weight</option>
+        <option value="wheelchairPushes">Wheelchair Pushes</option>
+      </select>
+      
+    <button type="submit">Get</button>
+  </form>
+<div id="results-container">
+
+</div>
+  <pre id="output" style="white-space: pre-wrap; margin-top: 1em; font-family: monospace;"></pre>

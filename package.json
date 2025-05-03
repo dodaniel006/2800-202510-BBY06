@@ -12,17 +12,21 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
-  "main": "index.js",
+  "type": "module",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js",
-    "server": "nodemon index.js",
-    "client": "browser-sync start --proxy localhost:8000 --files '*.html, *.css' --port 8000 --no-ui --no-notify\"",
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "browser-sync start --proxy localhost:8100 --files \"frontend/views/**/*.ejs, frontend/js/**/*.js, frontend/css/**/*.css\" --port 3000",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.1"
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",
