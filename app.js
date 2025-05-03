@@ -101,6 +101,15 @@ app.get("/register", (req, res) => {
   });
 });
 
+// begin test
+
+import main from "./db_test.js";
+console.log("Running db_test.js...");
+main();
+console.log("Test.js finished running.");
+
+
+// end test
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
