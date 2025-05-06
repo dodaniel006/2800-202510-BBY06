@@ -102,11 +102,13 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/*dummy404", (req, res) => {
+  let body = `<div class=\"h-100 d-flex flex-column justify-content-center text-center\"><h1 class=\"mb-0\">Error: 404 Page not found</h1><br>
+              <a href=\"/home\">Go Back Home</a></div>`;
   res.render("./layouts/default", {
     title: "404",
-    pageCSS: "/css/404.css",
+    pageCSS: false,
     pageJS: false,
-    body : "<h1>Error: 404 Page not found</h1>",
+    body : body,
     showNav: true,
     showFooter: true
   });
