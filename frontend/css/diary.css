@@ -5,13 +5,13 @@ body {
 .foodWindow {
   height: 40vh;
   border: 1px solid #000;
+  overflow-y: auto;
+  max-height: 40vh; /* Adjust height as needed */
 }
 
 #foodList {
   padding-left: 0;
   margin: 0;
-  overflow-y: auto;
-  max-height: 40vh; /* Adjust height as needed */
 }
 
 .foodItem {
