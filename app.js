@@ -99,6 +99,48 @@ app.get("/register", (req, res) => {
   });
 });
 
+app.get("/diary", async (req, res) => {
+  // Eventually get foot item details from DB for user for current day
+  // something like -> const foodDetails = await getFoodDetails();
+  const foodList = [
+    { foodAmount: 2, foodItem: "Banana", foodCalorie: 200 },
+    { foodAmount: 1, foodItem: "Sandwich", foodCalorie: 500 },
+    { foodAmount: 3, foodItem: "Orange", foodCalorie: 150 },
+    { foodAmount: 1, foodItem: "Pizza Slice", foodCalorie: 300 },
+    { foodAmount: 2, foodItem: "Cookies", foodCalorie: 250 },
+    { foodAmount: 1, foodItem: "Salad", foodCalorie: 100 },
+  ];
+
+  res.render("diary", {
+    title: "Diary",
+    pageCSS: "/css/diary.css",
+    pageJS: "/js/diary.js",
+    showNav: true,
+    showFooter: true,
+    foodList: foodList,
+  });
+});
+
+app.post("/diaryAddFood", (req, res) => {
+  const foodList = [
+    { foodAmount: 2, foodItem: "Banana", foodCalorie: 200 },
+    { foodAmount: 1, foodItem: "Sandwich", foodCalorie: 500 },
+    { foodAmount: 3, foodItem: "Orange", foodCalorie: 150 },
+    { foodAmount: 1, foodItem: "Pizza Slice", foodCalorie: 300 },
+    { foodAmount: 2, foodItem: "Cookies", foodCalorie: 250 },
+    { foodAmount: 1, foodItem: "Salad", foodCalorie: 100 },
+  ];
+
+  res.render("diary", {
+    title: "Diary",
+    pageCSS: "/css/diary.css",
+    pageJS: "/js/diary.js",
+    showNav: true,
+    showFooter: true,
+    foodList: foodList,
+  });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
