@@ -34,9 +34,10 @@ body {
   user-select: none; /* Prevents text highlighting */
 }
 
-.deleteItem:active {
-  background-color: rgb(30, 30, 30);
-  transform: scale(0.95);
+.foodTrash:active {
+  /* background-color: rgb(30, 30, 30); */
+  transform: scale(1.45);
+  transition: transform 0.05s ease-in-out;
 }
 
 .deleteItem:hover {
