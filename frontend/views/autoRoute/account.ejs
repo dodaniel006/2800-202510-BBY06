@@ -11,12 +11,14 @@
                         <div class="user-profile">
                             <div class="user-avatar">
                                 <!-- Profile Image -->
-                                <img id="profileImage" src="/images/nothing.png" alt="profileImage" class="profileImage">
+                                <img id="profileImage" src="/images/profile.png" alt="profileImage" class="profileImage">
                                 <!-- Upload Button -->
                                 <label for="imageUpload" id="imageUploadButton" class="btn m-auto mt-3 gbtn btn-secondary">Upload Image</label>
                                 <input type="file" id="imageUpload" accept="image/*" style="display: none;">
                               </div>
                                 <div class="form-group">
+                                    <h5 class="mb-2">Username</h5>
+
                                     <input type="text" disabled class="form-control publicInfoField" id="username">
                                 </div>
                         </div>
@@ -26,7 +28,7 @@
                         </div>
                     </div>
                     <div class="right mt-3">
-                        <a id="editPublicInfo" class="btn gbtn btn-secondary">Edit</a>
+                        <a id="editPublicInfo" type="button" class="btn gbtn btn-secondary">Edit</a>
                     </div>
                 </div>
                
@@ -34,10 +36,16 @@
                
         </div>
 
+        
+
         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
             <div class="card h-100">
                 <div class="card-body">
+
+                    
+
                     <div class="row gutters">
+
                         <div class="col-12">
                             <h6 class="mb-2 mt-4">Personal Details</h6>
                         </div>
@@ -96,10 +104,30 @@
         
     <div class="mb-3">
         <div class="card-body">
+
+            <div class="row gutters">
+
+                <div class="col-12">
+                  <h6 class="mb-2 mt-4">Health Data</h6>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <p>No account connected</p>
+                        <a href="healthConnectInstructions" class="btn gbtn btn-secondary" type="button">Connect Health Companion</a>
+                    </div>
+                </div>
+
+              
+
+            </div>
+              
+
             <div class="row gutters">
                 <div class="col-12">
                     <h6 class="mb-2 mt-4">Personal Details</h6>
                 </div>
+                
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="eMail">Email</label>

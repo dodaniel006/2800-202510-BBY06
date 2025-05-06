@@ -1,9 +1,12 @@
 
 import { Router } from 'express';
-import connectToMongo from '../config/db.js';
+import { connectToMongo, updateUserSettings, getUserById } from '../config/db.js';
 import { fetchAllHealthData } from './healthConnect.js';
+import mongoose from 'mongoose';
 
 const router = Router();
+
+const presetUserId = new mongoose.Types.ObjectId('6812be6afd11a4f1efb4bdfa');
 
 
 router.get('/test', async (req, res) => {
@@ -55,5 +58,47 @@ router.get('/test', async (req, res) => {
       res.status(500).json({ error: 'Health data sync failed' });
     }
   });
+
+  router.put('/user/public', async (req, res) => {
+    try {
+      const updatedUser = await updateUserSettings(presetUserId, {
+        username: req.body.username,
+        bio: req.body.bio
+      });
+      res.json({ success: true, user: updatedUser });
+    } catch (err) {
+      console.error('Public settings update failed:', err);
+      res.status(500).json({ error: 'Public update failed' });
+    }
+  });
+  
+  router.put('/user/private', async (req, res) => {
+    try {
+      const updatedUser = await updateUserSettings(presetUserId, {
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
+        street: req.body.street,
+        city: req.body.city,
+        province: req.body.province,
+        postalCode: req.body.postalCode
+      });
+      res.json({ success: true, user: updatedUser });
+    } catch (err) {
+      console.error('Private settings update failed:', err);
+      res.status(500).json({ error: 'Private update failed' });
+    }
+  });
+  
+  
+  router.get('/user', async (req, res) => {
+    try {
+      const user = await getUserById(presetUserId);
+      res.json(user);
+    } catch (err) {
+      res.status(404).json({ error: err.message });
+    }
+  });
+  
+  
 
   export default router;
