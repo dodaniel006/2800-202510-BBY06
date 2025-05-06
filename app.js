@@ -101,6 +101,16 @@ app.get("/register", (req, res) => {
   });
 });
 
+app.get("/*dummy404", (req, res) => {
+  res.render("./layouts/default", {
+    title: "404",
+    pageCSS: "/css/404.css",
+    pageJS: false,
+    body : "<h1>Error: 404 Page not found</h1>",
+    showNav: true,
+    showFooter: true
+  });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
