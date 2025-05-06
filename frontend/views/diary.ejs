@@ -47,10 +47,8 @@
     <ul id="foodList" class="bb-bg-wallet-green-glow">
       <% for (const food of foodList) { %>
       <li class="foodItem">
-        <span id="details1" class="px-3">
-          <%= food.foodAmount %>x <%= food.foodItem %>
-        </span>
-        <div id="details2" class="d-flex h-100 align-items-center">
+        <span class="px-3"> <%= food.foodAmount %>x <%= food.foodItem %> </span>
+        <div class="d-flex h-100 align-items-center">
           <span class="px-3 foodItemCalorie"><%= food.foodCalorie %></span>
           <div class="deleteItem px-3">
             <img class="foodTrash" src="/images/trash.png" alt="delete" />

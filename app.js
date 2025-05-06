@@ -35,6 +35,7 @@ app.use("/views", express.static("./frontend/views"));
 app.use("/config", express.static("./backend/config"));
 app.use("/api/healthConnect", healthConnect);
 app.use("/api/db", db);
+app.use(express.urlencoded({ extended: false }));
 
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -99,17 +100,18 @@ app.get("/register", (req, res) => {
   });
 });
 
+const foodList = [
+  { foodAmount: 2, foodItem: "Banana", foodCalorie: 200 },
+  { foodAmount: 1, foodItem: "Sandwich", foodCalorie: 500 },
+  { foodAmount: 3, foodItem: "Orange", foodCalorie: 150 },
+  { foodAmount: 1, foodItem: "Pizza Slice", foodCalorie: 300 },
+  { foodAmount: 2, foodItem: "Cookies", foodCalorie: 250 },
+  { foodAmount: 1, foodItem: "Salad", foodCalorie: 100 },
+];
+
 app.get("/diary", async (req, res) => {
   // Eventually get foot item details from DB for user for current day
   // something like -> const foodDetails = await getFoodDetails();
-  const foodList = [
-    { foodAmount: 2, foodItem: "Banana", foodCalorie: 200 },
-    { foodAmount: 1, foodItem: "Sandwich", foodCalorie: 500 },
-    { foodAmount: 3, foodItem: "Orange", foodCalorie: 150 },
-    { foodAmount: 1, foodItem: "Pizza Slice", foodCalorie: 300 },
-    { foodAmount: 2, foodItem: "Cookies", foodCalorie: 250 },
-    { foodAmount: 1, foodItem: "Salad", foodCalorie: 100 },
-  ];
 
   res.render("diary", {
     title: "Diary",
@@ -122,23 +124,18 @@ app.get("/diary", async (req, res) => {
 });
 
 app.post("/diaryAddFood", (req, res) => {
-  const foodList = [
-    { foodAmount: 2, foodItem: "Banana", foodCalorie: 200 },
-    { foodAmount: 1, foodItem: "Sandwich", foodCalorie: 500 },
-    { foodAmount: 3, foodItem: "Orange", foodCalorie: 150 },
-    { foodAmount: 1, foodItem: "Pizza Slice", foodCalorie: 300 },
-    { foodAmount: 2, foodItem: "Cookies", foodCalorie: 250 },
-    { foodAmount: 1, foodItem: "Salad", foodCalorie: 100 },
-  ];
+  const newFood = req.body;
+  foodList.push(newFood);
+  console.log(newFood);
 
-  res.render("diary", {
-    title: "Diary",
-    pageCSS: "/css/diary.css",
-    pageJS: "/js/diary.js",
-    showNav: true,
-    showFooter: true,
-    foodList: foodList,
-  });
+  // res.render("diary", {
+  //   title: "Diary",
+  //   pageCSS: "/css/diary.css",
+  //   pageJS: "/js/diary.js",
+  //   showNav: true,
+  //   showFooter: true,
+  //   foodList: foodList,
+  // });
 });
 
 app.listen(port, () => {
