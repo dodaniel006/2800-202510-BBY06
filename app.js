@@ -126,16 +126,7 @@ app.get("/diary", async (req, res) => {
 app.post("/diaryAddFood", (req, res) => {
   const newFood = req.body;
   foodList.push(newFood);
-  console.log(newFood);
-
-  // res.render("diary", {
-  //   title: "Diary",
-  //   pageCSS: "/css/diary.css",
-  //   pageJS: "/js/diary.js",
-  //   showNav: true,
-  //   showFooter: true,
-  //   foodList: foodList,
-  // });
+  // Hook up to DB in a new feature branch
 });
 
 app.listen(port, () => {
