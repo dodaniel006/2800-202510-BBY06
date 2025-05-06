@@ -58,15 +58,12 @@
     <!-- Footer -->
     <div class="card text-center text-bg-secondary m-2 p-2">
         <div class="row">
-            <div class="col">
-                <button class="btn btn-primary" type="button">Diary</button>
-            </div>
-            <div class="col">
-                <button class="btn btn-primary" type="button">Ladder</button>
-            </div>
-            <div class="col">
-                <button class="btn btn-primary" type="button">Profile/Stats</button>
-            </div>
+            <% const names = ['Diary', 'Ladder', 'Gym Log', 'Profile/Stats']; %>
+            <% for (let name of names) { %>
+                <div class="col">
+                    <button class="btn btn-primary" type="button"><%= name %></button>
+                </div>
+            <% } %>
         </div>
     </div>
 </body>
