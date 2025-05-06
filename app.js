@@ -101,6 +101,16 @@ app.get("/register", (req, res) => {
   });
 });
 
+app.get("/GymLog", (req, res) => {
+  res.render("gymLog", {
+    title: "Gym Log",
+    pageCSS: false,
+    pageJS: false,
+    showNav: true,
+    showFooter: true
+  });
+});
+
 app.get("/*dummy404", (req, res) => {
   let body = `<div class=\"h-100 d-flex flex-column justify-content-center text-center\"><h1 class=\"mb-0\">Error: 404 Page not found</h1><br>
               <a href=\"/home\">Go Back Home</a></div>`;
