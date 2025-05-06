@@ -10,6 +10,8 @@ body {
 #foodList {
   padding-left: 0;
   margin: 0;
+  overflow-y: auto;
+  max-height: 40vh; /* Adjust height as needed */
 }
 
 .foodItem {
