@@ -83,11 +83,14 @@
 
     <!-- Footer -->
     <div class="card text-center text-bg-secondary m-2 p-2">
-      <div class="row">
-        <div class="col">
-          <button id="diary" class="btn btn-primary" type="button">
-            Diary
-          </button>
+        <div class="row">
+            <% const names = ['Diary', 'Ladder', 'Gym Log', 'Profile/Stats']; %>
+            <% for (let name of names) { %>
+                <div class="col">
+                    <a class="btn btn-primary" href="/<%= name.replaceAll(' ','') %>"><%= name %></a>
+                    <!-- <button class="btn btn-primary" type="button"><%= name %></button> -->
+                </div>
+            <% } %>
         </div>
         <div class="col">
           <button class="btn btn-primary" type="button">Ladder</button>
