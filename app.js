@@ -109,6 +109,9 @@ app.get("/register", (req, res) => {
 app.get("/diary", async (req, res) => {
   // Connect to MongoDB and fetch food list
   await connectToMongo();
+
+  // Eventually this should be specific to a user
+  // For now, we will just get all food items in the DB
   const foodList = await Food.find({});
 
   res.render("diary", {
