@@ -7,6 +7,8 @@ import expressLayouts from "express-ejs-layouts";
 //route imports
 import healthConnect from './backend/routes/healthConnect.js';
 import db from './backend/routes/db.js';
+import files from './backend/routes/files.js';
+import user from './backend/routes/user.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -32,11 +34,16 @@ app.use("/images", express.static("./frontend/assets/images"));
 app.use("/videos", express.static("./frontend/assets/videos"));
 app.use("/fonts", express.static("./frontend/assets/fonts"));
 app.use("/views", express.static("./frontend/views"));
+app.use("/files", express.static("./frontend/assets/files"));
+
 
 //Backend
 app.use("/config", express.static("./backend/config"));
 app.use('/api/healthConnect', healthConnect);
 app.use('/api/db', db);
+app.use('/api/files', files);
+app.use('/api/user', user);
+
 
 
 function capitalizeFirst(str) {

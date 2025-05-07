@@ -48,38 +48,3 @@ export async function createUser(userData) {
   
 }
 
-export async function updateUserSettings(userId, updatedSettings) {
-  try {
-    connectToMongo()
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $set: updatedSettings },
-      { new: true, runValidators: true }
-    );
-    
-    if (!updatedUser) {
-      throw new Error('User not found');
-    }
-
-    return updatedUser;
-  } catch (error) {
-    console.error("Error updating user settings:", error.message);
-    throw error;
-  }
-}
-
-export async function getUserById(userId) {
-  try {
-    await connectToMongo();
-
-    const user = await User.findById(userId, '-password');
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return user;
-  } catch (error) {
-    console.error("Error fetching user by ID:", error.message);
-    throw error;
-  }
-}

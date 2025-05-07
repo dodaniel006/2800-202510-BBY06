@@ -1,73 +1,52 @@
+document.getElementById('save').addEventListener('click', handleSaveClick);
 
-  document.getElementById('editPublicInfo').addEventListener('click', () => {
-    const fields = document.querySelectorAll('.publicInfoField');
-    const isDisabled = fields[0].disabled;
-  
-    fields.forEach(field => field.disabled = !isDisabled);
-    if (!isDisabled) updatePublicData();
-  });
+function handleSaveClick() {
+  const data = collectFormData();
+  if (!validateData(data)) return;
 
-  document.getElementById('editPrivateInfo').addEventListener('click', () => {
-    const fields = document.querySelectorAll('.privateInfoField');
-    const isDisabled = fields[0].disabled;
-  
-    fields.forEach(field => field.disabled = !isDisabled);
-    if (!isDisabled) updatePrivateData();
+  updateUserSettings(data);
+}
+
+function collectFormData() {
+  return {
+    username: document.getElementById('username').value.trim(),
+    bio: document.getElementById('bio').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phoneNumber: document.getElementById('phoneNumber').value.trim(),
+    street: document.getElementById('street').value.trim(),
+    city: document.getElementById('city').value.trim(),
+    province: document.getElementById('province').value.trim(),
+    postalCode: document.getElementById('postalCode').value.trim()
+  };
+}
+
+function validateData(data) {
+  if (!data.email) {
+    alert("Email is required.");
+    return false;
+  }
+  return true;
+}
+
+function updateUserSettings(data) {
+  fetch('/api/user/account', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    alert(res.success ? 'User info updated!' : `Update failed: ${res.error || 'Unknown error'}`);
+  })
+  .catch(err => {
+    console.error('Error:', err);
+    alert('Request failed.');
   });
-  
-  function updatePublicData() {
-    const username = document.getElementById('username').value.trim();
-    const bio = document.getElementById('bio').value.trim();
-  
-    fetch('api/db/user/public', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, bio })
-    })
-    .then(res => res.json())
-    .then(res => {
-      alert(res.success ? 'Public info updated!' : `Update failed: ${res.error || 'Unknown error'}`);
-    })
-    .catch(err => {
-      console.error('Error:', err);
-      alert('Request failed.');
-    });
-  }
-  
-  function updatePrivateData() {
-    const email = document.getElementById('email').value.trim();
-    if (!email) {
-      alert("Email is required.");
-      return;
-    }
-  
-    const data = {
-      email,
-      phoneNumber: document.getElementById('phoneNumber').value.trim(),
-      street: document.getElementById('street').value.trim(),
-      city: document.getElementById('city').value.trim(),
-      province: document.getElementById('province').value.trim(),
-      postalCode: document.getElementById('postalCode').value.trim()
-    };
-  
-    fetch('api/db/user/private', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(res => {
-      alert(res.success ? 'Private info updated!' : `Update failed: ${res.error || 'Unknown error'}`);
-    })
-    .catch(err => {
-      console.error('Error:', err);
-      alert('Request failed.');
-    });
-  }
-  
+}
+
   
   window.addEventListener('DOMContentLoaded', () => {
-    fetch('/api/db/user')
+    fetch('/api/user/account')
       .then(res => res.json())
       .then(user => {
         if (user.error) throw new Error(user.error);
