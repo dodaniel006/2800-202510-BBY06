@@ -30,11 +30,19 @@
                   </div>
 
                   <div class="pt-1 mb-4">
-                    <button id="login" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-lg btn-block" type="button">Login</button>
+                    <button id="login" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-lg btn-block"
+                      type="button">Login</button>
                   </div>
 
+
+                  <div id="loginErrorMessage" class="alert alert-danger d-none" role="alert">
+                    <strong>Invalid email or password</strong> Please try again.
+                  </div>
+
+
                   <a class="small text-muted" href="#!">Forgot password?</a>
-                  <p class="mb-5 pb-lg-2 bb-text-surface">Don't have an account? <a href="/register" class="bb-text-surface">Register here</a></p>
+                  <p class="mb-5 pb-lg-2 bb-text-surface">Don't have an account? <a href="/register"
+                      class="bb-text-surface">Register here</a></p>
                   <a href="#!" class="small text-muted">Terms of use.</a>
                   <a href="#!" class="small text-muted">Privacy policy</a>
                 </form>
