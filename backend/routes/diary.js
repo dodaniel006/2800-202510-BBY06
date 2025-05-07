@@ -35,4 +35,27 @@ router.post("/addFoodToDiary", async (req, res) => {
   }
 });
 
+router.post("/deleteFoodFromDiary", async (req, res) => {
+  try {
+    const { foodItemId } = req.body;
+
+    await connectToMongo();
+    const data = await Food.deleteOne({
+      _id: foodItemId,
+    });
+
+    if (data) {
+      return res.status(200).json({
+        success: true,
+        message: "Food item deleted successfully",
+      });
+    } else {
+      return res.status(500).json({ error: "Failed to add food item" });
+    }
+  } catch (error) {
+    console.error("Error in /test:", error);
+    res.status(500).json({ error: "MongoDB query failed" });
+  }
+});
+
 export default router;

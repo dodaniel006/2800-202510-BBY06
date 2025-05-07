@@ -75,7 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // console.log(foodTrashElements);
 
   document.querySelectorAll(".deleteItem").forEach((trashIcon) => {
-    console.log("selected all icons");
     attachDelete(trashIcon);
   });
 });
@@ -86,6 +85,31 @@ function attachDelete(element) {
 
     const foodItem = e.target.closest(".foodItem");
     if (foodItem) {
+      // get food item id
+      const foodItemId = foodItem.getAttribute("data-id");
+      // Delete the food item from the database
+      fetch("/api/diary/deleteFoodFromDiary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          foodItemId,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Food item deleted successfully:", data);
+        })
+        .catch((error) => {
+          console.error("Error deleting food item:", error);
+          alert("Error deleting food item. Please try again later.");
+        });
+
+      // remove from the DOM
       foodItem.remove();
     }
   });

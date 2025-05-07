@@ -49,7 +49,7 @@
   <div class="col mb-3 mt-3 foodWindow">
     <ul id="foodList" class="bb-bg-wallet-green-glow">
       <% if (foodList) { %> <% for (const food of foodList) { %>
-      <li class="foodItem">
+      <li class="foodItem" data-id="<%=food._id %>">
         <span class="px-3"> <%= food.foodAmount %>x <%= food.foodName %> </span>
         <div class="d-flex h-100 align-items-center">
           <span class="px-3 foodItemCalorie"><%= food.foodCalorie %></span>
