@@ -4,6 +4,7 @@
     <label for="inputFood" class="form-label">What did you eat?</label>
     <input
       type="text"
+      name="foodItem"
       class="form-control"
       id="foodInput"
       placeholder="Enter food item..."
@@ -15,6 +16,7 @@
         <label for="calorieInput" class="form-label">Calorie</label>
         <input
           type="number"
+          name="foodCalories"
           class="form-control"
           id="calorieInput"
           min="0"
@@ -27,6 +29,7 @@
         <label for="quantityInput" class="form-label">Quantity</label>
         <input
           type="number"
+          name="foodAmount"
           class="form-control"
           id="quantityInput"
           min="0"
@@ -45,9 +48,9 @@
 
   <div class="col mb-3 mt-3 foodWindow">
     <ul id="foodList" class="bb-bg-wallet-green-glow">
-      <% for (const food of foodList) { %>
+      <% if (foodList) { %> <% for (const food of foodList) { %>
       <li class="foodItem">
-        <span class="px-3"> <%= food.foodAmount %>x <%= food.foodItem %> </span>
+        <span class="px-3"> <%= food.foodAmount %>x <%= food.foodName %> </span>
         <div class="d-flex h-100 align-items-center">
           <span class="px-3 foodItemCalorie"><%= food.foodCalorie %></span>
           <div class="deleteItem px-3">
@@ -55,7 +58,7 @@
           </div>
         </div>
       </li>
-      <% } %>
+      <% } %> <% } %>
     </ul>
   </div>
 </main>

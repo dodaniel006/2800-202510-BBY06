@@ -6,7 +6,12 @@ import expressLayouts from "express-ejs-layouts";
 
 //route imports
 import healthConnect from "./backend/routes/healthConnect.js";
+import diary from "./backend/routes/diary.js";
 import db from "./backend/routes/db.js";
+
+// Model imports
+import connectToMongo from "./backend/config/db.js";
+import Food from "./backend/config/db_schemas/Food.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,6 +40,7 @@ app.use("/views", express.static("./frontend/views"));
 app.use("/config", express.static("./backend/config"));
 app.use("/api/healthConnect", healthConnect);
 app.use("/api/db", db);
+app.use("/api/diary", diary);
 app.use(express.urlencoded({ extended: false }));
 
 function capitalizeFirst(str) {
@@ -100,18 +106,10 @@ app.get("/register", (req, res) => {
   });
 });
 
-const foodList = [
-  { foodAmount: 2, foodItem: "Banana", foodCalorie: 200 },
-  { foodAmount: 1, foodItem: "Sandwich", foodCalorie: 500 },
-  { foodAmount: 3, foodItem: "Orange", foodCalorie: 150 },
-  { foodAmount: 1, foodItem: "Pizza Slice", foodCalorie: 300 },
-  { foodAmount: 2, foodItem: "Cookies", foodCalorie: 250 },
-  { foodAmount: 1, foodItem: "Salad", foodCalorie: 100 },
-];
-
 app.get("/diary", async (req, res) => {
-  // Eventually get foot item details from DB for user for current day
-  // something like -> const foodDetails = await getFoodDetails();
+  // Connect to MongoDB and fetch food list
+  await connectToMongo();
+  const foodList = await Food.find({});
 
   res.render("diary", {
     title: "Diary",
@@ -121,12 +119,6 @@ app.get("/diary", async (req, res) => {
     showFooter: true,
     foodList: foodList,
   });
-});
-
-app.post("/diaryAddFood", (req, res) => {
-  const newFood = req.body;
-  foodList.push(newFood);
-  // Hook up to DB in a new feature branch
 });
 
 app.listen(port, () => {

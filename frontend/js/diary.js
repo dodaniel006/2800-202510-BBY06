@@ -1,6 +1,6 @@
 // Add food item to the list on "Add" button click
 document.getElementById("addFoodItem").addEventListener("click", (e) => {
-  e.preventDefault();
+  // e.preventDefault();
   // Get form values
   const foodAmount = document.getElementById("quantityInput").value;
   const foodItem = document.getElementById("foodInput").value;
@@ -42,7 +42,7 @@ document.getElementById("addFoodItem").addEventListener("click", (e) => {
   attachDelete(deleteDivContainer);
 
   // Make Fetch call to /diaryAddFood to add food to DB
-  fetch("/diaryAddFood", {
+  fetch("/api/diary/addFoodToDiary", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ foodItem, foodCalories, foodAmount }),
@@ -57,15 +57,15 @@ document.getElementById("addFoodItem").addEventListener("click", (e) => {
     .then((data) => {
       console.log("What is data: ", data);
       console.log("Food item added successfully:", data);
+      // Clear the input fields
+      document.getElementById("foodInput").value = "";
+      document.getElementById("calorieInput").value = "";
+      document.getElementById("quantityInput").value = "";
     })
     .catch((error) => {
       console.error("Error adding food item:", error);
+      alert("Error adding food item. Please try again later.");
     });
-
-  // Clear the input fields
-  document.getElementById("foodInput").value = "";
-  document.getElementById("calorieInput").value = "";
-  document.getElementById("quantityInput").value = "";
 });
 
 // Delete food item from list
