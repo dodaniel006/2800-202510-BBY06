@@ -37,6 +37,8 @@ app.use("/config", express.static("./backend/config"));
 app.use('/api/healthConnect', healthConnect);
 app.use('/api/db', db);
 
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
+
 
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -104,8 +106,8 @@ app.get("/register", (req, res) => {
 app.get("/GymLog", (req, res) => {
   res.render("gymLog", {
     title: "Gym Log",
-    pageCSS: false,
-    pageJS: false,
+    pageCSS: "/css/gymLog.css",
+    pageJS: "/js/gymLog.js",
     showNav: true,
     showFooter: true
   });
