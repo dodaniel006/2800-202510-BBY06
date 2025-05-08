@@ -5,12 +5,15 @@ import { fileURLToPath } from "url";
 import expressLayouts from "express-ejs-layouts";
 
 //route imports
-import healthConnect from "./backend/routes/healthConnect.js";
+import healthConnect from './backend/routes/healthConnect.js';
+import db from './backend/routes/db.js';
+import files from './backend/routes/files.js';
+import user from './backend/routes/user.js';
 import diary from "./backend/routes/diary.js";
-import db from "./backend/routes/db.js";
+
 
 // Model imports
-import connectToMongo from "./backend/config/db.js";
+import { connectToMongo } from "./backend/config/db.js";
 import Food from "./backend/config/db_schemas/Food.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +21,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 8100;
+
 
 app.use(express.json());
 
@@ -35,13 +39,17 @@ app.use("/images", express.static("./frontend/assets/images"));
 app.use("/videos", express.static("./frontend/assets/videos"));
 app.use("/fonts", express.static("./frontend/assets/fonts"));
 app.use("/views", express.static("./frontend/views"));
+app.use("/files", express.static("./frontend/assets/files"));
+
 
 //Backend
-app.use("/config", express.static("./backend/config"));
-app.use("/api/healthConnect", healthConnect);
-app.use("/api/db", db);
-app.use("/api/diary", diary);
 app.use(express.urlencoded({ extended: false }));
+app.use("/config", express.static("./backend/config"));
+app.use("/api/diary", diary);
+app.use('/api/healthConnect', healthConnect);
+app.use('/api/db', db);
+app.use('/api/files', files);
+app.use('/api/user', user);
 
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);

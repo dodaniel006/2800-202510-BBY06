@@ -4,7 +4,7 @@ dotenv.config();
 
 import User from "./db_schemas/User.js";
 
-async function connectToMongo() {
+export async function connectToMongo() {
   try {
     // Connects using URI from .env, specifies database
     const db = await mongoose.connect(process.env.MONGODB_URI, {
@@ -18,18 +18,23 @@ async function connectToMongo() {
   }
 }
 
-export default connectToMongo;
 
 export async function createUser(userData) {
   try {
     const newUser = new User({
       username: userData.username,
-      password: userData.password, // Gets hashed in the User model
+      password: userData.password,
       firstName: userData.firstName,
       lastName: userData.lastName,
       age: userData.age,
       email: userData.email,
-    });
+      phoneNumber: userData.phoneNumber,
+      street: userData.street,
+      city: userData.city,
+      province: userData.province,
+      postalCode: userData.postalCode,
+      bio: userData.bio
+  });
     await newUser.save();
     return newUser;
   } catch (error) {

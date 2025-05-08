@@ -1,14 +1,17 @@
-import { Router } from "express";
-import connectToMongo from "../config/db.js";
-import { fetchAllHealthData } from "./healthConnect.js";
+
+import { Router } from 'express';
+import { connectToMongo} from '../config/db.js';
+import { fetchAllHealthData } from './healthConnect.js';
+import mongoose from 'mongoose';
 
 const router = Router();
+
+const presetUserId = new mongoose.Types.ObjectId('6812be6afd11a4f1efb4bdfa');
 
 router.get("/test", async (req, res) => {
   try {
     const db = await connectToMongo();
     const data = await db.collection("users").findOne();
-
     console.log("Data fetched:", data);
 
     res
