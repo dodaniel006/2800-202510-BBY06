@@ -12,7 +12,6 @@ import files from './backend/routes/files.js';
 import user from './backend/routes/user.js';
 import diary from "./backend/routes/diary.js";
 import authRouter from './backend/routes/authentication.js'; // Import authRouter
-import connectToMongo from './backend/config/db.js'; // Import connectToMongo
 
 // Model imports
 import { connectToMongo } from "./backend/config/db.js";
