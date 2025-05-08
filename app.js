@@ -4,6 +4,8 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import expressLayouts from "express-ejs-layouts";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 //route imports
 import healthConnect from './backend/routes/healthConnect.js';
@@ -22,6 +24,33 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 8100;
+
+const TTL = 60 * 60;
+
+const sessionStore = MongoStore.create({
+  mongoUrl: process.env.MONGODB_URI,
+  collectionName: "sessions",
+  ttl: TTL,
+  autoRemove: "native",
+  dbName: "Japples",
+  crypto: {
+    secret: process.env.SESSION_SECRET,
+  },
+});
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+      maxAge: TTL * 1000,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+    },
+  })
+);
 
 
 app.use(express.json());
@@ -51,6 +80,24 @@ app.use('/api/healthConnect', healthConnect);
 app.use('/api/db', db);
 app.use('/api/files', files);
 app.use('/api/user', user);app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
+
+app.use((req, res, next) => {
+  const frontendRoutes = ["/", "/login", "/initDB", "/register"];
+
+  if (!req.session.authenticated && !frontendRoutes.includes(req.path)) {
+    return res.redirect("/login");
+  }
+  next();
+});
+
+app.use((req, res, next) => {
+  const frontendRoutes = ["/", "/login", "/register"];
+
+  if (req.session.authenticated && frontendRoutes.includes(req.path)) {
+    return res.redirect("/home");
+  }
+  next();
+});
 
 async function startServer() {
   try {

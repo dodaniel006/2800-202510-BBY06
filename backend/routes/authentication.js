@@ -9,11 +9,6 @@ import { Router } from "express";
 import User from "../config/db_schemas/User.js";
 import "dotenv/config"; // Load environment variables from .env file
 
-// Store session data with mongoDB
-import session from "express-session";
-import MongoStore from "connect-mongo";
-const TTL = 60 * 60; // 1 hour
-
 const authRouter = Router();
 
 export default authRouter;
@@ -29,33 +24,23 @@ function ensureLoggedIn(req, res, next) {
 
 export { ensureLoggedIn };
 
-// Session store setup
-const sessionStore = MongoStore.create({
-  mongoUrl: process.env.MONGODB_URI,
-  collectionName: "sessions",
-  ttl: TTL,
-  autoRemove: "native", // Use native MongoDB TTL index
-  dbName: "Japples",
-  collectionName: "sessions",
-  crypto: {
-    secret: process.env.SESSION_SECRET,
-  },
+// GET /api/auth/logout
+authRouter.get("/logout", (req, res) => {
+  if (!req.session) {
+    return res.status(400).json({ message: "No active session" });
+  }
+
+  req.session.destroy(err => {
+    if (err) {
+      console.error("Logout error:", err);
+      return res.status(500).json({ message: "Logout failed" });
+    }
+
+    res.clearCookie("connect.sid"); // remove session cookie
+    return res.status(200).json({ message: "Logged out successfully" });
+  });
 });
 
-// TODO: Router middleware to use session store
-authRouter.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore,
-    cookie: {
-      maxAge: TTL * 1000, // Converted to milliseconds
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-    },
-  })
-);
 
 // TODO: Joi validation for login data
 
@@ -99,7 +84,6 @@ authRouter.post("/register", async (req, res) => {
     req.session.userId = newUser._id; // Store user ID in session
     req.session.email = newUser.email; // Store email in session
     req.session.username = newUser.username; // Store username in session
-    req.session.cookie.maxAge = TTL * 1000; // Set cookie max age to 1 hour
 
     res.status(201).json({ message: "User registered successfully", userId: newUser._id });
   } catch (error) {
@@ -137,7 +121,6 @@ authRouter.post("/login", async (req, res) => {
       req.session.userId = user._id; // Store user ID in session
       req.session.email = user.email; // Store email in session
       req.session.username = user.username; // Store username in session
-      req.session.cookie.maxAge = TTL * 1000; // Set cookie max age to 1 hour
 
       res.status(200).json({ message: "Login success", userId: user._id });
     } else {
@@ -148,3 +131,4 @@ authRouter.post("/login", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
