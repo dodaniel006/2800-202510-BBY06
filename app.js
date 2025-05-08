@@ -1,3 +1,4 @@
+import "dotenv/config"; // Load environment variables from .env file FIRST
 import express from "express";
 import path from 'path';
 import fs from "fs";
@@ -7,7 +8,8 @@ import expressLayouts from "express-ejs-layouts";
 //route imports
 import healthConnect from './backend/routes/healthConnect.js';
 import db from './backend/routes/db.js';
-
+import authRouter from './backend/routes/authentication.js'; // Import authRouter
+import connectToMongo from './backend/config/db.js'; // Import connectToMongo
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,7 +38,21 @@ app.use("/views", express.static("./frontend/views"));
 app.use("/config", express.static("./backend/config"));
 app.use('/api/healthConnect', healthConnect);
 app.use('/api/db', db);
+app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
 
+async function startServer() {
+  try {
+    await connectToMongo(); // Connect to MongoDB
+    app.listen(port, () => {
+      console.log(`Example app listening on port ${port}`);
+    });
+  } catch (error) {
+    console.error("Failed to start the server:", error);
+    process.exit(1); // Exit if cannot connect to DB or start server
+  }
+}
+
+startServer(); // Call the async function to start the server
 
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -123,7 +139,3 @@ app.get("/*dummy404", (req, res) => {
     showFooter: true
   });
 });
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})

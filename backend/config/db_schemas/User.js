@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        trim: true,
         validate: {
             validator: function (v) {
                 return validateEmail(v);
@@ -21,7 +22,14 @@ const userSchema = new mongoose.Schema({
             message: props => `${props.value} is not a valid email!`
         }
     },
-    username: String,
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        minlength: 3,
+        maxlength: 20
+    },
     password: {
         type: String,
         required: true
