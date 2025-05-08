@@ -16,8 +16,16 @@
             </div>
         </div>
     </div>
+  </div>
+</div>
 
-    <div class="card text-center text-bg-secondary m-2 p-2">
+<div class="card text-center text-bg-secondary m-2 p-2">
+  <!-- Create new task button -->
+  <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-2">
+    <button class="btn btn-primary me-md-2" type="button">
+      Create New Task
+    </button>
+  </div>
 
         <!-- Create new task button -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-2">
@@ -84,14 +92,17 @@
     <!-- Footer -->
     <div class="card text-center text-bg-secondary m-2 p-2">
         <div class="row">
-            <% const names = ['Diary', 'Ladder', 'Gym Log', 'Profile/Stats']; %>
-            <% for (let name of names) { %>
-                <div class="col">
-                    <a class="btn btn-primary" href="/<%= name.replaceAll(' ','') %>"><%= name %></a>
-                    <!-- <button class="btn btn-primary" type="button"><%= name %></button> -->
-                </div>
-            <% } %>
+          <div class="col">
+            <h1>Task Name</h1>
+            <p>Short Description</p>
+          </div>
+          <div class="col d-grid gap-2">
+            <button class="btn btn-primary" type="button">
+              Complete Task
+            </button>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- <script type="text/javascript" src="/game/html5game/data.hazel"></script> -->

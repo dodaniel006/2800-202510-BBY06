@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
-
     firstName: String,
     lastName: String,
     age: {
@@ -14,6 +13,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        trim: true,
         validate: {
             validator: function (v) {
                 return validateEmail(v);
@@ -21,10 +21,41 @@ const userSchema = new mongoose.Schema({
             message: props => `${props.value} is not a valid email!`
         }
     },
-    username: String,
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        minlength: 3,
+        maxlength: 20
+    },
     password: {
         type: String,
         required: true
+    },
+    phoneNumber: {
+        type: String,
+        trim: true
+    },
+    street: {
+        type: String,
+        trim: true
+    },
+    city: {
+        type: String,
+        trim: true
+    },
+    province: {
+        type: String,
+        trim: true
+    },
+    postalCode: {
+        type: String,
+        trim: true
+    },
+    bio: {
+        type: String,
+        trim: true
     },
     createdAt: {
         type: Date,
@@ -34,9 +65,9 @@ const userSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now
-    },
-
+    }
 });
+
 
 // Middleware to automatically hash password before saving
 userSchema.pre('save', async function (next) {

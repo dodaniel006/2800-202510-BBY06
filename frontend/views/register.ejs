@@ -11,7 +11,7 @@
               <div class="col-md-6 col-lg-7 d-flex align-items-center">
                 <div class="card-body p-4 p-lg-5 text-black">
   
-                  <form id="register-form">
+                  <form id="register-form" method="POST" action="/register">
   
                     <div class="d-flex align-items-center mb-3 pb-1">
                       <span class="h1 fw-bold m-0"><img class="logo" src="/images/logo.png"></span>
@@ -21,23 +21,25 @@
   
                     <div class="form-outline mb-2">
                         <label class="form-label" for="registerUsername">Username</label>
-                        <input type="text" id="registerUsername" class="form-control form-control-lg" required />
+                        <input type="text" id="registerUsername" name="username" class="form-control form-control-lg" required />
                       </div>
 
                     <div class="form-outline mb-2">
                       <label class="form-label" for="registerFirstLastName">Full Name</label>
-                      <input type="text" id="registerFirstLastName" class="form-control form-control-lg" required />
+                      <input type="text" id="registerFirstLastName" name="fullName" class="form-control form-control-lg" required />
                     </div>
   
                     <div class="form-outline mb-2">
                       <label class="form-label" for="registerEmail">Email address</label>
-                      <input type="email" id="registerEmail" class="form-control form-control-lg" required />
+                      <input type="email" id="registerEmail" name="email" class="form-control form-control-lg" required />
                     </div>
   
                     <div class="form-outline mb-2">
                         <label class="form-label" for="registerPassword">Password</label>
-                        <input type="password" id="registerPassword" class="form-control form-control-lg" required />
+                        <input type="password" id="registerPassword" name="password" class="form-control form-control-lg" required />
                     </div>
+
+                    <div id="registerErrorMessage" class="alert alert-danger d-none mt-2" role="alert"></div>
   
                     <div class="pt-1 mb-4 d-flex justify-content-left">
                         <button id="register" class="btn btn-dark btn-lg" type="button">Register</button>
@@ -59,4 +61,3 @@
       </div>
     </div>
   </section>
-  

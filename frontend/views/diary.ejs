@@ -1,0 +1,64 @@
+<main class="container">
+  <h1 class="display-4">Enter your food for the day here</h1>
+  <form>
+    <label for="inputFood" class="form-label">What did you eat?</label>
+    <input
+      type="text"
+      name="foodItem"
+      class="form-control"
+      id="foodInput"
+      placeholder="Enter food item..."
+      aria-describedby="foodHelp"
+    />
+
+    <div class="row">
+      <div class="col">
+        <label for="calorieInput" class="form-label">Calorie</label>
+        <input
+          type="number"
+          name="foodCalories"
+          class="form-control"
+          id="calorieInput"
+          min="0"
+          max="10000"
+          placeholder="e.g. 100..."
+          aria-describedby="calorieHelp"
+        />
+      </div>
+      <div class="col">
+        <label for="quantityInput" class="form-label">Quantity</label>
+        <input
+          type="number"
+          name="foodAmount"
+          class="form-control"
+          id="quantityInput"
+          min="0"
+          max="10000"
+          placeholder="e.g. 1, 2..."
+          aria-describedby="quantityHelp"
+        />
+      </div>
+      <div class="col d-flex align-items-end mx-auto">
+        <button type="submit" id="addFoodItem" class="btn btn-primary">
+          Add
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="col mb-3 mt-3 foodWindow">
+    <ul id="foodList" class="bb-bg-wallet-green-glow">
+      <% if (foodList) { %> <% for (const food of foodList) { %>
+      <li class="foodItem" data-id="<%=food._id %>">
+        <span class="px-3"> <%= food.foodAmount %>x <%= food.foodName %> </span>
+        <div class="d-flex h-100 align-items-center">
+          <span class="px-3 foodItemCalorie"><%= food.foodCalorie %></span>
+          <div class="deleteItem px-3">
+            <img class="foodTrash" src="/images/trash.png" alt="delete" />
+          </div>
+        </div>
+      </li>
+      <% } %> <% } %>
+    </ul>
+  </div>
+</main>
