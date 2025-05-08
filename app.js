@@ -81,23 +81,25 @@ app.use('/api/db', db);
 app.use('/api/files', files);
 app.use('/api/user', user);app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
 
-app.use((req, res, next) => {
-  const frontendRoutes = ["/", "/login", "/initDB", "/register"];
+const lifecycle = process.env.npm_lifecycle_event;
 
-  if (!req.session.authenticated && !frontendRoutes.includes(req.path)) {
-    return res.redirect("/login");
-  }
-  next();
-});
+if (!["dev", "server"].includes(lifecycle)) {
+  app.use((req, res, next) => {
+    const frontendRoutes = ["/", "/login", "/initDB", "/register"];
 
-app.use((req, res, next) => {
-  const frontendRoutes = ["/", "/login", "/register"];
+    if (!req.session.authenticated && !frontendRoutes.includes(req.path)) {
+      return res.redirect("/login");
+    }
 
-  if (req.session.authenticated && frontendRoutes.includes(req.path)) {
-    return res.redirect("/home");
-  }
-  next();
-});
+    if (req.session.authenticated && ["/", "/login", "/register"].includes(req.path)) {
+      return res.redirect("/home");
+    }
+
+    next();
+  });
+} else {
+  console.log("⚠️ Route protection is disabled (running via npm run dev/server)");
+}
 
 async function startServer() {
   try {
