@@ -1,5 +1,5 @@
 import { Router, urlencoded } from "express";
-import connectToMongo from "../config/db.js";
+import { connectToMongo } from "../config/db.js";
 import Food from "../config/db_schemas/Food.js";
 
 const router = Router();
