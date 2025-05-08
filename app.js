@@ -125,7 +125,6 @@ const definedRoutes = new Set();
 
 // Auto-register .ejs views as routes
 fs.readdirSync(autoRouteDir).forEach((file) => {
-fs.readdirSync(autoRouteDir).forEach((file) => {
   const ext = path.extname(file);
   const name = path.basename(file, ext);
   console.log(name, ", ", ext);
@@ -227,6 +226,3 @@ app.get("/*dummy404", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
