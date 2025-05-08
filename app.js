@@ -7,6 +7,7 @@ import expressLayouts from "express-ejs-layouts";
 //route imports
 import healthConnect from './backend/routes/healthConnect.js';
 import db from './backend/routes/db.js';
+import game from './backend/routes/game.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,6 +37,7 @@ app.use("/views", express.static("./frontend/views"));
 app.use("/config", express.static("./backend/config"));
 app.use('/api/healthConnect', healthConnect);
 app.use('/api/db', db);
+app.use('/api/game', game);
 
 
 function capitalizeFirst(str) {

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./css/main.css">
+    <title>Create Task</title>
+</head>
+<body>
+
+    <div class="card text-center text-bg-secondary m-2 p-2">
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-2">
+            <button class="btn btn-primary me-md-2" type="button" onclick="window.location='/home'">Back</button>
+        </div>
+
+        <!-- Scroll With Cards inside -->
+        <div class="bg-body-tertiary p-3 rounded-2">
+            <div class="card text-bg-dark text-start mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Task Name" aria-label="Task Name" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="input-group input-group-lg mb-2">
+                                <input type="text" class="form-control" placeholder="Short Description" aria-label="Short Description" aria-describedby="inputGroup-sizing-lg">
+                            </div>
+
+                            <label for="customRange2" class="form-label">Point Value: 0</label>
+                            <input type="range" class="form-range" min="0" max="100" id="customRange2">
+                        </div>
+
+                        <div class="col d-grid gap-2">
+                            <button class="btn btn-primary" type="button">Create Task</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </div>
+
+    <!-- Footer -->
+    <div class="card text-center text-bg-secondary m-2 p-2">
+        <div class="row">
+            <% const names = ['Diary', 'Ladder', 'Gym Log', 'Profile/Stats']; %>
+            <% for (let name of names) { %>
+                <div class="col">
+                    <a class="btn btn-primary" href="/<%= name.replaceAll(' ','') %>"><%= name %></a>
+                    <!-- <button class="btn btn-primary" type="button"><%= name %></button> -->
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- <script type="text/javascript" src="/game/html5game/data.hazel"></script> -->
+    <script type="module" src="/js/home.js"></script>
+</body>
+</html>
