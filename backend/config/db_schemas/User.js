@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
-
     firstName: String,
     lastName: String,
     age: {
@@ -26,6 +25,30 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    phoneNumber: {
+        type: String,
+        trim: true
+    },
+    street: {
+        type: String,
+        trim: true
+    },
+    city: {
+        type: String,
+        trim: true
+    },
+    province: {
+        type: String,
+        trim: true
+    },
+    postalCode: {
+        type: String,
+        trim: true
+    },
+    bio: {
+        type: String,
+        trim: true
+    },
     createdAt: {
         type: Date,
         immutable: true,
@@ -34,9 +57,9 @@ const userSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now
-    },
-
+    }
 });
+
 
 // Middleware to automatically hash password before saving
 userSchema.pre('save', async function (next) {

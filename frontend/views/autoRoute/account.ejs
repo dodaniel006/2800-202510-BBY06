@@ -1,7 +1,7 @@
 <main class="container">
 
     <div class="center">
-        <h1 class="mt-4">Public profile</h1>
+        <h1 class="mt-4">Account</h1>
     </div>
     <div class="row gutters" >
         <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
@@ -11,22 +11,21 @@
                         <div class="user-profile">
                             <div class="user-avatar">
                                 <!-- Profile Image -->
-                                <img id="profileImage" src="/images/nothing.png" alt="profileImage" class="profileImage">
+                                <img id="profileImage" src="/images/profile.png" alt="profileImage" class="profileImage">
                                 <!-- Upload Button -->
                                 <label for="imageUpload" id="imageUploadButton" class="btn m-auto mt-3 gbtn btn-secondary">Upload Image</label>
                                 <input type="file" id="imageUpload" accept="image/*" style="display: none;">
                               </div>
                                 <div class="form-group">
-                                    <input type="text" disabled class="form-control publicInfoField" id="username">
+                                    <h5 class="mb-2">Username</h5>
+
+                                    <input type="text" disabled class="form-control InfoField" id="username">
                                 </div>
                         </div>
                         <div class="about">
                             <h5 id="publicAbout" class="mb-2">About</h5>
-                            <textarea  disabled class="form-control publicInfoField" id="bio" rows="5"></textarea>
+                            <textarea  disabled class="form-control InfoField" id="bio" rows="5"></textarea>
                         </div>
-                    </div>
-                    <div class="right mt-3">
-                        <a id="editPublicInfo" class="btn gbtn btn-secondary">Edit</a>
                     </div>
                 </div>
                
@@ -34,10 +33,16 @@
                
         </div>
 
+        
+
         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
             <div class="card h-100">
                 <div class="card-body">
+
+                    
+
                     <div class="row gutters">
+
                         <div class="col-12">
                             <h6 class="mb-2 mt-4">Personal Details</h6>
                         </div>
@@ -84,73 +89,76 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row gutters">
+
+                        <div class="col-12">
+                          <h6 class="mb-2 mt-4">Health Data</h6>
+                          <div class="form-group">
+                            <p>No account connected</p>
+                            <a href="healthConnectInstructions" class="btn gbtn btn-secondary" type="button">Connect Health Companion</a>
+                          </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <div class="center">
-        <h1 class="m-0">Private information</h1>
-    </div>
 
-
+    <div class="row gutters">
+        <div class="col-12">
+            <h6 class="mb-2 mt-4">Personal Details</h6>
+        </div>
         
-    <div class="mb-3">
-        <div class="card-body">
-            <div class="row gutters">
-                <div class="col-12">
-                    <h6 class="mb-2 mt-4">Personal Details</h6>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="eMail">Email</label>
-                        <input disabled type="email" class="form-control privateInfoField" id="email">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input disabled type="text" class="form-control privateInfoField" id="phoneNumber">
-                    </div>
-                </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="eMail">Email</label>
+                <input disabled type="email" class="form-control InfoField" id="email">
             </div>
-
-            <div class="row gutters">
-                <div class="col-12">
-                    <h6 class="mb-2 mt-4">Address</h6>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="street">Street</label>
-                        <input disabled type="text" class="form-control privateInfoField" id="street">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="city">City</label>
-                        <input disabled type="text" class="form-control privateInfoField" id="city">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="state">Province</label>
-                        <input disabled type="text" class="form-control privateInfoField" id="province">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="zip">Postal Code</label>
-                        <input disabled type="text" class="form-control privateInfoField" id="postalCode">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row gutters">
-                <div class="col-12 bottom-menu text-right pt-3">
-                    <button type="button" id="editPrivateInfo" class="btn gbtn btn-secondary">Edit</button>
-                </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input disabled type="text" class="form-control InfoField" id="phoneNumber">
             </div>
         </div>
     </div>
 
+    <div class="row gutters">
+        <div class="col-12">
+            <h6 class="mb-2 mt-4">Address</h6>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="street">Street</label>
+                <input disabled type="text" class="form-control InfoField" id="street">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="city">City</label>
+                <input disabled type="text" class="form-control InfoField" id="city">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="state">Province</label>
+                <input disabled type="text" class="form-control InfoField" id="province">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="zip">Postal Code</label>
+                <input disabled type="text" class="form-control InfoField" id="postalCode">
+            </div>
+        </div>
+    </div>
+
+    <div class="row gutters mb-3">
+        <div class="col-12 bottom-menu text-right pt-3">
+            <button type="button" id="cancel" class="btn gbtn btn-secondary">Cancel</button>
+            <button type="button" id="save" class="btn gbtn btn-secondary">Save</button>
+        </div>
     </div>
 </main>
