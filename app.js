@@ -1,8 +1,8 @@
 import "dotenv/config"; // Load environment variables from .env file FIRST
 import express from "express";
-import path from "path";
+import path from 'path';
 import fs from "fs";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from 'url';
 import expressLayouts from "express-ejs-layouts";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -125,6 +125,7 @@ const definedRoutes = new Set();
 
 // Auto-register .ejs views as routes
 fs.readdirSync(autoRouteDir).forEach((file) => {
+fs.readdirSync(autoRouteDir).forEach((file) => {
   const ext = path.extname(file);
   const name = path.basename(file, ext);
   console.log(name, ", ", ext);
@@ -140,6 +141,7 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
           pageJS: `/js/${name}.js`,
           showNav: true,
           showFooter: true,
+          mapPage: false,
         });
       });
       definedRoutes.add(route);
@@ -155,6 +157,7 @@ app.get("/", (req, res) => {
     pageJS: false,
     showNav: false,
     showFooter: false,
+    mapPage: false,
   });
 });
 
@@ -165,6 +168,7 @@ app.get("/login", (req, res) => {
     pageJS: "/js/login.js",
     showNav: false,
     showFooter: false,
+    mapPage: false,
   });
 });
 
@@ -175,6 +179,7 @@ app.get("/register", (req, res) => {
     pageJS: "/js/register.js",
     showNav: false,
     showFooter: false,
+    mapPage: false,
   });
 });
 
@@ -192,17 +197,19 @@ app.get("/diary", async (req, res) => {
     pageJS: "/js/diary.js",
     showNav: true,
     showFooter: true,
+    mapPage: false,
     foodList: foodList,
   });
 });
 
-app.get("/GymLog", (req, res) => {
+app.get("/gymLog", (req, res) => {
   res.render("gymLog", {
     title: "Gym Log",
-    pageCSS: false,
-    pageJS: false,
+    pageCSS: "/css/gymLog.css",
+    pageJS: "/js/gymLog.js",
     showNav: true,
     showFooter: true,
+    mapPage: true,
   });
 });
 
@@ -216,5 +223,10 @@ app.get("/*dummy404", (req, res) => {
     body: body,
     showNav: true,
     showFooter: true,
+    mapPage: false,
   });
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });

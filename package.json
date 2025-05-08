@@ -29,7 +29,8 @@
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.1",
     "mongodb": "^6.16.0",
-    "mongoose": "^8.14.1"
+    "mongoose": "^8.14.1",
+    "ol": "^10.5.0"
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",
