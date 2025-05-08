@@ -1,20 +1,17 @@
-
-import Map from 'ol/Map.js';
-import OSM from 'ol/source/OSM.js';
-import TileLayer from 'ol/layer/Tile.js';
-import View from 'ol/View';
-
 console.log("Gym Log JS loaded");
 
-const map = new Map({
-  target: 'map',
+const map = new ol.Map({
   layers: [
-    new TileLayer({
-      source: new OSM(),
+    new ol.layer.Tile({
+      source: new ol.source.TileJSON({
+        url: "https://api.maptiler.com/maps/basic-v2/tiles.json?key=jMM6JmEYJJVW4Ydny1Mv",
+        tileSize: 512,
+      }),
     }),
   ],
-  view: new View({
-    center: [0, 0],
+  target: "map",
+  view: new ol.View({
+    center: ol.proj.fromLonLat([0, 0]),
     zoom: 2,
   }),
 });

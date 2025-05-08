@@ -1,18 +1,17 @@
 import express from "express";
-import path from 'path';
+import path from "path";
 import fs from "fs";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 import expressLayouts from "express-ejs-layouts";
 
 //route imports
-import healthConnect from './backend/routes/healthConnect.js';
-import db from './backend/routes/db.js';
-
+import healthConnect from "./backend/routes/healthConnect.js";
+import db from "./backend/routes/db.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express()
+const app = express();
 const port = process.env.PORT || 8100;
 
 app.use(express.json());
@@ -34,11 +33,10 @@ app.use("/views", express.static("./frontend/views"));
 
 //Backend
 app.use("/config", express.static("./backend/config"));
-app.use('/api/healthConnect', healthConnect);
-app.use('/api/db', db);
+app.use("/api/healthConnect", healthConnect);
+app.use("/api/db", db);
 
-app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
-
+app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
 
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -49,7 +47,7 @@ const autoRouteDir = path.join(process.cwd(), "./frontend/views/autoRoute");
 const definedRoutes = new Set();
 
 // Auto-register .ejs views as routes
-fs.readdirSync(autoRouteDir).forEach(file => {
+fs.readdirSync(autoRouteDir).forEach((file) => {
   const ext = path.extname(file);
   const name = path.basename(file, ext);
 
@@ -63,7 +61,8 @@ fs.readdirSync(autoRouteDir).forEach(file => {
           pageCSS: `/css/${name}.css`,
           pageJS: `/js/${name}.js`,
           showNav: true,
-          showFooter: true
+          showFooter: true,
+          mapPage: false,
         });
       });
       definedRoutes.add(route);
@@ -78,7 +77,8 @@ app.get("/", (req, res) => {
     pageCSS: false,
     pageJS: false,
     showNav: false,
-    showFooter: false
+    showFooter: false,
+    mapPage: false,
   });
 });
 
@@ -88,10 +88,10 @@ app.get("/login", (req, res) => {
     pageCSS: "/css/login.css",
     pageJS: "/js/login.js",
     showNav: false,
-    showFooter: false
+    showFooter: false,
+    mapPage: false,
   });
 });
-
 
 app.get("/register", (req, res) => {
   res.render("register", {
@@ -99,17 +99,19 @@ app.get("/register", (req, res) => {
     pageCSS: "/css/register.css",
     pageJS: "/js/register.js",
     showNav: false,
-    showFooter: false
+    showFooter: false,
+    mapPage: false,
   });
 });
 
-app.get("/GymLog", (req, res) => {
+app.get("/gymLog", (req, res) => {
   res.render("gymLog", {
     title: "Gym Log",
     pageCSS: "/css/gymLog.css",
     pageJS: "/js/gymLog.js",
     showNav: true,
-    showFooter: true
+    showFooter: true,
+    mapPage: true,
   });
 });
 
@@ -120,12 +122,13 @@ app.get("/*dummy404", (req, res) => {
     title: "404",
     pageCSS: false,
     pageJS: false,
-    body : body,
+    body: body,
     showNav: true,
-    showFooter: true
+    showFooter: true,
+    mapPage: false,
   });
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
