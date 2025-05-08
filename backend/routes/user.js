@@ -38,8 +38,14 @@ export async function getUserById(userId) {
 
 // Endpoints
 router.put('/account', async (req, res) => {
+  const userId = req.session?.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized: No user session' });
+  }
+
   try {
-    const updatedUser = await updateUserSettings(presetUserId, req.body);
+    const updatedUser = await updateUserSettings(userId, req.body);
     res.json({ success: true, user: updatedUser });
   } catch (err) {
     console.error('Account settings update failed:', err);
@@ -47,9 +53,16 @@ router.put('/account', async (req, res) => {
   }
 });
 
+
 router.get('/account', async (req, res) => {
+  const userId = req.session?.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized: No user session' });
+  }
+
   try {
-    const user = await getUserById(presetUserId);
+    const user = await getUserById(userId);
     res.json(user);
   } catch (err) {
     res.status(404).json({ error: err.message });
