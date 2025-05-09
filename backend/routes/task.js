@@ -17,17 +17,23 @@ router.post("/createTaskEntry", async (req, res) => {
     });
 
     if (data) {
-      return res.status(200).json({
-        success: true,
-        message: "Food item added successfully",
-        taskEntry: {
-            taskName: taskName,
-            taskDescription: taskDescription,
-            taskValue: taskValue,
-        },
-      });
+
+        await User.updateOne(
+            { _id: req.session.userId },
+            { $push: { taskList: data._id } }
+        )
+
+        return res.status(200).json({
+            success: true,
+            message: "Task entry added successfully",
+            taskEntry: {
+                taskName: taskName,
+                taskDescription: taskDescription,
+                taskValue: taskValue,
+            },
+        });
     } else {
-      return res.status(500).json({ error: "Failed to add task entry" });
+        return res.status(500).json({ error: "Failed to add task entry" });
     }
   } catch (error) {
     console.error("Error in /test:", error);
@@ -39,7 +45,7 @@ router.get("/readUserTasks", async (req, res) => {
     try {
         await connectToMongo();
 
-        // Get user id
+        // Get user document
         const taskArray = await User.find({
             email: req.session.email
         })    
@@ -50,7 +56,6 @@ router.get("/readUserTasks", async (req, res) => {
         });
 
         if (taskList) {
-            console.log(taskList)
           return res.status(200).json({
             success: true,
             message: taskList,

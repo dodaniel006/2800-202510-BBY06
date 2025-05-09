@@ -7,30 +7,25 @@ function getValue() {
     document.getElementById("sliderLabel").innerHTML = "Point Value: " + value;
 }
 
-// Read all tasks
-const response = await fetch(`/api/task/readUserTasks`, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-});
+// Create Task
 
-// Credit to Jacob for this code here, I love stealing things
-const result = await response.json();
+document.getElementById("create").addEventListener("click", createTask);
 
-if (response.ok) {
-    console.log(result.message);
+async function createTask() {
+
+    let name = document.getElementById("name").value;
+    let description = document.getElementById("description").value;
+    let value = document.getElementById("slider").value;
+
+    const response1 = await fetch(`/api/task/createTaskEntry`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ taskName: name, taskDescription: description, taskValue: value }),
+    }).then(
+        setTimeout(function(){
+            window.location='/home'
+        }, 500)
+    );
 }
-
-
-
-// //Create task
-// const response1 = await fetch(`/api/task/createTaskEntry`, {
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({ taskName: "Task1", taskDescription: "Task1Description", taskValue: 30 }),
-// });
-
-// console.log(response1)

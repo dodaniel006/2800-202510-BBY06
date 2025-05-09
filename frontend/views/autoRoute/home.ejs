@@ -8,6 +8,27 @@
     <title>Home</title>
 </head>
 <body>
+
+<template id="taskTemplate">
+    <div class="card text-bg-dark text-start mb-2">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <h1 id="taskName">Task Name</h1>
+                    <p id="taskDescription">Short Description</p>
+                    <!-- <p id="taskValue">0</p> -->
+                </div>
+                <div class="col d-grid gap-2">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary button" taskValue="0" taskId="681d9e21e318cf8157224819" data-bs-toggle="modal" data-bs-target="#confirmationPoppup">
+                        Complete Task
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
 <div class="card text-center text-bg-secondary m-2">
     <div class="card-body">   
         <div class="resizer">
@@ -23,40 +44,8 @@
     </div>
 
     <!-- Scroll With Cards inside -->
-    <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0" style="overflow-y: scroll; height: 300px;">
-        <div class="card text-bg-dark text-start mb-2">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <h1>Task Name</h1>
-                        <p>Short Description</p>
-                    </div>
-                    <div class="col d-grid gap-2">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationPoppup">
-                            Complete Task
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card text-bg-dark text-start mb-2">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <h1>Task Name</h1>
-                        <p>Short Description</p>
-                    </div>
-                    <div class="col d-grid gap-2">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationPoppup">
-                            Complete Task
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0" style="overflow-y: scroll; height: 300px;" id="cardHolder">
+        <!-- Populated with cards -->
     </div>  
 </div>
     <!-- Modal -->
