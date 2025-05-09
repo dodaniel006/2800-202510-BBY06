@@ -1,8 +1,11 @@
+import "dotenv/config"; // Load environment variables from .env file FIRST
 import express from "express";
-import path from "path";
+import path from 'path';
 import fs from "fs";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from 'url';
 import expressLayouts from "express-ejs-layouts";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 //route imports
 import healthConnect from './backend/routes/healthConnect.js';
@@ -10,7 +13,7 @@ import db from './backend/routes/db.js';
 import files from './backend/routes/files.js';
 import user from './backend/routes/user.js';
 import diary from "./backend/routes/diary.js";
-
+import authRouter from './backend/routes/authentication.js'; // Import authRouter
 
 // Model imports
 import { connectToMongo } from "./backend/config/db.js";
@@ -21,6 +24,33 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 8100;
+
+const TTL = 60 * 60;
+
+const sessionStore = MongoStore.create({
+  mongoUrl: process.env.MONGODB_URI,
+  collectionName: "sessions",
+  ttl: TTL,
+  autoRemove: "native",
+  dbName: "Japples",
+  crypto: {
+    secret: process.env.SESSION_SECRET,
+  },
+});
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+      maxAge: TTL * 1000,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+    },
+  })
+);
 
 
 app.use(express.json());
@@ -49,7 +79,41 @@ app.use("/api/diary", diary);
 app.use('/api/healthConnect', healthConnect);
 app.use('/api/db', db);
 app.use('/api/files', files);
-app.use('/api/user', user);
+app.use('/api/user', user);app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
+
+const lifecycle = process.env.npm_lifecycle_event;
+
+if (!["dev", "server"].includes(lifecycle)) {
+  app.use((req, res, next) => {
+    const frontendRoutes = ["/", "/login", "/initDB", "/register"];
+
+    if (!req.session.authenticated && !frontendRoutes.includes(req.path)) {
+      return res.redirect("/login");
+    }
+
+    if (req.session.authenticated && ["/", "/login", "/register"].includes(req.path)) {
+      return res.redirect("/home");
+    }
+
+    next();
+  });
+} else {
+  console.log("⚠️ Route protection is disabled (running via npm run dev/server)");
+}
+
+async function startServer() {
+  try {
+    await connectToMongo(); // Connect to MongoDB
+    app.listen(port, () => {
+      console.log(`Example app listening on port ${port}`);
+    });
+  } catch (error) {
+    console.error("Failed to start the server:", error);
+    process.exit(1); // Exit if cannot connect to DB or start server
+  }
+}
+
+startServer(); // Call the async function to start the server
 
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -76,6 +140,7 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
           pageJS: `/js/${name}.js`,
           showNav: true,
           showFooter: true,
+          mapPage: false,
         });
       });
       definedRoutes.add(route);
@@ -91,6 +156,7 @@ app.get("/", (req, res) => {
     pageJS: false,
     showNav: false,
     showFooter: false,
+    mapPage: false,
   });
 });
 
@@ -101,6 +167,7 @@ app.get("/login", (req, res) => {
     pageJS: "/js/login.js",
     showNav: false,
     showFooter: false,
+    mapPage: false,
   });
 });
 
@@ -111,6 +178,7 @@ app.get("/register", (req, res) => {
     pageJS: "/js/register.js",
     showNav: false,
     showFooter: false,
+    mapPage: false,
   });
 });
 
@@ -128,17 +196,19 @@ app.get("/diary", async (req, res) => {
     pageJS: "/js/diary.js",
     showNav: true,
     showFooter: true,
+    mapPage: false,
     foodList: foodList,
   });
 });
 
-app.get("/GymLog", (req, res) => {
+app.get("/gymLog", (req, res) => {
   res.render("gymLog", {
     title: "Gym Log",
-    pageCSS: false,
-    pageJS: false,
+    pageCSS: "/css/gymLog.css",
+    pageJS: "/js/gymLog.js",
     showNav: true,
     showFooter: true,
+    mapPage: true,
   });
 });
 
@@ -152,9 +222,7 @@ app.get("/*dummy404", (req, res) => {
     body: body,
     showNav: true,
     showFooter: true,
+    mapPage: false,
   });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
