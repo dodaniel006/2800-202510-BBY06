@@ -36,10 +36,11 @@ function initMap(lon, lat) {
     map = new ol.Map({
       layers: [
         new ol.layer.Tile({
-          source: new ol.source.TileJSON({
-            url: "https://api.maptiler.com/maps/streets-v2/tiles.json?key=CtM10uhhBnnLZPJPfCxl",
-            tileSize: 512,
-          }),
+          source: new ol.source.OSM(), // Use OpenStreetMap as the tile source
+          // source: new ol.source.TileJSON({
+          //   url: "https://api.maptiler.com/maps/streets-v2/tiles.json?key=CtM10uhhBnnLZPJPfCxl",
+          //   tileSize: 512,
+          // }),
         }),
       ],
       target: "map",
@@ -71,6 +72,32 @@ function initMap(lon, lat) {
 
   map.addLayer(marker);
 
+  reverseGeocode(lon, lat); // Call reverse geocoding function with the current position
+}
+
+async function reverseGeocode(lon, lat) {
+  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data && data.address) {
+      const city = data.address.city || data.address.town || data.address.village || "Unknown City";
+      const country = data.address.country || "Unknown Country";
+      console.log(`You are in ${city}, ${country}.`);
+
+      // Display the location details on the page
+      const locationDiv = document.getElementById("location");
+      locationDiv.innerHTML = `You are in <strong>${city}</strong>, <strong>${country}</strong>.<br>
+      Your approximate address is: <strong>${data.address.house_number} ${data.address.road}, ${data.address.postcode}</strong>`;
+
+    } else {
+      console.error("No address found for the given coordinates.");
+    }
+  } catch (error) {
+    console.error("Error during reverse geocoding:", error);
+  }
 }
 
 geolocation.on("change:position", () => {
