@@ -11,6 +11,8 @@ import MongoStore from "connect-mongo";
 import healthConnect from './backend/routes/healthConnect.js';
 import db from './backend/routes/db.js';
 import files from './backend/routes/files.js';
+import game from './backend/routes/game.js';
+import task from './backend/routes/task.js';
 import user from './backend/routes/user.js';
 import diary from "./backend/routes/diary.js";
 import authRouter from './backend/routes/authentication.js'; // Import authRouter
@@ -18,6 +20,7 @@ import authRouter from './backend/routes/authentication.js'; // Import authRoute
 // Model imports
 import { connectToMongo } from "./backend/config/db.js";
 import Food from "./backend/config/db_schemas/Food.js";
+import Task from "./backend/config/db_schemas/Task.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,6 +82,7 @@ app.use("/api/diary", diary);
 app.use('/api/healthConnect', healthConnect);
 app.use('/api/db', db);
 app.use('/api/game', game);
+app.use('/api/task', task);
 app.use('/api/files', files);
 app.use('/api/user', user);app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
 
@@ -128,7 +132,7 @@ const definedRoutes = new Set();
 fs.readdirSync(autoRouteDir).forEach((file) => {
   const ext = path.extname(file);
   const name = path.basename(file, ext);
-  console.log(name, ", ", ext);
+  console.log("Loaded: " + name + ext);
 
   if (ext === ".ejs") {
     const route = `/${name}`;

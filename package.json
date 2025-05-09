@@ -27,10 +27,10 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-ejs-layouts": "^2.5.1",
-    "fs": "^0.0.1-security",
     "express-session": "^1.18.1",
+    "fs": "^0.0.1-security",
     "mongodb": "^6.16.0",
-    "mongoose": "^8.14.1"
+    "mongoose": "^8.14.2"
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",
