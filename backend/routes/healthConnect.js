@@ -91,19 +91,32 @@ export async function fetchAllHealthData({ accessToken, queries = {}, lastSynced
 
 
 router.post('/get/:method', async (req, res) => {
+  const userId = req.session?.userId;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
   const { method } = req.params;
   const { accessToken, queries, lastSyncedAt } = req.body;
 
   try {
     const { data, status } = await fetchHealthData({ method, accessToken, queries, lastSyncedAt });
-    res.status(status).json(data);
+
+    // ⬇️ Attach userId to each entry (if it's an array)
+    const taggedData = Array.isArray(data)
+      ? data.map(entry => ({ ...entry, userId }))
+      : { ...data, userId };
+
+    res.status(status).json(taggedData);
   } catch (error) {
     console.error('Error forwarding request:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
+
 router.post('/getAll', async (req, res) => {
+  const userId = req.session?.userId;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
   const { accessToken, queries, lastSyncedAt } = req.body;
 
   if (!accessToken) {
@@ -112,11 +125,21 @@ router.post('/getAll', async (req, res) => {
 
   try {
     const allResults = await fetchAllHealthData({ accessToken, queries, lastSyncedAt });
+
+    // ⬇️ Attach userId to each result set
+    for (const key of Object.keys(allResults)) {
+      const item = allResults[key];
+      if (Array.isArray(item.data)) {
+        allResults[key].data = item.data.map(entry => ({ ...entry, userId }));
+      }
+    }
+
     res.json(allResults);
   } catch (error) {
     console.error('Error in fetchAllHealthData:', error);
     res.status(500).json({ error: 'Failed to fetch all health data' });
   }
 });
+
 
 export default router;

@@ -1,0 +1,287 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+<style>
+    canvas {
+      touch-action: pan-y;
+    }
+    .chart-container {
+      margin-bottom: 40px;
+    }
+    #fitnessChart, #heartRateChart, #sleepChart {
+      max-width: 100%;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 1rem;
+      margin-bottom: 20px;
+    }
+    button {
+      margin-bottom: 40px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background-color: #eee;
+      cursor: pointer;
+    }
+  </style>
+  <div class="chart-container">
+    <h2>Steps Over Time</h2>
+    <canvas id="fitnessChart" height="100"></canvas>
+    <button onclick="resetZoom('fitnessChart')">Reset Zoom</button>
+  </div>
+  
+  <div class="chart-container">
+    <h2>Heart Rate Over Time</h2>
+    <canvas id="heartRateChart" height="100"></canvas>
+    <button onclick="resetZoom('heartRateChart')">Reset Zoom</button>
+  </div>
+  
+  <div class="chart-container">
+    <h2>Sleep Stages Over Time</h2>
+    <canvas id="sleepChart" height="100"></canvas>
+  </div>
+  
+  <script>
+    Chart.register(window.ChartZoom);
+  
+    let sleepChartInstance = null;
+  
+    function getZoomOptions() {
+      return {
+        pan: { enabled: true, mode: 'x' },
+        zoom: {
+          wheel: { enabled: true, modifierKey: 'ctrl' },
+          pinch: { enabled: true },
+          mode: 'x'
+        }
+      };
+    }
+  
+    function resetZoom(chartId) {
+      const chart = Chart.getChart(chartId);
+      if (chart) chart.resetZoom();
+    }
+  
+    async function fetchData() {
+      const res = await fetch('/api/db/data/steps');
+      if (!res.ok) throw new Error("Failed to fetch steps data");
+      return await res.json();
+    }
+  
+    function transformData(data) {
+      const bucketMinutes = 5;
+      const buckets = {};
+      for (const item of data) {
+        const date = new Date(item.start);
+        const rounded = new Date(date);
+        rounded.setMinutes(Math.floor(date.getMinutes() / bucketMinutes) * bucketMinutes, 0, 0);
+        const key = rounded.toISOString();
+        if (!buckets[key]) buckets[key] = [];
+        buckets[key].push(item.data.count);
+      }
+  
+      const labels = [];
+      const averagedCounts = [];
+      for (const key of Object.keys(buckets).sort()) {
+        const avg = buckets[key].reduce((a, b) => a + b, 0) / buckets[key].length;
+        labels.push(new Date(key).toLocaleTimeString());
+        averagedCounts.push(Math.round(avg));
+      }
+  
+      return {
+        labels,
+        datasets: [{
+          label: 'Avg Activity Count',
+          data: averagedCounts,
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgb(75, 192, 192)',
+          borderWidth: 1
+        }]
+      };
+    }
+  
+    async function fetchHeartData() {
+      const res = await fetch('/api/db/data/heartRate');
+      if (!res.ok) throw new Error("Failed to fetch heart rate data");
+      const raw = await res.json();
+      const samples = raw.flatMap(entry => entry.data.samples);
+      samples.sort((a, b) => new Date(a.time) - new Date(b.time));
+      const STEP = Math.ceil(samples.length / 300);
+      return samples.filter((_, i) => i % STEP === 0);
+    }
+  
+    function transformHeartRateData(samples) {
+      return {
+        labels: samples.map(s => new Date(s.time).toLocaleTimeString()),
+        datasets: [{
+          label: 'Heart Rate (BPM)',
+          data: samples.map(s => s.beatsPerMinute),
+          fill: false,
+          borderColor: 'rgb(255, 99, 132)',
+          tension: 0.4,
+          cubicInterpolationMode: 'monotone',
+          pointRadius: 0.1,
+          pointHitRadius: 10,
+          pointHoverRadius: 4
+        }]
+      };
+    }
+  
+
+  
+
+    async function renderChart() {
+      const rawData = await fetchData();
+      const chartData = transformData(rawData);
+      new Chart(document.getElementById('fitnessChart').getContext('2d'), {
+        type: 'bar',
+        data: chartData,
+        options: {
+          responsive: true,
+          animation: false,
+          interaction: { mode: 'index', intersect: false, axis: 'x' },
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+            title: { display: true, text: 'Steps Over Time' },
+            zoom: getZoomOptions()
+          },
+          scales: {
+            x: { title: { display: true, text: 'Time' }, ticks: { maxTicksLimit: 10 } },
+            y: { beginAtZero: true, title: { display: true, text: 'Steps per 5-Minute Interval' } }
+          }
+        }
+      });
+    }
+  
+    async function renderHeartRateChart() {
+      const samples = await fetchHeartData();
+      const chartData = transformHeartRateData(samples);
+      new Chart(document.getElementById('heartRateChart').getContext('2d'), {
+        type: 'line',
+        data: chartData,
+        options: {
+          responsive: true,
+          animation: false,
+          interaction: { mode: 'index', intersect: false, axis: 'x' },
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true },
+            title: { display: true, text: 'Heart Rate (Downsampled)' },
+            zoom: getZoomOptions()
+          },
+          scales: {
+            x: { title: { display: true, text: 'Time' }, ticks: { maxTicksLimit: 10 } },
+            y: { title: { display: true, text: 'Beats Per Minute' } }
+          }
+        }
+      });
+    }
+  
+
+    async function fetchSleepData() {
+  const res = await fetch('/api/db/data/sleepsessions');
+  if (!res.ok) throw new Error('Failed to fetch sleep data');
+  const sessions = await res.json();
+  return sessions.flatMap(session => session.data.stages.map(stage => ({
+    stage: stage.stage,
+    start: new Date(stage.startTime),
+    end: new Date(stage.endTime),
+  })));
+}
+
+function getStageLabel(stage) {
+  const map = {
+    1: 'Awake',
+    4: 'Light',
+    5: 'REM',
+    6: 'Deep'
+  };
+  return map[stage] ?? `Stage ${stage}`;
+}
+
+function getStageColor(stage) {
+  const map = {
+    1: '#f39c12', // Awake
+    4: '#3498db', // Light
+    5: '#9b59b6', // REM
+    6: '#2ecc71'  // Deep
+  };
+  return map[stage] ?? '#95a5a6';
+}
+
+function transformSleepData(sleepStages) {
+  return {
+    labels: ['Sleep Session'],
+    datasets: sleepStages.map((s, index) => ({
+      label: getStageLabel(s.stage),
+      data: [{
+        x: [s.start, s.end],
+        y: 'Sleep Session'
+      }],
+      backgroundColor: getStageColor(s.stage),
+      borderSkipped: false,
+      borderRadius: 3
+    }))
+  };
+}
+
+async function renderSleepChart() {
+  const stages = await fetchSleepData();
+  const chartData = transformSleepData(stages);
+
+  if (sleepChartInstance) {
+    sleepChartInstance.destroy();
+  }
+
+  sleepChartInstance = new Chart(document.getElementById('sleepChart').getContext('2d'), {
+    type: 'bar',
+    data: chartData,
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const range = context.raw.x;
+              return `${context.dataset.label}: ${new Date(range[0]).toLocaleTimeString()} - ${new Date(range[1]).toLocaleTimeString()}`;
+            }
+          }
+        },
+        title: {
+          display: true,
+          text: 'Sleep Stages Over Time'
+        },
+        zoom: getZoomOptions()
+      },
+      parsing: false,
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            displayFormats: { minute: 'h:mm a' }
+          },
+          title: {
+            display: true,
+            text: 'Time'
+          }
+        },
+        y: {
+          title: { display: false }
+        }
+      }
+    }
+  });
+}
+
+
+    renderChart();
+    renderSleepChart();
+
+
+    renderHeartRateChart();
+  </script>
