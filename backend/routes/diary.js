@@ -11,10 +11,13 @@ router.post("/addFoodToDiary", async (req, res) => {
 
     await connectToMongo();
     const data = await Food.insertOne({
+      userId: req.session.userId,
       foodName: foodItem,
       foodAmount: foodAmount,
       foodCalorie: foodCalories,
     });
+
+    console.log("data: ", data);
 
     if (data) {
       return res.status(200).json({
@@ -42,6 +45,7 @@ router.post("/deleteFoodFromDiary", async (req, res) => {
     await connectToMongo();
     const data = await Food.deleteOne({
       _id: foodItemId,
+      userId: req.session.userId,
     });
 
     if (data) {

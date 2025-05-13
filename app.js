@@ -1,19 +1,19 @@
 import "dotenv/config"; // Load environment variables from .env file FIRST
 import express from "express";
-import path from 'path';
+import path from "path";
 import fs from "fs";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 import expressLayouts from "express-ejs-layouts";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
 //route imports
-import healthConnect from './backend/routes/healthConnect.js';
-import db from './backend/routes/db.js';
-import files from './backend/routes/files.js';
-import user from './backend/routes/user.js';
+import healthConnect from "./backend/routes/healthConnect.js";
+import db from "./backend/routes/db.js";
+import files from "./backend/routes/files.js";
+import user from "./backend/routes/user.js";
 import diary from "./backend/routes/diary.js";
-import authRouter from './backend/routes/authentication.js'; // Import authRouter
+import authRouter from "./backend/routes/authentication.js"; // Import authRouter
 
 // Model imports
 import { connectToMongo } from "./backend/config/db.js";
@@ -52,7 +52,6 @@ app.use(
   })
 );
 
-
 app.use(express.json());
 
 // EJS + Layouts
@@ -71,15 +70,15 @@ app.use("/fonts", express.static("./frontend/assets/fonts"));
 app.use("/views", express.static("./frontend/views"));
 app.use("/files", express.static("./frontend/assets/files"));
 
-
 //Backend
 app.use(express.urlencoded({ extended: false }));
 app.use("/config", express.static("./backend/config"));
 app.use("/api/diary", diary);
-app.use('/api/healthConnect', healthConnect);
-app.use('/api/db', db);
-app.use('/api/files', files);
-app.use('/api/user', user);app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
+app.use("/api/healthConnect", healthConnect);
+app.use("/api/db", db);
+app.use("/api/files", files);
+app.use("/api/user", user);
+app.use("/api/auth", authRouter); // Use authRouter for /api/auth routes
 
 const lifecycle = process.env.npm_lifecycle_event;
 
@@ -91,14 +90,19 @@ if (!["dev", "server"].includes(lifecycle)) {
       return res.redirect("/login");
     }
 
-    if (req.session.authenticated && ["/", "/login", "/register"].includes(req.path)) {
+    if (
+      req.session.authenticated &&
+      ["/", "/login", "/register"].includes(req.path)
+    ) {
       return res.redirect("/home");
     }
 
     next();
   });
 } else {
-  console.log("⚠️ Route protection is disabled (running via npm run dev/server)");
+  console.log(
+    "⚠️ Route protection is disabled (running via npm run dev/server)"
+  );
 }
 
 async function startServer() {
@@ -185,10 +189,7 @@ app.get("/register", (req, res) => {
 app.get("/diary", async (req, res) => {
   // Connect to MongoDB and fetch food list
   await connectToMongo();
-
-  // Eventually this should be specific to a user
-  // For now, we will just get all food items in the DB
-  const foodList = await Food.find({});
+  const foodList = await Food.find({ userId: req.session.userId });
 
   res.render("diary", {
     title: "Diary",
@@ -225,4 +226,3 @@ app.get("/*dummy404", (req, res) => {
     mapPage: false,
   });
 });
-
