@@ -33,6 +33,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    taskList: {
+        type: Array
+    },
     phoneNumber: {
         type: String,
         trim: true

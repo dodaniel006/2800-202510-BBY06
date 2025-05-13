@@ -3,11 +3,18 @@
     margin-left: auto; 
     margin-right: auto;
     padding: 0; 
-    height: 51vw;
-    width: 50vw;
+    height: 41vw;
+    width: 40vw;
     overflow: hidden 
 }
     .resizer > .resized { 
         flex-grow: 1; 
         border: 0 
     }
+
+@media only screen and (max-width: 740px) {
+    .resizer {
+        height: 51vw;
+        width: 50vw;
+    }
+}
