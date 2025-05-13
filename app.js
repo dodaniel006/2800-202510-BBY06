@@ -84,7 +84,7 @@ app.use('/api/db', db);
 app.use('/api/game', game);
 app.use('/api/task', task);
 app.use('/api/files', files);
-app.use('/api/user', user);app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
+app.use('/api/user', user); app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
 
 const lifecycle = process.env.npm_lifecycle_event;
 
@@ -124,6 +124,19 @@ function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+const defaultSettings = {
+  pageCSS: false,
+  pageJS: false,
+  showNav: true,
+  showFooter: true,
+  mapPage: false,
+}
+
+function createSettings(userSettings) {
+  let settings = Object.assign({}, defaultSettings, userSettings);
+  return settings;
+}
+
 const autoRouteDir = path.join(process.cwd(), "./frontend/views/autoRoute");
 
 const definedRoutes = new Set();
@@ -138,15 +151,13 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
     const route = `/${name}`;
     if (!definedRoutes.has(route)) {
       app.get(route, (req, res) => {
-        res.render(`autoRoute/${name}`, {
-          layout: "layouts/default",
+        let settings = createSettings({
           title: capitalizeFirst(name),
+          layout: "layouts/default",
           pageCSS: `/css/${name}.css`,
           pageJS: `/js/${name}.js`,
-          showNav: true,
-          showFooter: true,
-          mapPage: false,
         });
+        res.render(`autoRoute/${name}`, settings);
       });
       definedRoutes.add(route);
     }
@@ -155,36 +166,34 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
 
 //Manual param routes
 app.get("/", (req, res) => {
-  res.render("index", {
+  let settings = createSettings({
     title: "Index",
-    pageCSS: false,
-    pageJS: false,
     showNav: false,
     showFooter: false,
-    mapPage: false,
   });
+  res.render("index", settings);
 });
 
 app.get("/login", (req, res) => {
-  res.render("login", {
+  let settings = createSettings({
     title: "Login",
     pageCSS: "/css/login.css",
     pageJS: "/js/login.js",
     showNav: false,
     showFooter: false,
-    mapPage: false,
   });
+  res.render("login", settings);
 });
 
 app.get("/register", (req, res) => {
-  res.render("register", {
+  let settings = createSettings({
     title: "Register",
-    pageCSS: "/css/register.css",
-    pageJS: "/js/register.js",
+    pageCSS: "/css/login.css",
+    pageJS: "/js/login.js",
     showNav: false,
     showFooter: false,
-    mapPage: false,
   });
+  res.render("register", settings);
 });
 
 app.get("/diary", async (req, res) => {
@@ -195,39 +204,32 @@ app.get("/diary", async (req, res) => {
   // For now, we will just get all food items in the DB
   const foodList = await Food.find({});
 
-  res.render("diary", {
+  let settings = createSettings({
     title: "Diary",
     pageCSS: "/css/diary.css",
     pageJS: "/js/diary.js",
-    showNav: true,
-    showFooter: true,
-    mapPage: false,
     foodList: foodList,
   });
+  res.render("diary", settings);
 });
 
 app.get("/gymLog", (req, res) => {
-  res.render("gymLog", {
+  let settings = createSettings({
     title: "Gym Log",
     pageCSS: "/css/gymLog.css",
     pageJS: "/js/gymLog.js",
-    showNav: true,
-    showFooter: true,
     mapPage: true,
   });
+  res.render("gymLog", settings);
 });
 
 app.get("/*dummy404", (req, res) => {
   let body = `<div class=\"h-100 d-flex flex-column justify-content-center text-center\"><h1 class=\"mb-0\">Error: 404 Page not found</h1><br>
               <a href=\"/home\">Go Back Home</a></div>`;
-  res.render("./layouts/default", {
+  let settings = createSettings({
     title: "404",
-    pageCSS: false,
-    pageJS: false,
     body: body,
-    showNav: true,
-    showFooter: true,
-    mapPage: false,
   });
+  res.render("./layouts/default", settings);
 });
 
