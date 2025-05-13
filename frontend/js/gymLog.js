@@ -80,14 +80,18 @@ async function reverseGeocode(lon, lat) {
     const data = await response.json();
 
     if (data && data.address) {
+      const locationDiv = document.getElementById("location");
       const city = data.address.city || data.address.town || data.address.village || "Unknown City";
       const country = data.address.country || "Unknown Country";
+      locationDiv.innerHTML = `You are in <strong>${city}</strong>, <strong>${country}</strong>.`;
       console.log(`You are in ${city}, ${country}.`);
 
       // Display the location details on the page
-      const locationDiv = document.getElementById("location");
-      locationDiv.innerHTML = `You are in <strong>${city}</strong>, <strong>${country}</strong>.<br>
-      Your approximate address is: <strong>${data.address.house_number} ${data.address.road}, ${data.address.postcode}</strong>`;
+      if (data.address.house_number && data.address.road && data.address.postcode) {
+
+        locationDiv.innerHTML += `<br>Your approximate address is: <strong>${data.address.house_number}
+         ${data.address.road}, ${data.address.postcode}</strong>`;
+      }
     } else {
       console.error("No address found for the given coordinates.");
     }
