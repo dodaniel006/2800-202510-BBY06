@@ -82,9 +82,9 @@ async function reverseGeocode(lon, lat) {
     if (data && data.address) {
       const locationDiv = document.getElementById("location");
       const city = data.address.city || data.address.town || data.address.village || "Unknown City";
-      const country = data.address.country || "Unknown Country";
-      locationDiv.innerHTML = `You are in <strong>${city}</strong>, <strong>${country}</strong>.`;
-      console.log(`You are in ${city}, ${country}.`);
+      const area = data.address.state || data.address.country || "Unknown area";
+      locationDiv.innerHTML = `You are in <strong><span id="userCity">${city}</span></strong>, <strong><span id="userArea">${area}</span></strong>.`;
+      console.log(`You are in ${city}, ${area}.`);
 
       // Display the location details on the page
       if (data.address.house_number && data.address.road && data.address.postcode) {
@@ -134,6 +134,45 @@ document.getElementById("updateLocation").addEventListener("click", () => {
   geolocation.setTracking(true);
   console.log("Updating Location...");
   timeout(); // Start the timeout for tracking
+});
+
+document.getElementById("submitUserInfo").addEventListener("click", async () => {
+  const userName = document.getElementById("userName").value;
+  const userAge = document.getElementById("userAge").value;
+  const place = document.getElementById("place").value;
+  const userLocation = document.getElementById("userArea").innerText;
+
+  // console.log("Place", place);
+  // let response = await fetch(`/api/gym/submitUserInfo?place=${place}`);
+  // console.log("Response", response);
+  // let parsed = await response.json();
+  // console.log("parsed", parsed);
+
+
+  // Send the user info to the server
+  fetch("/api/gym/submitUserInfo", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userName,
+      userAge,
+      place,
+      userLocation,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Location Successfully Parsed", data[0]);
+      document.getElementById("setLocation").innerHTML = data[0].display_name;
+    })
+    .catch((error) => {
+      console.error("Error submitting user info:", error);
+    });
 });
 
 // =========================

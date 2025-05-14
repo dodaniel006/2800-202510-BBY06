@@ -15,6 +15,7 @@ import game from './backend/routes/game.js';
 import task from './backend/routes/task.js';
 import user from './backend/routes/user.js';
 import diary from "./backend/routes/diary.js";
+import gym from "./backend/routes/gym.js";
 import authRouter from './backend/routes/authentication.js'; // Import authRouter
 
 // Model imports
@@ -84,6 +85,7 @@ app.use('/api/db', db);
 app.use('/api/game', game);
 app.use('/api/task', task);
 app.use('/api/files', files);
+app.use('/api/gym', gym);
 app.use('/api/user', user); app.use('/api/auth', authRouter); // Use authRouter for /api/auth routes
 
 const lifecycle = process.env.npm_lifecycle_event;
