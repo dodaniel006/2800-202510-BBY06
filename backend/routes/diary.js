@@ -9,6 +9,10 @@ router.post("/addFoodToDiary", async (req, res) => {
   try {
     const { foodItem, foodCalories, foodAmount } = req.body;
 
+    console.log("foodItem: ", foodItem);
+    console.log("foodCalories: ", foodCalories);
+    console.log("foodAmount: ", foodAmount);
+
     await connectToMongo();
     const data = await Food.insertOne({
       userId: req.session.userId,
