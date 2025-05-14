@@ -189,7 +189,20 @@ app.get("/register", (req, res) => {
 app.get("/diary", async (req, res) => {
   // Connect to MongoDB and fetch food list
   await connectToMongo();
-  const foodList = await Food.find({ userId: req.session.userId });
+
+  // Get today's midnight (start of day)
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  // Get end of today (start of next day)
+  const endOfDay = new Date(startOfDay);
+  endOfDay.setDate(endOfDay.getDate() + 1);
+
+  // Find food entries for the current user created today
+  const foodList = await Food.find({
+    userId: req.session.userId,
+    createdAt: { $gte: startOfDay, $lt: endOfDay },
+  });
 
   res.render("diary", {
     title: "Diary",
