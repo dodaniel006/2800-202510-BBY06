@@ -2,46 +2,15 @@
 document.getElementById("addFoodItem").addEventListener("click", (e) => {
   // e.preventDefault();
   // Get form values
-  const foodAmount = document.getElementById("quantityInput").value;
+  const foodAmount = document.getElementById("quantityInput").value || 1;
   const foodItem = document.getElementById("foodInput").value;
-  const foodCalories = document.getElementById("calorieInput").value;
-
-  // Create a new list item
-  const listItem = document.createElement("li");
-  listItem.classList.add("foodItem");
-
-  // Create spans for food and calories
-  const details1 = document.createElement("span");
-  details1.classList.add("px-3");
-  details1.textContent = `${foodAmount}x ${foodItem}`;
-
-  const details2 = document.createElement("div");
-  const calroiesValue = document.createElement("span");
-  calroiesValue.classList.add("px-3", "foodItemCalorie");
-  calroiesValue.textContent = `${foodCalories}`;
-  details2.appendChild(calroiesValue);
-
-  // create img element with src=/images/trash.png
-  const deleteDivContainer = document.createElement("div");
-  deleteDivContainer.classList.add("deleteItem", "px-3");
-  const deleteIcon = document.createElement("img");
-  deleteIcon.src = "/images/trash.png";
-  deleteIcon.alt = "delete";
-  deleteDivContainer.appendChild(deleteIcon);
-  details2.appendChild(deleteDivContainer);
-
-  details2.classList.add("d-flex", "h-100", "align-items-center");
-
-  // Append the spans to list item and
-  // and append list item to food list
-  listItem.appendChild(details1);
-  listItem.appendChild(details2);
-  document.getElementById("foodList").appendChild(listItem);
-
-  // Attach the delete listener to the newly create trash icon for this list item
-  attachDelete(deleteDivContainer);
+  const foodCalories = document.getElementById("calorieInput").value || 0;
 
   // Make Fetch call to /diaryAddFood to add food to DB
+  foodItem !== "" ? addFoodToDiary(foodItem, foodCalories, foodAmount) : null;
+});
+
+function addFoodToDiary(foodItem, foodCalories, foodAmount) {
   fetch("/api/diary/addFoodToDiary", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -52,30 +21,22 @@ document.getElementById("addFoodItem").addEventListener("click", (e) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      return (window.location.href = "/diary");
-    })
-    .then((data) => {
-      console.log("What is data: ", data);
-      console.log("Food item added successfully:", data);
-      // Clear the input fields
-      document.getElementById("foodInput").value = "";
-      document.getElementById("calorieInput").value = "";
-      document.getElementById("quantityInput").value = "";
+      // return (window.location.href = "/diary");
     })
     .catch((error) => {
       console.error("Error adding food item:", error);
       alert("Error adding food item. Please try again later.");
     });
-});
+}
 
-// Delete food item from list
+// add edit and delete listeners for each food item in list
 document.addEventListener("DOMContentLoaded", () => {
-  // For debugging - shows all elements in list - delete me when finished
-  // const foodTrashElements = document.querySelectorAll(".deleteItem");
-  // console.log(foodTrashElements);
-
   document.querySelectorAll(".deleteItem").forEach((trashIcon) => {
     attachDelete(trashIcon);
+  });
+
+  document.querySelectorAll(".editItem").forEach((editIcon) => {
+    attachEditFoodItem(editIcon);
   });
 });
 
@@ -83,9 +44,8 @@ function attachDelete(element) {
   element.addEventListener("click", (e) => {
     e.preventDefault();
 
-    const foodItem = e.target.closest(".foodItem");
+    const foodItem = e.target.closest("tr.foodItem");
     if (foodItem) {
-      // get food item id
       const foodItemId = foodItem.getAttribute("data-id");
       // Delete the food item from the database
       fetch("/api/diary/deleteFoodFromDiary", {
@@ -102,7 +62,17 @@ function attachDelete(element) {
           return response.json();
         })
         .then((data) => {
-          console.log("Food item deleted successfully:", data);
+          // reduce the total calories tally
+          const totalCalories = document.getElementById("totalCalories");
+          const currentCalories = parseInt(totalCalories.innerText);
+          // get food amount
+          const foodAmount = parseInt(
+            foodItem.querySelector(".foodAmount").innerText
+          );
+          const foodCalories = parseInt(
+            foodItem.querySelector(".foodCalories").innerText
+          );
+          totalCalories.innerText = currentCalories - foodCalories * foodAmount;
         })
         .catch((error) => {
           console.error("Error deleting food item:", error);
@@ -113,4 +83,55 @@ function attachDelete(element) {
       foodItem.remove();
     }
   });
+}
+
+async function attachEditFoodItem(element) {
+  element.addEventListener("click", (e) => {
+    const foodItem = e.target.closest("tr.foodItem");
+
+    // Target the edit modal input fields
+    const editName = document.getElementById("editFoodItem");
+    const editAmount = document.getElementById("editAmountInput");
+    const editCalorie = document.getElementById("editCalorieInput");
+
+    if (foodItem) {
+      const foodItemId = foodItem.getAttribute("data-id");
+      const foodName = foodItem.querySelector(".foodName").innerText;
+      const foodCalories = foodItem.querySelector(".foodCalories").innerText;
+      const foodAmount = foodItem.querySelector(".foodAmount").innerText;
+
+      editName.value = foodName;
+      editAmount.value = foodAmount;
+      editCalorie.value = foodCalories;
+
+      const saveButton = document.getElementById("saveEdit");
+      saveButton.addEventListener("click", (e) => {
+        editFoodItem(
+          foodItemId,
+          editName.value,
+          editAmount.value,
+          editCalorie.value
+        );
+      });
+    }
+  });
+}
+
+async function editFoodItem(foodItemId, name, amount, calorie) {
+  const response = await fetch("/api/diary/editFood", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      foodItemId,
+      name,
+      calorie,
+      amount,
+    }),
+  });
+
+  if (!response.ok) {
+    console.error("Error editing food item:", response.statusText);
+  } else {
+    return (window.location.href = "/diary");
+  }
 }

@@ -9,12 +9,19 @@ router.post("/addFoodToDiary", async (req, res) => {
   try {
     const { foodItem, foodCalories, foodAmount } = req.body;
 
+    console.log("foodItem: ", foodItem);
+    console.log("foodCalories: ", foodCalories);
+    console.log("foodAmount: ", foodAmount);
+
     await connectToMongo();
     const data = await Food.insertOne({
+      userId: req.session.userId,
       foodName: foodItem,
       foodAmount: foodAmount,
       foodCalorie: foodCalories,
     });
+
+    console.log("data: ", data);
 
     if (data) {
       return res.status(200).json({
@@ -35,6 +42,41 @@ router.post("/addFoodToDiary", async (req, res) => {
   }
 });
 
+router.put("/editFood", async (req, res) => {
+  try {
+    const { name, amount, calorie, foodItemId } = req.body;
+
+    await connectToMongo();
+    const data = await Food.updateOne(
+      { _id: foodItemId, userId: req.session.userId },
+      {
+        $set: {
+          foodName: name,
+          foodAmount: amount,
+          foodCalorie: calorie,
+        },
+      }
+    );
+
+    if (data) {
+      return res.status(200).json({
+        success: true,
+        message: "Food item updated successfully",
+        foodItem: {
+          foodName: name,
+          foodAmount: amount,
+          foodCalorie: calorie,
+        },
+      });
+    } else {
+      return res.status(500).json({ error: "Failed to add food item" });
+    }
+  } catch (error) {
+    console.error("Error in /test:", error);
+    res.status(500).json({ error: "MongoDB query failed" });
+  }
+});
+
 router.post("/deleteFoodFromDiary", async (req, res) => {
   try {
     const { foodItemId } = req.body;
@@ -42,6 +84,7 @@ router.post("/deleteFoodFromDiary", async (req, res) => {
     await connectToMongo();
     const data = await Food.deleteOne({
       _id: foodItemId,
+      userId: req.session.userId,
     });
 
     if (data) {
