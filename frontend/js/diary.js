@@ -29,10 +29,14 @@ function addFoodToDiary(foodItem, foodCalories, foodAmount) {
     });
 }
 
-// Delete food item from list
+// add edit and delete listeners for each food item in list
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".deleteItem").forEach((trashIcon) => {
     attachDelete(trashIcon);
+  });
+
+  document.querySelectorAll(".editItem").forEach((editIcon) => {
+    attachEditFoodItem(editIcon);
   });
 });
 
@@ -79,4 +83,55 @@ function attachDelete(element) {
       foodItem.remove();
     }
   });
+}
+
+async function attachEditFoodItem(element) {
+  element.addEventListener("click", (e) => {
+    const foodItem = e.target.closest("tr.foodItem");
+
+    // Target the edit modal input fields
+    const editName = document.getElementById("editFoodItem");
+    const editAmount = document.getElementById("editAmountInput");
+    const editCalorie = document.getElementById("editCalorieInput");
+
+    if (foodItem) {
+      const foodItemId = foodItem.getAttribute("data-id");
+      const foodName = foodItem.querySelector(".foodName").innerText;
+      const foodCalories = foodItem.querySelector(".foodCalories").innerText;
+      const foodAmount = foodItem.querySelector(".foodAmount").innerText;
+
+      editName.value = foodName;
+      editAmount.value = foodAmount;
+      editCalorie.value = foodCalories;
+
+      const saveButton = document.getElementById("saveEdit");
+      saveButton.addEventListener("click", (e) => {
+        editFoodItem(
+          foodItemId,
+          editName.value,
+          editAmount.value,
+          editCalorie.value
+        );
+      });
+    }
+  });
+}
+
+async function editFoodItem(foodItemId, name, amount, calorie) {
+  const response = await fetch("/api/diary/editFood", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      foodItemId,
+      name,
+      calorie,
+      amount,
+    }),
+  });
+
+  if (!response.ok) {
+    console.error("Error editing food item:", response.statusText);
+  } else {
+    return (window.location.href = "/diary");
+  }
 }

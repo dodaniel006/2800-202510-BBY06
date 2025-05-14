@@ -27,13 +27,3 @@ body {
 .deleteItem:hover {
   background-color: rgb(50, 50, 50);
 }
-
-.editButton {
-  cursor: pointer;
-  user-select: none; /* Prevents text highlighting */
-  background-color: red;
-}
-
-.editButton:hover {
-  background-color: #0b5ed7;
-}
