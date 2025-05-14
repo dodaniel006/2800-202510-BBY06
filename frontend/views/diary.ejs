@@ -1,5 +1,5 @@
-<div class="container">
-  <h1 class="display-4">Enter your food for the day here</h1>
+<div class="container-fluid mt-4 mb-2">
+  <h1 class="display-6">Food Diary</h1>
   <form>
     <label for="inputFood" class="form-label">What did you eat?</label>
     <input
@@ -40,14 +40,18 @@
         />
       </div>
       <div class="col d-flex align-items-end mx-auto">
-        <button type="submit" id="addFoodItem" class="btn btn-primary bb-bg-wallet-green-dark border-0">
+        <button
+          type="submit"
+          id="addFoodItem"
+          class="btn btn-primary bb-bg-wallet-green-dark border-0"
+        >
           Add
         </button>
       </div>
     </div>
   </form>
 
-  <div class="container foodWindow col mb-3 mt-3 px-0">
+  <div class="container-fluid foodWindow mt-3 px-0">
     <table id="foodTable" class="table table-striped">
       <thead>
         <tr>
@@ -65,7 +69,11 @@
           <td class="foodCalories"><%= food.foodCalorie %></td>
           <td>
             <div class="d-flex align-items-center">
-              <button class="btn btn-primary me-2 bb-bg-wallet-green-dark border-0 editItem" data-bs-toggle="modal" data-bs-target="#exampleModal" >
+              <button
+                class="btn btn-primary me-2 bb-bg-wallet-green-dark border-0 editItem"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -89,7 +97,7 @@
       </tbody>
     </table>
   </div>
-  <div class="container"></div>
+  <div class="container-fluid">
     Total Calories:
     <span id="totalCalories" class="fw-bold">
       <% if (foodList && foodList.length > 0) { %> <%= foodList.reduce((total,
@@ -99,31 +107,67 @@
   </div>
 </div>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
-
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Edit entry</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <!-- 3 inputs pre-filled with the details from the closest tr entry -->
         <p>Food item:</p>
-        <input type="text" class="form-control" id="editFoodItem" placeholder="Enter food item..." aria-describedby="foodHelp" required />
+        <input
+          type="text"
+          class="form-control"
+          id="editFoodItem"
+          placeholder="Enter food item..."
+          aria-describedby="foodHelp"
+          required
+        />
         <p>Calories:</p>
-        <input type="number" class="form-control" id="editCalorieInput" min="0" max="10000" placeholder="e.g. 100..." aria-describedby="calorieHelp" />
+        <input
+          type="number"
+          class="form-control"
+          id="editCalorieInput"
+          min="0"
+          max="10000"
+          placeholder="e.g. 100..."
+          aria-describedby="calorieHelp"
+        />
         <p>Amount:</p>
-        <input type="number" class="form-control" id="editAmountInput" min="0" max="10000" placeholder="e.g. 1, 2..." aria-describedby="quantityHelp" />
+        <input
+          type="number"
+          class="form-control"
+          id="editAmountInput"
+          min="0"
+          max="10000"
+          placeholder="e.g. 1, 2..."
+          aria-describedby="quantityHelp"
+        />
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button id="saveEdit" type="button" class="btn btn-primary bb-bg-wallet-green-dark border-0">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          id="saveEdit"
+          type="button"
+          class="btn btn-primary bb-bg-wallet-green-dark border-0"
+        >
+          Save changes
+        </button>
       </div>
     </div>
   </div>
