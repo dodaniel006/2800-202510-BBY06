@@ -1,12 +1,13 @@
 // Add food item to the list on "Add" button click
 document.getElementById("addFoodItem").addEventListener("click", (e) => {
+  // e.preventDefault();
   // Get form values
   const foodAmount = document.getElementById("quantityInput").value || 1;
   const foodItem = document.getElementById("foodInput").value;
   const foodCalories = document.getElementById("calorieInput").value || 0;
 
-  //   // Make Fetch call to /diaryAddFood to add food to DB
-  addFoodToDiary(foodItem, foodCalories, foodAmount);
+  // Make Fetch call to /diaryAddFood to add food to DB
+  foodItem !== "" ? addFoodToDiary(foodItem, foodCalories, foodAmount) : null;
 });
 
 function addFoodToDiary(foodItem, foodCalories, foodAmount) {
@@ -20,7 +21,7 @@ function addFoodToDiary(foodItem, foodCalories, foodAmount) {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      return (window.location.href = "/diary");
+      // return (window.location.href = "/diary");
     })
     .catch((error) => {
       console.error("Error adding food item:", error);
