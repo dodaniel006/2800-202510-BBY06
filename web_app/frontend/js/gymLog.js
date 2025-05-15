@@ -120,7 +120,7 @@ geolocation.on("change:position", () => {
 
 geolocation.on("error", (error) => {
   console.error("Geolocation error:", error.message);
-  initMap(-123.003651, 49.251138); // Initialize the map with default position at BCIT SW01
+  initMap(lon || -123.003651, lat || 49.251138); // Initialize the map with default position at BCIT SW01
   geolocation.setTracking(false); // Stop tracking on error
 });
 
@@ -176,7 +176,7 @@ function timeout() {
     if (geolocation.getTracking()) {
       geolocation.setTracking(false); // Stop tracking after 5 seconds
       console.log("Tracking stopped after timeout");
-      initMap(-123.003651, 49.251138); // Initialize the map with default position at BCIT SW01
+      initMap(lon || -123.003651, lat || 49.251138); // Initialize the map with default position at BCIT SW01
     }
   }, 5000); // 5 seconds timeout
 }
