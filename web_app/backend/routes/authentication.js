@@ -32,9 +32,11 @@ authRouter.post("/logout", async (req, res) => {
     // Only update user if data is provided
     if (typeof isHealthAppLinked === 'boolean' && userId) {
       const user = await User.findOne({ userId });
+      console.log("User found:", user);
       if (user) {
         user.isHealthAppLinked = isHealthAppLinked;
         await user.save(); // ✅ Save changes
+        console.log("User updated:", user);
       }
     }
 
