@@ -30,7 +30,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 8100;
+const port = process.env.PORT || 8101;
 
 const TTL = 60 * 60;
 
@@ -110,6 +110,17 @@ if (!["dev", "server"].includes(lifecycle)) {
   console.log("⚠️ Route protection is disabled (running via npm run dev/server)");
 }
 
+const logFile = path.join(__dirname, 'server.log');
+const logStream = fs.createWriteStream(logFile, { flags: 'a' });
+
+const origConsoleLog = console.log;
+console.log = (...args) => {
+  const msg = args.join(' ') + '\n';
+  logStream.write(msg);
+  origConsoleLog(...args);
+};
+
+
 async function startServer() {
   try {
     await connectToMongo(); // Connect to MongoDB
@@ -159,6 +170,16 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
 
 // Game - Server interface
 
+app.get('/view-logs', (req, res) => {
+  res.render("viewLogs", {
+    title: "Server Logs",
+    pageCSS: false,
+    pageJS: "/js/viewLogs.js",
+    showNav: false,
+    showFooter: false,
+    mapPage: false,
+  });
+});
 
 
 //Manual param routes
@@ -224,6 +245,14 @@ app.get("/gymLog", (req, res) => {
     mapPage: true,
   });
 });
+
+app.get('/logs', (req, res) => {
+  fs.readFile(logFile, 'utf8', (err, data) => {
+    if (err) return res.status(500).send('Could not read log file.');
+    res.type('text/plain').send(data);
+  });
+});
+
 
 app.get("/*dummy404", (req, res) => {
   let body = `<div class=\"h-100 d-flex flex-column justify-content-center text-center\"><h1 class=\"mb-0\">Error: 404 Page not found</h1><br>
