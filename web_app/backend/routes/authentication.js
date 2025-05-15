@@ -26,13 +26,17 @@ export { ensureLoggedIn };
 
 // GET /api/auth/logout
 authRouter.post("/logout", async (req, res) => {
+    const isHealthAppLinked = req.body?.isHealthAppLinked;
+    const userId = req.body?.userId;
 
-  const { isHealthAppLinked, userId } = req.body;
-
-  if(!isHealthAppLinked) {
-    const user = await User.findOne({ userId });
-    user.isHealthAppLinked = isHealthAppLinked;
-  }
+    // Only update user if data is provided
+    if (typeof isHealthAppLinked === 'boolean' && userId) {
+      const user = await User.findOne({ userId });
+      if (user) {
+        user.isHealthAppLinked = isHealthAppLinked;
+        await user.save(); // ✅ Save changes
+      }
+    }
 
   if (!req.session) {
     return res.status(400).json({ message: "No active session" });

@@ -648,7 +648,7 @@ return showWeb ? (
                 title="Logout"
                 onPress={() => {
 
-                  fetch('https://japples.yehorskudilov.com//api/auth/logout', {
+                  fetch('https://japples.yehorskudilov.com/api/auth/logout', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
