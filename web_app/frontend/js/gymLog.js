@@ -73,31 +73,34 @@ function initMap(lon, lat) {
 // 3. Reverse Geocoding
 // =========================
 async function reverseGeocode(lon, lat) {
-  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data && data.address) {
-      const locationDiv = document.getElementById("location");
-      const city = data.address.city || data.address.town || data.address.village || "Unknown City";
-      const area = data.address.state || data.address.country || "Unknown area";
-      locationDiv.innerHTML = `You are in <strong><span id="userCity">${city}</span></strong>, <strong><span id="userArea">${area}</span></strong>.`;
-      console.log(`You are in ${city}, ${area}.`);
-
-      // Display the location details on the page
-      if (data.address.house_number && data.address.road && data.address.postcode) {
-
-        locationDiv.innerHTML += `<br>Your approximate address is: <strong>${data.address.house_number}
-         ${data.address.road}, ${data.address.postcode}</strong>`;
+  fetch(`/api/gym/reverseGeocode?lon=${lon}&lat=${lat}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok ${response.status} ${response.error}`);
       }
-    } else {
-      console.error("No address found for the given coordinates.");
-    }
-  } catch (error) {
-    console.error("Error during reverse geocoding:", error);
-  }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Reverse Geocoding Data:", data);
+
+      if (data.address) {
+        const locationDiv = document.getElementById("userLocation");
+        const city = data.address.city || data.address.town || data.address.village || "Unknown City";
+        const area = data.address.state || data.address.country || "Unknown area";
+        locationDiv.innerHTML = `You are in <strong><span id="userCity">${city}</span></strong>, <strong><span id="userArea">${area}</span></strong>.`;
+        console.log(`You are in ${city}, ${area}.`);
+
+        // Display the location details on the page
+        if (data.address.house_number && data.address.road && data.address.postcode) {
+          locationDiv.innerHTML += `<br>Your approximate address is: <strong>${data.address.house_number}
+                    ${data.address.road}, ${data.address.postcode}</strong>`;
+        }
+      }
+
+    })
+    .catch((error) => {
+      console.error("Error in reverse geocoding:", error);
+    });
 }
 
 // =========================
@@ -158,7 +161,7 @@ document.getElementById("submitUserInfo").addEventListener("click", async () => 
     })
     .then((data) => {
       console.log("Location Successfully Parsed", data.data[0]);
-      document.getElementById("setLocation").innerHTML = data.data[0].display_name;
+      document.getElementById("gymLocation").innerHTML = data.data[0].display_name;
     })
     .catch((error) => {
       console.error("Error submitting user info:", error);
