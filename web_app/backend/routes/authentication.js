@@ -99,7 +99,7 @@ authRouter.post("/register", async (req, res) => {
 
 // POST /api/auth/login
 authRouter.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, isHealthAppLinked } = req.body;
 
   if (!email || !password) {
     return res
@@ -108,6 +108,8 @@ authRouter.post("/login", async (req, res) => {
   }
 
   try {
+
+
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -117,6 +119,10 @@ authRouter.post("/login", async (req, res) => {
     const isPassMatch = await user.comparePassword(password);
     if (isPassMatch) {
       // Login success
+
+      user.isHealthAppLinked = isHealthAppLinked; // Update the user's health app linked status
+      await user.save(); // Save the updated user object
+
       // TODO hadnle session stuffs
       req.session.authenticated = true;
       req.session.userId = user._id; // Store user ID in session

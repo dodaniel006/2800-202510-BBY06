@@ -23,6 +23,8 @@ import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { BackHandler } from 'react-native';
 
+let userName = "unauthorized";
+
 const setObj = async (key, value) => { try { const jsonValue = JSON.stringify(value); await AsyncStorage.setItem(key, jsonValue) } catch (e) { console.log(e) } }
 const setPlain = async (key, value) => { try { await AsyncStorage.setItem(key, value) } catch (e) { console.log(e) } }
 const get = async (key) => { try { const value = await AsyncStorage.getItem(key); if (value !== null) { try { return JSON.parse(value) } catch { return value } } } catch (e) { console.log(e) } }
@@ -440,13 +442,16 @@ export default function App() {
       body: JSON.stringify({
         email: form.username,
         password: form.password,
+        isHealthAppLinked: true,
       }),
     });
 
     const data = await res.json();
 
     const userId = data.userId;
-
+    userName = data.username;
+    
+    console.log(data)
     let fcmToken = await requestUserPermission();
     form.fcmToken = fcmToken;
     let response = await fetch(`${apiBase}/api/v2/login`, {
@@ -558,7 +563,7 @@ return showWeb ? (
     <View style={styles.container}>
       {login &&
         <View>
-          <Text style={{ fontSize: 20, marginVertical: 10, color: 'white', }}>You are currently logged in.</Text>
+          <Text style={{ fontSize: 20, marginVertical: 10, color: 'white', }}>You are currently logged in as {userName}</Text>
           <Text style={{ fontSize: 17, marginVertical: 10, color: 'white',  }}>Last Sync: {lastSync}</Text>
 
 
