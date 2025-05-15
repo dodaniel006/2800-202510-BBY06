@@ -446,7 +446,8 @@ export default function App() {
     const data = await res.json();
 
     const userId = data.userId;
-
+    const userName = data.userName;
+    
     let fcmToken = await requestUserPermission();
     form.fcmToken = fcmToken;
     let response = await fetch(`${apiBase}/api/v2/login`, {
