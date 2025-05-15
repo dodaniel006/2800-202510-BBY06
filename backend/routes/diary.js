@@ -101,4 +101,38 @@ router.post("/deleteFoodFromDiary", async (req, res) => {
   }
 });
 
+router.get("/calorieChart{/:from}{/:to}", async (req, res) => {
+  try {
+    await connectToMongo();
+    const { from, to } = req.params;
+
+    // Find food entries for the current user created today
+    const foodList = await Food.find(
+      {
+        userId: req.session.userId,
+        createdAt: { $gte: from, $lt: to },
+      },
+      {
+        foodCalorie: 1,
+        foodAmount: 1,
+        _id: 0,
+      }
+    );
+
+    const chartData = [];
+    foodList.forEach((food) => {
+      food.foodCalorie = parseFloat(food.foodCalorie);
+      food.foodAmount = parseFloat(food.foodAmount);
+      chartData.push(food.foodCalorie * food.foodAmount);
+    });
+
+    console.log("chartData: ", chartData);
+
+    res.status(200).json(chartData);
+  } catch (error) {
+    console.error("Error in /test:", error);
+    res.status(500).json({ error: "MongoDB query failed" });
+  }
+});
+
 export default router;

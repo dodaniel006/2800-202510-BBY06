@@ -1,0 +1,72 @@
+<div class="container-fluid">
+  <canvas id="myChart"></canvas>
+  <button class="btn btn-primary bb-bg-wallet-green-dark border-0">
+    Previous Week
+  </button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById("myChart");
+
+  let today = new Date();
+  let startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+  let endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+
+  //   let labels = [];
+
+  //   for (let i = 0; i < 7; i++) {
+  //     const day = new Date(startOfWeek);
+  //     day.setDate(day.getDate() + i);
+  //     const dayOfTheWeek = day.toLocaleDateString("en-US", { weekday: "long" });
+  //     labels.push(day.toLocaleDateString("en-US", { weekday: "long" }));
+  //     labels[i] = day.toISOString().split("T")[0] + "\n" + dayOfTheWeek;
+  //   }
+
+  function generateLabels(startOfWeek) {
+    const labels = [];
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(startOfWeek);
+      day.setDate(day.getDate() + i);
+      const dayOfTheWeek = day.toLocaleDateString("en-US", { weekday: "long" });
+      labels.push(day.toISOString().split("T")[0] + "\n" + dayOfTheWeek);
+    }
+    return labels;
+  }
+
+  async function fetchData() {
+    const response = await fetch(
+      `/api/diary/calorieChart/${startOfWeek}/${endOfWeek}`
+    );
+    const data = await response.json();
+    return data;
+  }
+
+  async function renderChart() {
+    const valueResponse = await fetchData();
+    const labels = generateLabels(startOfWeek);
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Calories",
+            data: valueResponse,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  }
+  renderChart();
+</script>
