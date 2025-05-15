@@ -241,11 +241,45 @@ const refreshTokenFunc = async () => {
   }
 }
 
+
+
+
+const syncFinished = async () => {
+  Toast.show({
+    type: 'success',
+    text1: "Sync Complete",
+    text2: "All health records have been synced.",
+  });
+
+  const response = await fetch('https://japples.yehorskudilov.com/api/db/syncAll', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    // Include cookie for session-based auth if needed
+    credentials: 'include'
+  },
+  body: JSON.stringify({
+    userId: 'YOUR_USER_ID_HERE', // optional if using session
+    queries: {} // optional, or pass filters
+  })
+});
+
+const result = await response.json();
+console.log(result);
+
+
+  console.log("✅ Sync fully finished");
+};
+
+
+
 const sync = async () => {
   const isInitialized = await initialize();
   console.log("Syncing data...");
   let numRecords = 0;
   let numRecordsSynced = 0;
+  let syncAlreadyFinished = false;
+
   Toast.show({
     type: 'info',
     text1: "Syncing data...",
@@ -325,7 +359,9 @@ const sync = async () => {
               }
             })
 
-            if (numRecordsSynced == numRecords) {
+           if (!syncAlreadyFinished && numRecordsSynced === numRecords) {
+              syncAlreadyFinished = true;
+
               ReactNativeForegroundService.update({
                 id: 1244,
                 title: 'HCGateway Sync Progress',
@@ -333,8 +369,11 @@ const sync = async () => {
                 icon: 'ic_launcher',
                 setOnlyAlertOnce: true,
                 color: '#000000',
-              })
+              });
+
+              syncFinished();
             }
+
             }
             catch {}
           }, j*3000)
@@ -373,11 +412,29 @@ const sync = async () => {
             setOnlyAlertOnce: true,
             color: '#000000',
           })
+            syncFinished(); 
+
         }
         }
         catch {}
       }
   }
+
+if (numRecords === 0 && !syncAlreadyFinished) {
+  syncAlreadyFinished = true;
+
+  ReactNativeForegroundService.update({
+    id: 1244,
+    title: 'HCGateway Sync Progress',
+    message: `No health records found to sync.`,
+    icon: 'ic_launcher',
+    setOnlyAlertOnce: true,
+    color: '#000000',
+  });
+
+  syncFinished();
+}
+
 }
 
 const handlePush = async (message) => {

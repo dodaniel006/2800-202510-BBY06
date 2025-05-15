@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { connectToMongo } from '../config/db.js';
 import { fetchAllHealthData } from './healthConnect.js';
 import mongoose from 'mongoose';
+import User from "../config/db_schemas/User.js";
 
 const router = Router();
 
@@ -34,17 +35,18 @@ router.get("/test", async (req, res) => {
 });
 
 router.post("/syncAll", async (req, res) => {
-  const userId = req.session?.userId;
-  if (!userId) return res.status(401).json({ error: "Unauthorized: No session" });
 
-  const { accessToken, queries, lastSyncedAt } = req.body;
-  if (!accessToken) {
-    return res.status(400).json({ error: "Missing accessToken" });
-  }
+  const { queries } = req.body;
+  
+  const userId = req.body?.userId || req.session?.userId;
+
+
+const user = await User.findById(userId); // ✅
+  const lastSyncedAt = user.lastSyncedAt || new Date(0);
 
   try {
     await connectToMongo();
-    const fetchedResults = await fetchAllHealthData({ accessToken, queries, lastSyncedAt });
+    const fetchedResults = await fetchAllHealthData({ userId, queries, lastSyncedAt });
     const insertResults = {};
 
     for (const method in fetchedResults) {
@@ -60,6 +62,10 @@ router.post("/syncAll", async (req, res) => {
 
           const result = await GenericModel.insertMany(taggedData, { ordered: false });
           insertResults[method] = { inserted: result.length };
+
+          user.lastSyncedAt = new Date(now);
+           await user.save();
+          
         } catch (insertErr) {
           console.error(`Insert error for ${method}:`, insertErr);
           insertResults[method] = { error: insertErr.message };
