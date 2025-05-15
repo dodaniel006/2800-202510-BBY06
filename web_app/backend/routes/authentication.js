@@ -25,7 +25,15 @@ function ensureLoggedIn(req, res, next) {
 export { ensureLoggedIn };
 
 // GET /api/auth/logout
-authRouter.get("/logout", (req, res) => {
+authRouter.post("/logout", async (req, res) => {
+
+  const { isHealthAppLinked, userId } = req.body;
+
+  if(!isHealthAppLinked) {
+    const user = await User.findOne({ userId });
+    user.isHealthAppLinked = isHealthAppLinked;
+  }
+
   if (!req.session) {
     return res.status(400).json({ message: "No active session" });
   }
@@ -116,11 +124,12 @@ authRouter.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    const isPassMatch = await user.comparePassword(password);
-    if (isPassMatch) {
+      const isPassMatch = await user.comparePassword(password);
+      if (isPassMatch) {
       // Login success
-
-      user.isHealthAppLinked = isHealthAppLinked; // Update the user's health app linked status
+      if (isHealthAppLinked) {
+            user.isHealthAppLinked = isHealthAppLinked;
+      }
       await user.save(); // Save the updated user object
 
       // TODO hadnle session stuffs

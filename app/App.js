@@ -24,6 +24,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { BackHandler } from 'react-native';
 
 let userName = "unauthorized";
+let userId = "unauthorized";
 
 const setObj = async (key, value) => { try { const jsonValue = JSON.stringify(value); await AsyncStorage.setItem(key, jsonValue) } catch (e) { console.log(e) } }
 const setPlain = async (key, value) => { try { await AsyncStorage.setItem(key, value) } catch (e) { console.log(e) } }
@@ -448,9 +449,9 @@ export default function App() {
 
     const data = await res.json();
 
-    const userId = data.userId;
+    userId = data.userId;
     userName = data.username;
-    
+
     console.log(data)
     let fcmToken = await requestUserPermission();
     form.fcmToken = fcmToken;
@@ -646,6 +647,26 @@ return showWeb ? (
               <CustomButton
                 title="Logout"
                 onPress={() => {
+
+                  fetch('https://japples.yehorskudilov.com//api/auth/logout', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    userId: userId,
+                    isHealthAppLinked: false
+                  })
+                })
+                  .then(res => res.json())
+                  .then(data => {
+                    console.log('Logout successful:', data);
+                  })
+                  .catch(err => {
+                    console.error('Logout failed:', err);
+                  });
+
+
                   delkey('login');
                   login = null;
                   Toast.show({

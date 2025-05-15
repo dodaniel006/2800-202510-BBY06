@@ -59,6 +59,10 @@ function updateUserSettings(data) {
         document.getElementById('postalCode').value = user.postalCode || '';
         document.getElementById('username').value = user.username || '';
         document.getElementById('bio').value = user.bio || '';
+
+        document.getElementById('ConnectButton').innerHTML = user.isHealthAppLinked ? "Connected" : "Connect Health Companion";
+        document.getElementById('ConnectButton').classList.add(user.isHealthAppLinked ? "btn-success" : "btn-danger") 
+
       })
       .catch(err => {
         console.error('Failed to load user data:', err);
