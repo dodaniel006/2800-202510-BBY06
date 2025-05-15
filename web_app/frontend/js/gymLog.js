@@ -137,38 +137,28 @@ document.getElementById("updateLocation").addEventListener("click", () => {
 });
 
 document.getElementById("submitUserInfo").addEventListener("click", async () => {
-  const userName = document.getElementById("userName").value;
-  const userAge = document.getElementById("userAge").value;
+  const gymName = document.getElementById("gymName").value;
   const place = document.getElementById("place").value;
   const userLocation = document.getElementById("userArea").innerText;
-
-  // console.log("Place", place);
-  // let response = await fetch(`/api/gym/submitUserInfo?place=${place}`);
-  // console.log("Response", response);
-  // let parsed = await response.json();
-  // console.log("parsed", parsed);
-
-
   // Send the user info to the server
-  fetch("/api/gym/submitUserInfo", {
+  fetch("/api/gym/submitGymInfo", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      userName,
-      userAge,
+      gymName,
       place,
       userLocation,
     }),
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error(`Network response was not ok ${response.status} ${response.error}`);
       }
       return response.json();
     })
     .then((data) => {
-      console.log("Location Successfully Parsed", data[0]);
-      document.getElementById("setLocation").innerHTML = data[0].display_name;
+      console.log("Location Successfully Parsed", data.data[0]);
+      document.getElementById("setLocation").innerHTML = data.data[0].display_name;
     })
     .catch((error) => {
       console.error("Error submitting user info:", error);
