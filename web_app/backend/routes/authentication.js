@@ -27,11 +27,11 @@ export { ensureLoggedIn };
 // GET /api/auth/logout
 authRouter.post("/logout", async (req, res) => {
     const isHealthAppLinked = req.body?.isHealthAppLinked;
-    const userId = req.body?.userId;
+    const _id = req.body?.userId;
 
     // Only update user if data is provided
     if (typeof isHealthAppLinked === 'boolean' && userId) {
-      const user = await User.findOne({ userId });
+      const user = await User.findOne({ _id});
       console.log("User found:", user);
       if (user) {
         user.isHealthAppLinked = isHealthAppLinked;
