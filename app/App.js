@@ -251,6 +251,14 @@ const syncFinished = async () => {
     text2: "All health records have been synced.",
   });
 
+  if (!userId) {
+  userId = await get('userId'); // ✅ retrieve if needed
+}
+if (!userId) {
+  console.error("❌ userId is undefined, aborting syncFinished");
+  return;
+}
+
   const response = await fetch('https://japples.yehorskudilov.com/api/db/syncAll', {
     method: 'POST',
     headers: {
@@ -262,20 +270,6 @@ const syncFinished = async () => {
     })
   });
 
-  const text = await response.text(); // always succeed
-  console.log("📨 Raw server response:", text);
-
-  try {
-    const json = JSON.parse(text); // only try if valid JSON
-    if (response.ok) {
-      console.log("✅ Sync result:", json);
-    } else {
-      console.error("❌ Sync error:", json);
-    }
-  } catch (err) {
-    console.error("❌ Server returned invalid JSON. Raw response was:");
-    console.error(text); // this is what you wanted
-  }
 
   console.log("✅ Sync fully finished");
 
@@ -504,8 +498,10 @@ export default function App() {
 
     const data = await res.json();
 
-    userId = data.userId;
     userName = data.username;
+
+    userId = data.userId;
+    await setPlain('userId', userId); 
 
     console.log(data)
     let fcmToken = await requestUserPermission();
