@@ -194,8 +194,8 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
   let settings = createSettings({
     title: "Register",
-    pageCSS: "/css/login.css",
-    pageJS: "/js/login.js",
+    pageCSS: "/css/register.css",
+    pageJS: "/js/register.js",
     showNav: false,
     showFooter: false,
   });
