@@ -36,6 +36,12 @@ const userSchema = new mongoose.Schema({
     taskList: {
         type: Array
     },
+    port: {
+        type: String
+    },
+    roadScore: {
+        type: Number
+    },
     phoneNumber: {
         type: String,
         trim: true

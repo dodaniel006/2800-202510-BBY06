@@ -1,56 +1,29 @@
 
-// Get points
+// Send this user to the mail room to be added to the end of a list
+const response1 = fetch(`/api/game/send`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        data: {"test": "Hello!"}
+    })
+});
 
-// var TaskValue = 0;
-// var TaskId = '';
+// Send Points on complete task
+document.getElementById("complete").addEventListener("click", sendPoints);
 
-// var setClick = function()
-// {
-//     TaskValue = document.querySelector(".button").taskValue;
-//     TaskId = document.querySelector(".button").taskId;
-//     console.log(TaskValue, TaskId);
-// }
-
-// document.querySelectorAll(".button").onclick = setClick;
-
-// Game interface
-const DATAPATH = "/game/html5game/data.hazel";
-
-document.getElementById("complete").addEventListener("click", myFunction);
-
-async function myFunction() {
-    
-    const response = await fetch(`/api/game/write`, {
+function sendPoints() {
+    const response2 = fetch(`/api/game/points`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            datapath: "./frontend/game/html5game/data.hazel"
-            // points: 50
+            data: {"scoreAdd": 50}
         })
-    }).then(
-        readTextFile(DATAPATH, function(text){
-            var data = JSON.parse(text);
-            console.log(data);
-        })
-    );
-
-    
+    })
 }
-
-function readTextFile(file, callback) {
-    var rawFile = new XMLHttpRequest();
-    rawFile.overrideMimeType("application/json");
-    rawFile.open("GET", file, true);
-    rawFile.onreadystatechange = function() {
-        if (rawFile.readyState === 4 && rawFile.status == "200") {
-            callback(rawFile.responseText);
-        }
-    }
-    rawFile.send(null);
-}
-
 
 // Read all tasks
 const response = await fetch(`/api/task/readUserTasks`, {
@@ -80,4 +53,3 @@ if (response.ok) {
         document.getElementById("cardHolder").append(newcard);
     }
 }
-

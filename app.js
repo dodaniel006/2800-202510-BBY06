@@ -7,6 +7,7 @@ import expressLayouts from "express-ejs-layouts";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+
 //route imports
 import healthConnect from './backend/routes/healthConnect.js';
 import db from './backend/routes/db.js';
@@ -16,6 +17,9 @@ import task from './backend/routes/task.js';
 import user from './backend/routes/user.js';
 import diary from "./backend/routes/diary.js";
 import authRouter from './backend/routes/authentication.js'; // Import authRouter
+
+// Import game interface
+// import gameInterface from './backend/config/game_interface.js'; 
 
 // Model imports
 import { connectToMongo } from "./backend/config/db.js";
@@ -152,6 +156,10 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
     }
   }
 });
+
+// Game - Server interface
+
+
 
 //Manual param routes
 app.get("/", (req, res) => {
