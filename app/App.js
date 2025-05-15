@@ -252,190 +252,188 @@ const syncFinished = async () => {
   });
 
   const response = await fetch('https://japples.yehorskudilov.com/api/db/syncAll', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    // Include cookie for session-based auth if needed
-    credentials: 'include'
-  },
-  body: JSON.stringify({
-    userId: 'YOUR_USER_ID_HERE', // optional if using session
-    queries: {} // optional, or pass filters
-  })
-});
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      userId,
+      queries: {}
+    })
+  });
 
-const result = await response.json();
-console.log(result);
+  const text = await response.text(); // always succeed
+  console.log("📨 Raw server response:", text);
 
+  try {
+    const json = JSON.parse(text); // only try if valid JSON
+    if (response.ok) {
+      console.log("✅ Sync result:", json);
+    } else {
+      console.error("❌ Sync error:", json);
+    }
+  } catch (err) {
+    console.error("❌ Server returned invalid JSON. Raw response was:");
+    console.error(text); // this is what you wanted
+  }
 
   console.log("✅ Sync fully finished");
+
+
 };
 
-
+const updateForeground = (current, total) => {
+  ReactNativeForegroundService.update({
+    id: 1244,
+    title: 'HCGateway Sync Progress',
+    message: `HCGateway is syncing... [${current}/${total}]`,
+    icon: 'ic_launcher',
+    setOnlyAlertOnce: true,
+    color: '#000000',
+    progress: {
+      max: total,
+      curr: current,
+    }
+  });
+};
 
 const sync = async () => {
   const isInitialized = await initialize();
   console.log("Syncing data...");
+
   let numRecords = 0;
   let numRecordsSynced = 0;
-  let syncAlreadyFinished = false;
 
   Toast.show({
     type: 'info',
     text1: "Syncing data...",
-  })
-  
-  const currentTime = new Date().toISOString();
-  
-  let startTime;
-  if (fullSyncMode) 
-    startTime = String(new Date(new Date().setDate(new Date().getDate() - 29)).toISOString());
-  
-  else {
-    if (lastSync) 
-      startTime = lastSync;
-    else 
-      startTime = String(new Date(new Date().setDate(new Date().getDate() - 29)).toISOString());
-  }
-  
-  await setPlain('lastSync', currentTime);
-  lastSync = currentTime;
-
-  let recordTypes = ["ActiveCaloriesBurned", "BasalBodyTemperature", "BloodGlucose", "BloodPressure", "BasalMetabolicRate", "BodyFat", "BodyTemperature", "BoneMass", "CyclingPedalingCadence", "CervicalMucus", "ExerciseSession", "Distance", "ElevationGained", "FloorsClimbed", "HeartRate", "Height", "Hydration", "LeanBodyMass", "MenstruationFlow", "MenstruationPeriod", "Nutrition", "OvulationTest", "OxygenSaturation", "Power", "RespiratoryRate", "RestingHeartRate", "SleepSession", "Speed", "Steps", "StepsCadence", "TotalCaloriesBurned", "Vo2Max", "Weight", "WheelchairPushes"]; 
-  
-  for (let i = 0; i < recordTypes.length; i++) {
-      let records;
-      try {
-      records = await readRecords(recordTypes[i],
-        {
-          timeRangeFilter: {
-            operator: "between",
-            startTime: startTime,
-            endTime: String(new Date().toISOString())
-          }
-        }
-      );
-
-      records = records.records;
-      }
-      catch (err) {
-        console.log(err)
-        continue;
-      }
-      console.log(recordTypes[i]);
-      numRecords += records.length;
-
-      if (['SleepSession', 'Speed', 'HeartRate'].includes(recordTypes[i])) {
-        console.log("INSIDE IF - ", recordTypes[i])
-        for (let j=0; j<records.length; j++) {
-          console.log("INSIDE FOR", j, recordTypes[i])
-          setTimeout(async () => {
-            try {
-              let record = await readRecord(recordTypes[i], records[j].metadata.id);
-              await axios.post(`${apiBase}/api/v2/sync/${recordTypes[i]}`, {
-                data: record
-              }, {
-                headers: {
-                  "Authorization": `Bearer ${login}`
-                }
-              })
-            }
-            catch (err) {
-              console.log(err)
-            }
-
-            numRecordsSynced += 1;
-            try {
-            ReactNativeForegroundService.update({
-              id: 1244,
-              title: 'HCGateway Sync Progress',
-              message: `HCGateway is currently syncing... [${numRecordsSynced}/${numRecords}]`,
-              icon: 'ic_launcher',
-              setOnlyAlertOnce: true,
-              color: '#000000',
-              progress: {
-                max: numRecords,
-                curr: numRecordsSynced,
-              }
-            })
-
-           if (!syncAlreadyFinished && numRecordsSynced === numRecords) {
-              syncAlreadyFinished = true;
-
-              ReactNativeForegroundService.update({
-                id: 1244,
-                title: 'HCGateway Sync Progress',
-                message: `HCGateway is working in the background to sync your data.`,
-                icon: 'ic_launcher',
-                setOnlyAlertOnce: true,
-                color: '#000000',
-              });
-
-              syncFinished();
-            }
-
-            }
-            catch {}
-          }, j*3000)
-        }
-      }
-
-      else {
-        await axios.post(`${apiBase}/api/v2/sync/${recordTypes[i]}`, {
-          data: records
-        }, {
-          headers: {
-            "Authorization": `Bearer ${login}`
-          }
-        });
-        numRecordsSynced += records.length;
-        try {
-        ReactNativeForegroundService.update({
-          id: 1244,
-          title: 'HCGateway Sync Progress',
-          message: `HCGateway is currently syncing... [${numRecordsSynced}/${numRecords}]`,
-          icon: 'ic_launcher',
-          setOnlyAlertOnce: true,
-          color: '#000000',
-          progress: {
-            max: numRecords,
-            curr: numRecordsSynced,
-          }
-        })
-
-        if (numRecordsSynced == numRecords) {
-          ReactNativeForegroundService.update({
-            id: 1244,
-            title: 'HCGateway Sync Progress',
-            message: `HCGateway is working in the background to sync your data.`,
-            icon: 'ic_launcher',
-            setOnlyAlertOnce: true,
-            color: '#000000',
-          })
-            syncFinished(); 
-
-        }
-        }
-        catch {}
-      }
-  }
-
-if (numRecords === 0 && !syncAlreadyFinished) {
-  syncAlreadyFinished = true;
-
-  ReactNativeForegroundService.update({
-    id: 1244,
-    title: 'HCGateway Sync Progress',
-    message: `No health records found to sync.`,
-    icon: 'ic_launcher',
-    setOnlyAlertOnce: true,
-    color: '#000000',
   });
 
-  syncFinished();
+  const currentTime = new Date().toISOString();
+
+let startTime;
+if (fullSyncMode) {
+  startTime = new Date(new Date().setDate(new Date().getDate() - 29)).toISOString();
+} else if (lastSync) {
+  startTime = lastSync;
+} else {
+  startTime = new Date(new Date().setDate(new Date().getDate() - 29)).toISOString();
 }
 
-}
+
+
+const recordTypes = [
+  "ActiveCaloriesBurned", "BasalBodyTemperature", "BloodGlucose", "BloodPressure",
+  "BasalMetabolicRate", "BodyFat", "BodyTemperature", "BoneMass",
+  "CyclingPedalingCadence", "CervicalMucus", "ExerciseSession", "Distance",
+  "ElevationGained", "FloorsClimbed", "HeartRate", "Height", "Hydration", "LeanBodyMass",
+  "MenstruationFlow", "MenstruationPeriod", "Nutrition", "OvulationTest", "OxygenSaturation",
+  "Power", "RespiratoryRate", "RestingHeartRate", "SleepSession", "Speed", "Steps",
+  "StepsCadence", "TotalCaloriesBurned", "Vo2Max", "Weight", "WheelchairPushes"
+];
+  const allPromises = [];
+
+  for (let i = 0; i < recordTypes.length; i++) {
+    const type = recordTypes[i];
+    let records;
+
+    try {
+      const result = await readRecords(type, {
+        timeRangeFilter: {
+          operator: "between",
+          startTime,
+          endTime: new Date().toISOString()
+        }
+      });
+console.log(`📅 Syncing ${type} from ${startTime} to ${new Date().toISOString()}`);
+
+      console.log(`🔍 Raw result for ${type}:`, JSON.stringify(result, null, 2));
+
+
+        if (!result.records) {
+    console.log(`❌ No 'records' field in result for ${type}`, result);
+  }
+  
+      if (!result || !Array.isArray(result.records)) {
+        console.log(`⚠️ Skipping ${type}: invalid or empty data`);
+        continue;
+      }
+
+      records = result.records;
+      if (records.length === 0) {
+        console.log(`ℹ️ No records to sync for ${type}`);
+        continue;
+      }
+
+      console.log(`${type}: ${records.length} records`);
+      numRecords += records.length;
+
+      if (['SleepSession', 'Speed', 'HeartRate'].includes(type)) {
+        for (let j = 0; j < records.length; j++) {
+          const promise = new Promise((resolve) => {
+            setTimeout(async () => {
+              try {
+                const fullRecord = await await readRecord(type, { id: records[j].metadata.id });
+                await axios.post(`${apiBase}/api/v2/sync/${type}`, {
+                  data: fullRecord
+                }, {
+                  headers: { Authorization: `Bearer ${login}` }
+                });
+              } catch (err) {
+                console.log(`❌ Failed to sync ${type} record ${j}`, err);
+              }
+
+              numRecordsSynced++;
+              updateForeground(numRecordsSynced, numRecords);
+
+              resolve();
+            }, j * 3000); // stagger
+          });
+
+          allPromises.push(promise);
+        }
+      } else {
+        const promise = (async () => {
+          try {
+            await axios.post(`${apiBase}/api/v2/sync/${type}`, {
+              data: records
+            }, {
+              headers: { Authorization: `Bearer ${login}` }
+            });
+          } catch (err) {
+            console.log(`❌ Failed to bulk sync ${type}`, err);
+          }
+
+          numRecordsSynced += records.length;
+          updateForeground(numRecordsSynced, numRecords);
+        })();
+
+        allPromises.push(promise);
+      }
+
+    } catch (err) {
+      console.log(`❌ Error reading records for ${type}`, err);
+    }
+  }
+
+  // ✅ Wait for all sync operations to finish
+  await Promise.all(allPromises);
+
+  if (numRecords > 0) {
+    console.log("✅ Sync complete:", numRecordsSynced, "/", numRecords);
+
+      await setPlain('lastSync', currentTime);
+     lastSync = currentTime;
+
+    syncFinished();
+  } else {
+    Toast.show({
+      type: 'info',
+      text1: "No data found to sync.",
+    });
+  }
+};
+
 
 const handlePush = async (message) => {
   const isInitialized = await initialize();
@@ -699,6 +697,7 @@ return showWeb ? (
 <CustomButton title="Open Japples (in-app)" onPress={() => setShowWeb(true)} />
 
         </View>
+
 
            <View style={{ marginTop: 0 }}>
               <CustomButton

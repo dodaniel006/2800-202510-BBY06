@@ -36,13 +36,23 @@ router.get("/test", async (req, res) => {
 
 router.post("/syncAll", async (req, res) => {
 
-  const { queries } = req.body;
-  
+    const { queries } = req.body;
   const userId = req.body?.userId || req.session?.userId;
 
+  if (!userId) {
+    return res.status(400).json({ error: "Missing userId" });
+  }
 
-const user = await User.findById(userId); // ✅
+  await connectToMongo();
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
   const lastSyncedAt = user.lastSyncedAt || new Date(0);
+
 
   try {
     await connectToMongo();
