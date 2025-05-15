@@ -8,7 +8,8 @@ import User from "../config/db_schemas/User.js";
 const channels = {};
 
 var userList = [];
-var portList = [];
+var wsList = [];
+var allWS = [];
 
 var data;
 
@@ -26,19 +27,7 @@ socket.on('error', (err) => {
   //   portList.push(rinfo.port);
   //   console.log("added port", portList, userList);
 
-  //   await User.updateOne(
-  //       { email: userList[0] },
-  //       { $set: { port: portList[0].toString() } }
-  //   );
 
-  //   const array = await User.find({
-  //     email: userList[0]
-  //   })  
-  //   send_data({"roadScore": array[0].roadScore}, userList[0]);
-
-  //   portList.pop();
-  //   userList.pop();
-  //   console.log("added port to user db", portList, userList);
 
   // } else if (data.hasOwnProperty("Score")) { // Score updating
 
@@ -55,49 +44,57 @@ socket.on('error', (err) => {
   // }
 // })
 
-socket.on('connection', (ws) => {
+socket.on('connection', async (ws) => {
   ws.on('message', (data) => {
     console.log('received: %s', data);
   });
 
-  ws.send('something');
-  
+  wsList.push(ws);
+  var wsIndex = wsList.length - 1;
 
+  allWS.push(wsList[0]);
+  send_data({ Connect: "Hello" }, userList[0]);
+  console.log("connected websocket", wsIndex);
+
+  await User.updateOne(
+      { email: userList[0] },
+      { $set: { ws: wsIndex } }
+  );
+
+  const array = await User.find({
+    email: userList[0]
+  })
+  send_data({"roadScore": array[0].roadScore}, userList[0]);
+  wsList.pop();
+  userList.pop();
+  console.log("added ws to user db", wsIndex);
+  
 });
 
 socket.on('listening', () => {
-  console.log('WebSocket server is running...');
+  console.log('WebSocket server is running...', socket.address());
 });
 
-// async function send_data(data, user) {
-//   // console.log('Server Send Data');
+async function send_data(data, user) {
+  console.log('Server Send Data');
+  const array = await User.find({
+    email: user
+  })
+  var ws = allWS[array[0].ws];
 
-//   // const userArray = await User.find({
-//   //     email: user
-//   // })    
+  // Respond to the client
+  ws.send(JSON.stringify(data));
 
-//   // const destPort = userArray[0].port;
+}
 
-//   // console.log(Number(destPort), data)
+function add_user(user) {
+  userList.push(user);
+  console.log("added user", wsList, userList);
+}
 
-//   // // Respond to the client
-//   // server.send(JSON.stringify(data), Number(destPort), address, (err) => {
-//   //   if (err) {
-//   //     console.error('Error sending response:', err);
-//   //   }
-//   // });
+// Unused
+function get_ws() {
+    return allWS;
+}
 
-// }
-
-// function get_ports() {
-//     return portList;
-// }
-
-// function add_user(user) {
-//   userList.push(user);
-//   console.log("added user", portList, userList);
-// }
-
-// // server.bind(8080)
-
-// export { send_data, get_ports, add_user };
+export { get_ws, add_user, send_data };

@@ -36,8 +36,8 @@ const userSchema = new mongoose.Schema({
     taskList: {
         type: Array
     },
-    port: {
-        type: String
+    ws: {
+        type: Number
     },
     roadScore: {
         type: Number
