@@ -24,7 +24,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { BackHandler } from 'react-native';
 
 let userName = "unauthorized";
-let userId = "unauthorized";
+let userId;
 
 const setObj = async (key, value) => { try { const jsonValue = JSON.stringify(value); await AsyncStorage.setItem(key, jsonValue) } catch (e) { console.log(e) } }
 const setPlain = async (key, value) => { try { await AsyncStorage.setItem(key, value) } catch (e) { console.log(e) } }
@@ -647,14 +647,13 @@ return showWeb ? (
               <CustomButton
                 title="Logout"
                 onPress={() => {
-
                   fetch('https://japples.yehorskudilov.com/api/auth/logout', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify({
-                    userId: userId,
+                    userId,
                     isHealthAppLinked: false
                   })
                 })
