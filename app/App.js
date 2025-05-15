@@ -490,11 +490,10 @@ export default Sentry.wrap(function App() {
     const data = await res.json();
 
     userName = data.username;
-console.log(data)
     userId = data.userId;
     await setPlain('userId', userId); 
 
-    console.log(data)
+    console.log("ahssawsas " + JSON.stringify(data));
     let fcmToken = await requestUserPermission();
     form.fcmToken = fcmToken;
     let response = await fetch(`${apiBase}/api/v2/login`, {

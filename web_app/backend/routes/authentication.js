@@ -144,7 +144,7 @@ authRouter.post("/login", async (req, res) => {
       req.session.email = user.email; // Store email in session
       req.session.username = user.username; // Store username in session
 
-      res.status(200).json({ message: "Login success", userId: user._id, username: user.username });
+      res.status(200).json({ message: "Login success", userId: user._id, username: "Looser" });
     } else {
       return res.status(401).json({ message: "Invalid credentials." });
     }
