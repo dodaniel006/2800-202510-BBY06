@@ -20,8 +20,11 @@ import {Notifications} from 'react-native-notifications';
 import { TouchableOpacity } from 'react-native';
 import { BackHandler } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { FlatList } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { ProgressBarAndroid, Platform, ProgressViewIOS } from 'react-native';
 
-let userName = "unauthorized";
+let userName;
 let userId;
 
 const setObj = async (key, value) => { try { const jsonValue = JSON.stringify(value); await AsyncStorage.setItem(key, jsonValue) } catch (e) { console.log(e) } }
@@ -65,16 +68,16 @@ get('sentryEnabled')
         dsn: 'https://e4a201b96ea602d28e90b5e4bbe67aa6@sentry.shuchir.dev/6',
         // enableSpotlight: __DEV__,
       });
-      Toast.show({
-        type: 'success',
-        text1: "Sentry enabled from settings",
-      });
+      // Toast.show({
+      //   type: 'success',
+      //   text1: "Sentry enabled from settings",
+      // });
     } else {
       isSentryEnabled = false;
-      Toast.show({
-        type: 'info',
-        text1: "Sentry is disabled",
-      });
+      // Toast.show({
+      //   type: 'info',
+      //   text1: "Sentry is disabled",
+      // });
     }
   })
   .catch(err => {
@@ -113,29 +116,29 @@ let lastSync = null;
 let taskDelay = 7200 * 1000; // 2 hours
 let fullSyncMode = true; // Default to full 30-day sync
 
-Toast.show({
-  type: 'info',
-  text1: "Loading API Base URL...",
-  autoHide: false
-})
-get('apiBase')
-.then(res => {
-  if (res) {
-    apiBase = res;
-    Toast.hide();
-    Toast.show({
-      type: "success",
-      text1: "API Base URL loaded",
-    })
-  }
-  else {
-    Toast.hide();
-    Toast.show({
-      type: "error",
-      text1: "API Base URL not found. Using default server.",
-    })
-  }
-})
+// Toast.show({
+//   type: 'info',
+//   text1: "Loading API Base URL...",
+//   autoHide: false
+// })
+// get('apiBase')
+// .then(res => {
+//   if (res) {
+//     apiBase = res;
+//     Toast.hide();
+//     Toast.show({
+//       type: "success",
+//       text1: "API Base URL loaded",
+//     })
+//   }
+//   else {
+//     Toast.hide();
+//     Toast.show({
+//       type: "error",
+//       text1: "API Base URL not found. Using default server.",
+//     })
+//   }
+// })
 
 get('login')
 .then(res => {
@@ -282,144 +285,134 @@ const refreshTokenFunc = async () => {
   }
 }
 
-const sync = async () => {
+const sync = async (setSyncSummaryCallback, setSyncingCallback, setProgressCallback) => {
+
+setSyncingCallback(true);
+setProgressCallback({ current: 0, total: 0 });
+
   const isInitialized = await initialize();
-  console.log("Syncing data...");
+  console.log("🔄 Syncing data...");
+
   let numRecords = 0;
   let numRecordsSynced = 0;
-  Toast.show({
-    type: 'info',
-    text1: "Syncing data...",
-  })
-  
+  let syncedSummary = {}; // ✅ collect results
+
+  Toast.show({ type: 'info', text1: "Syncing data..." });
+
   const currentTime = new Date().toISOString();
-  
-  let startTime;
-  if (fullSyncMode) 
-    startTime = String(new Date(new Date().setDate(new Date().getDate() - 29)).toISOString());
-  
-  else {
-    if (lastSync) 
-      startTime = lastSync;
-    else 
-      startTime = String(new Date(new Date().setDate(new Date().getDate() - 29)).toISOString());
-  }
-  
+  const startTime = fullSyncMode
+    ? new Date(Date.now() - 29 * 24 * 60 * 60 * 1000).toISOString()
+    : lastSync || new Date(Date.now() - 29 * 24 * 60 * 60 * 1000).toISOString();
+
   await setPlain('lastSync', currentTime);
   lastSync = currentTime;
 
-  let recordTypes = ["ActiveCaloriesBurned", "BasalBodyTemperature", "BloodGlucose", "BloodPressure", "BasalMetabolicRate", "BodyFat", "BodyTemperature", "BoneMass", "CyclingPedalingCadence", "CervicalMucus", "ExerciseSession", "Distance", "ElevationGained", "FloorsClimbed", "HeartRate", "Height", "Hydration", "LeanBodyMass", "MenstruationFlow", "MenstruationPeriod", "Nutrition", "OvulationTest", "OxygenSaturation", "Power", "RespiratoryRate", "RestingHeartRate", "SleepSession", "Speed", "Steps", "StepsCadence", "TotalCaloriesBurned", "Vo2Max", "Weight", "WheelchairPushes"]; 
-  
-  for (let i = 0; i < recordTypes.length; i++) {
-      let records;
-      try {
-      records = await readRecords(recordTypes[i],
-        {
-          timeRangeFilter: {
-            operator: "between",
-            startTime: startTime,
-            endTime: String(new Date().toISOString())
-          }
-        }
-      );
+  let pendingSyncs = [];
 
-      records = records.records;
-      }
-      catch (err) {
-        console.log(err)
-        continue;
-      }
-      console.log(recordTypes[i]);
-      numRecords += records.length;
+  const recordTypes = [
+    "ActiveCaloriesBurned", "BasalBodyTemperature", "BloodGlucose", "BloodPressure", "BasalMetabolicRate", "BodyFat",
+    "BodyTemperature", "BoneMass", "CyclingPedalingCadence", "CervicalMucus", "ExerciseSession", "Distance", "ElevationGained",
+    "FloorsClimbed", "HeartRate", "Height", "Hydration", "LeanBodyMass", "MenstruationFlow", "MenstruationPeriod",
+    "Nutrition", "OvulationTest", "OxygenSaturation", "Power", "RespiratoryRate", "RestingHeartRate", "SleepSession", "Speed",
+    "Steps", "StepsCadence", "TotalCaloriesBurned", "Vo2Max", "Weight", "WheelchairPushes"
+  ];
 
-      if (['SleepSession', 'Speed', 'HeartRate'].includes(recordTypes[i])) {
-        console.log("INSIDE IF - ", recordTypes[i])
-        for (let j=0; j<records.length; j++) {
-          console.log("INSIDE FOR", j, recordTypes[i])
+  for (let type of recordTypes) {
+    let records = [];
+    try {
+      const result = await readRecords(type, {
+        timeRangeFilter: { operator: "between", startTime, endTime: currentTime }
+      });
+      records = result.records;
+    } catch (err) {
+      console.log(`❌ Error reading ${type}:`, err);
+      continue;
+    }
+
+    numRecords += records.length;
+setProgressCallback(prev => ({ ...prev, total: numRecords }));
+
+    if (records.length === 0) continue;
+
+    if (["SleepSession", "Speed", "HeartRate"].includes(type)) {
+      for (let j = 0; j < records.length; j++) {
+        const delay = j * 3000;
+        const promise = new Promise(resolve => {
           setTimeout(async () => {
             try {
-              let record = await readRecord(recordTypes[i], records[j].metadata.id);
-              await axios.post(`${apiBase}/api/v2/sync/${recordTypes[i]}`, {
-                data: record
-              }, {
-                headers: {
-                  "Authorization": `Bearer ${login}`
-                }
-              })
-            }
-            catch (err) {
-              console.log(err)
+              const record = await readRecord(type, records[j].metadata.id);
+              await axios.post(`${apiBase}/api/v2/sync/${type}`, { data: record }, {
+                headers: { "Authorization": `Bearer ${login}` }
+              });
+              syncedSummary[type] = (syncedSummary[type] || 0) + 1;
+            } catch (err) {
+              console.log(`❌ Error syncing ${type} record`, err);
             }
 
             numRecordsSynced += 1;
-            try {
+            setProgressCallback(prev => ({ ...prev, current: prev.current + 1 }));
+
             ReactNativeForegroundService.update({
               id: 1244,
               title: 'HCGateway Sync Progress',
-              message: `HCGateway is currently syncing... [${numRecordsSynced}/${numRecords}]`,
+              message: `Syncing... [${numRecordsSynced}/${numRecords}]`,
               icon: 'ic_launcher',
-              setOnlyAlertOnce: true,
-              color: '#000000',
-              progress: {
-                max: numRecords,
-                curr: numRecordsSynced,
-              }
-            })
+              progress: { max: numRecords, curr: numRecordsSynced },
+            });
 
-            if (numRecordsSynced == numRecords) {
-              ReactNativeForegroundService.update({
-                id: 1244,
-                title: 'HCGateway Sync Progress',
-                message: `HCGateway is working in the background to sync your data.`,
-                icon: 'ic_launcher',
-                setOnlyAlertOnce: true,
-                color: '#000000',
-              })
-            }
-            }
-            catch {}
-          }, j*3000)
-        }
-      }
-
-      else {
-        await axios.post(`${apiBase}/api/v2/sync/${recordTypes[i]}`, {
-          data: records
-        }, {
-          headers: {
-            "Authorization": `Bearer ${login}`
-          }
+            resolve();
+          }, delay);
         });
+
+        pendingSyncs.push(promise);
+      }
+    } else {
+      try {
+        await axios.post(`${apiBase}/api/v2/sync/${type}`, { data: records }, {
+          headers: { "Authorization": `Bearer ${login}` }
+        });
+        syncedSummary[type] = records.length;
         numRecordsSynced += records.length;
-        try {
+        setProgressCallback(prev => ({ ...prev, current: prev.current + records.length }));
+
         ReactNativeForegroundService.update({
           id: 1244,
           title: 'HCGateway Sync Progress',
-          message: `HCGateway is currently syncing... [${numRecordsSynced}/${numRecords}]`,
+          message: `Syncing... [${numRecordsSynced}/${numRecords}]`,
           icon: 'ic_launcher',
-          setOnlyAlertOnce: true,
-          color: '#000000',
-          progress: {
-            max: numRecords,
-            curr: numRecordsSynced,
-          }
-        })
-
-        if (numRecordsSynced == numRecords) {
-          ReactNativeForegroundService.update({
-            id: 1244,
-            title: 'HCGateway Sync Progress',
-            message: `HCGateway is working in the background to sync your data.`,
-            icon: 'ic_launcher',
-            setOnlyAlertOnce: true,
-            color: '#000000',
-          })
-        }
-        }
-        catch {}
+          progress: { max: numRecords, curr: numRecordsSynced },
+        });
+      } catch (err) {
+        console.log(`❌ Error syncing ${type}:`, err);
       }
+    }
   }
-}
+
+  // Wait for all delayed syncs to complete
+  await Promise.all(pendingSyncs);
+setSyncingCallback(false);
+
+
+  // ✅ Print sync summary
+  console.log("✅ Sync Summary:");
+  if (Object.keys(syncedSummary).length === 0) {
+    console.log("No records were synced.");
+  } else {
+    for (const [type, count] of Object.entries(syncedSummary)) {
+      console.log(`${type}: ${count} record(s)`);
+    }
+  }
+
+  setSyncSummaryCallback(Object.entries(syncedSummary));
+
+
+  Toast.show({
+    type: 'success',
+    text1: "Sync completed!",
+    text2: `Synced ${numRecordsSynced} records.`,
+  });
+};
+
 
 const handlePush = async (message) => {
   const isInitialized = await initialize();
@@ -466,6 +459,23 @@ export default Sentry.wrap(function App() {
   const [form, setForm] = React.useState(null);
   const [showSyncWarning, setShowSyncWarning] = React.useState(false);
   const [showWeb, setShowWeb] = React.useState(false);
+const [syncSummary, setSyncSummary] = React.useState([]);
+const [showSyncSummary, setShowSyncSummary] = React.useState(false);
+const [userNameState, setUserNameState] = React.useState("");
+const [syncProgress, setSyncProgress] = React.useState({ current: 0, total: 0 });
+const [syncing, setSyncing] = React.useState(false);
+
+
+React.useEffect(() => {
+  get('userName').then(res => {
+    if (res) {
+      userName = res;
+      setUserNameState(res);
+    }
+  });
+}, []);
+
+
 
   const loginFunc = async () => {
     Toast.show({
@@ -492,6 +502,7 @@ export default Sentry.wrap(function App() {
     userName = data.username;
     userId = data.userId;
     await setPlain('userId', userId); 
+    await setPlain('userName', userName); 
 
     console.log("ahssawsas " + JSON.stringify(data));
     let fcmToken = await requestUserPermission();
@@ -605,9 +616,15 @@ return showWeb ? (
     <View style={styles.container}>
       {login &&
         <View>
-          <Text style={{ fontSize: 20, marginVertical: 10, color: 'white', }}>You are currently logged in as {userName}</Text>
-          <Text style={{ fontSize: 17, marginVertical: 10 , color: 'white' }}>Last Sync: {lastSync}</Text>
+          <Text style={{ fontSize: 20,textAlign: 'center' , marginBottom: 40, color: 'white' }}>
+            You are currently logged in as {userNameState || "unknown user"}
+          </Text>
 
+            <Text style={{ fontSize: 17, marginVertical: 10,marginBottom: 40, marginHorizontal:'auto', color: 'white' }}>
+          Last Sync: {lastSync ? new Date(lastSync).toLocaleString() : 'N/A'}
+        </Text>
+
+      
           {/* <Text style={{ marginTop: 10, fontSize: 15 }}>API Base URL:</Text>
           <TextInput
             style={styles.input}
@@ -619,24 +636,53 @@ return showWeb ? (
             }}
           /> */}
 
-          <Text style={{ marginTop: 10, fontSize: 15 , color: 'white' }}>Sync Interval (in seconds) (defualt is 2 hours):</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Sync Interval"
-            keyboardType='numeric'
-            defaultValue={(taskDelay / 1000).toString()}
-            onChangeText={text => {
-              taskDelay = Number(text) * 1000;
-              setPlain('taskDelay', String(text * 1000));
-              ReactNativeForegroundService.update_task(() => sync(), {
-                delay: taskDelay,
-              })
-              Toast.show({
-                type: 'success',
-                text1: "Sync interval updated",
-              })
-            }}
-          />
+         <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal:'auto' }}>
+  <Text style={{ fontSize: 15, color: 'white', textAlign: "center", marginRight: 10 }}>
+    Sync Interval:
+  </Text>
+
+<View style={{
+  borderWidth: 1,
+  borderColor: '#ccc',
+  backgroundColor: 'white',
+  borderRadius: 4,
+  height: 40,
+  width: 130,
+  justifyContent: 'center',
+  overflow: 'hidden',
+}}>
+  <Picker
+    selectedValue={taskDelay}
+    onValueChange={(value) => {
+      taskDelay = value;
+      setPlain('taskDelay', String(value));
+      ReactNativeForegroundService.update_task(() => sync(), {
+        delay: taskDelay,
+      });
+      Toast.show({
+        type: 'success',
+        text1: 'Sync interval updated',
+      });
+    }}
+    style={{
+      height: 40,
+      marginTop: 0, // ✅ nudge text upward slightly for vertical centering
+    }}
+    dropdownIconColor="#000"
+    mode="dropdown"
+  >
+    <Picker.Item label="5 min" value={5 * 60 * 1000} />
+    <Picker.Item label="15 min" value={15 * 60 * 1000} />
+    <Picker.Item label="30 min" value={30 * 60 * 1000} />
+    <Picker.Item label="1 hr" value={60 * 60 * 1000} />
+    <Picker.Item label="2 hr" value={2 * 60 * 60 * 1000} />
+    <Picker.Item label="4 hr" value={4 * 60 * 60 * 1000} />
+  </Picker>
+</View>
+
+
+</View>
+
 
             {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
             <Text style={{ fontSize: 15 }}>Enable Sentry:</Text>
@@ -668,7 +714,7 @@ return showWeb ? (
             />
             </View> */}
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal:'auto', marginVertical: 10 }}>
             <Text style={{ fontSize: 15, color: 'white'  }}>Full 30-day sync:</Text>
             <Switch
               value={fullSyncMode}
@@ -689,6 +735,8 @@ return showWeb ? (
             />
           </View>
           
+
+
           {showSyncWarning && (
             <View style={styles.warningContainer}>
               <Text style={styles.warningText}>
@@ -720,24 +768,146 @@ return showWeb ? (
             </View>
           )}
 
-          <View style={{ marginTop: 20 }}>
-            <CustomButton
-              title="Sync Now"
-              onPress={() => {
-                sync()
-              }}
-            />
+          {syncing && (
+  <View style={{ marginVertical: 20, width: '100%', alignItems: 'center' }}>
+    <Text style={{ color: 'white', marginBottom: 10 }}>
+      Syncing... {syncProgress.current} / {syncProgress.total}
+    </Text>
+    {Platform.OS === 'android' ? (
+      <ProgressBarAndroid
+        styleAttr="Horizontal"
+        indeterminate={false}
+        progress={
+          syncProgress.total
+            ? syncProgress.current / syncProgress.total
+            : 0
+        }
+        color="#ffffff"
+        style={{ width: 300 }}
+      />
+    ) : (
+      <ProgressViewIOS
+        progress={
+          syncProgress.total
+            ? syncProgress.current / syncProgress.total
+            : 0
+        }
+        style={{ width: 300 }}
+      />
+    )}
+  </View>
+)}
+
+
+
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingVertical: 8,
+            paddingHorizontal: 10,
+            marginVertical: 2,
+            borderRadius: 6,
+            backgroundColor: '#3a7762'
+          }}>
+    
+    <View style={{ marginTop: 5, width: '100%' }}>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>Sync Summary</Text>
+    <TouchableOpacity onPress={() => setShowSyncSummary(prev => !prev)}>
+      <Text style={{ fontSize: 16, color: '#ccc' }}>
+        {showSyncSummary ? 'Hide ▲' : 'Show ▼'}
+      </Text>
+    </TouchableOpacity>
+  </View>
+
+  {showSyncSummary && (
+    syncSummary.length > 0 ? (
+      <FlatList
+        data={syncSummary}
+        keyExtractor={([type]) => type}
+        renderItem={({ item: [type, count] }) => (
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingVertical: 6,
+            borderBottomWidth: 1,
+            borderColor: '#ccc',
+          }}>
+            <Text style={{ color: 'white', fontSize: 16 }}>{type}</Text>
+            <Text style={{ color: 'white', fontSize: 16 }}>{count} record(s)</Text>
+          </View>
+        )}
+      />
+    ) : (
+      <Text style={{ color: '#ccc', fontStyle: 'italic' }}>No records synced yet.</Text>
+    )
+  )}
+</View>
+
+
+
+          </View>
+
+          
+
+          <View style={{ marginTop: 5 }}>
+           <CustomButton
+  title="Sync Now"
+  onPress={async () => {
+    await sync(setSyncSummary, setSyncing, setSyncProgress);
+    Toast.show({
+      type: 'success',
+      text1: "Sync completed",
+    });
+    
+    if (!userId) userId = await get('userId');
+    if (!userId) {
+      console.error("❌ userId is undefined, aborting syncFinished");
+      return;
+    }
+
+    const response = await fetch('https://japples.yehorskudilov.com/api/db/syncAll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId,
+        queries: {}
+      })
+    });
+  }}
+/>
+
           </View>
 
           <View>
-            <CustomButton title="Open Japples (in-app)" onPress={() => setShowWeb(true)} />
+            <CustomButton title="Open Japples" onPress={() => setShowWeb(true)} />
 
           </View>
 
-          <View style={{ marginTop: 20 }}>
+          <View style={{ marginTop: 0 }}>
             <CustomButton
               title="Logout"
               onPress={() => {
+              fetch('https://japples.yehorskudilov.com/api/auth/logout', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    userId,
+                    isHealthAppLinked: false
+                  })
+                })
+                  .then(res => res.json())
+                  .then(data => {
+                    console.log('Logout successful:', data);
+                  })
+                  .catch(err => {
+                    console.error('Logout failed:', err);
+                  });
+
                 delkey('login');
                 login = null;
                 Toast.show({
