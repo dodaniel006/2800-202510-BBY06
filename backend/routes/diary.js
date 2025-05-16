@@ -115,18 +115,24 @@ router.get("/calorieChart{/:from}{/:to}", async (req, res) => {
       {
         foodCalorie: 1,
         foodAmount: 1,
+        createdAt: 1,
         _id: 0,
       }
     );
 
-    const chartData = [];
+    const chartData = {};
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(from);
+      day.setDate(day.getDate() + i);
+      chartData[day.toISOString().split("T")[0]] = 0;
+    }
+
     foodList.forEach((food) => {
       food.foodCalorie = parseFloat(food.foodCalorie);
       food.foodAmount = parseFloat(food.foodAmount);
-      chartData.push(food.foodCalorie * food.foodAmount);
+      chartData[food.createdAt.toISOString().split("T")[0]] +=
+        food.foodCalorie * food.foodAmount;
     });
-
-    console.log("chartData: ", chartData);
 
     res.status(200).json(chartData);
   } catch (error) {
