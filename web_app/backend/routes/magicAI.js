@@ -5,7 +5,8 @@ import "dotenv/config";
 const router = Router();
 
 // Put the following in your .env: AI_HOST=http://ai.japples.ca
-const ollama = new Ollama({ host: process.env.AI_HOST + ":80" });
+const host = process.env.AI_HOST ? process.env.AI_HOST + ":80" : "http://ai.japples.ca:80";
+const ollama = new Ollama({ host: host });
 
 // Default system message for health goals
 const defaultSystemMessage = {
