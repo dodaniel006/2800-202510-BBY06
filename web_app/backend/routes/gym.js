@@ -18,6 +18,23 @@ function validateCoordinates(lon, lat) {
     );
 }
 
+function haversine(lon1, lat1, lon2, lat2) {
+    const toRadians = (degrees) => degrees * (Math.PI / 180);
+
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // Distance in kilometers
+}
+
 router.get("/reverseGeocode", async (req, res) => {
     let { lon, lat } = req.query;
     lon = Number(lon);
@@ -57,8 +74,6 @@ router.get("/checkDistance", async (req, res) => {
     lon = Number(lon);
     lat = Number(lat);
 
-    console.log("Coordinates received:", lon, lat);
-
     if (!validateCoordinates(lon, lat)) {
         console.log("Invalid coordinates provided.");
         res.status(400).json({ error: "Invalid coordinates provided" });
@@ -69,48 +84,23 @@ router.get("/checkDistance", async (req, res) => {
 
             const gym = await Gym.findOne({
                 userId: req.session.userId,
-                gymCoordinates: {
-                    $near: {
-                        $geometry: {
-                            type: "Point",
-                            coordinates: [lon, lat],
-                        },
-                        $maxDistance: 500, // 500 meters
-                    },
-                },
             });
 
-            console.log("Gym found:", gym);
+            let gymCoordinates = gym.gymCoordinates.coordinates;
+            let distance = haversine(gymCoordinates[0], gymCoordinates[1], lon, lat);
 
-            const distance = await Gym.aggregate([
-                {
-                    $geoNear: {
-                        near: {
-                            type: "Point",
-                            coordinates: [lon, lat],
-                        },
-                        distanceField: "dist.calculated",
-                        maxDistance: 500,
-                        spherical: true,
-                        query: { userID: req.session.userId },
-                    },
-                }
-            ]);
-
-            console.log("Distance data:", distance);
-
-            if (gym) {
+            if (gym && distance <= 0.5) {
                 console.log("Gym found within 500m radius");
                 res.status(200).json({
                     success: true,
-                    message: "Gym found within 500m radius",
+                    message: `${gym.gymName} found within 500m radius!`,
                     distance: distance,
                 });
             } else {
                 console.log("No gym found within 500m radius");
-                res.status(404).json({
+                res.status(200).json({
                     success: false,
-                    message: "No gym found within 500m radius",
+                    message: `${gym.gymName} was not found within 500m radius`,
                     distance: distance,
                 });
             }
@@ -150,7 +140,7 @@ router.post("/submitGymInfo", async (req, res) => {
                             gymAddress: place,
                             gymCoordinates: {
                                 type: "Point",
-                                coordinates: [jsonData[0].lon, jsonData[0].lat],
+                                coordinates: [Number(jsonData[0].lon), Number(jsonData[0].lat)],
                             },
                         },
                     },

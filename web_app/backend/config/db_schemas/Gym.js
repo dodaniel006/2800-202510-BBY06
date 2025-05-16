@@ -13,7 +13,6 @@ const gymLogSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      // index: "2dsphere",
     },
   },
   createdAt: {
@@ -28,6 +27,5 @@ const gymLogSchema = new mongoose.Schema({
 });
 
 // Export the Gym model
-gymLogSchema.index({ gymCoordinates: "2dsphere" });
 const Gym = mongoose.model("Gym", gymLogSchema);
 export default Gym;
