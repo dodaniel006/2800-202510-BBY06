@@ -15,14 +15,14 @@
           }
         }
       ],
-      [
-        "@sentry/react-native/expo",
-        {
-          "url": "https://sentry.io/",
-          "project": "hcgateway-app",
-          "organization": "shuchir-jain"
-        }
-      ],
+        [
+      "@sentry/react-native/expo",
+      {
+        "url": "https://sentry.io/",
+        "project": "japples",
+        "organization": "yehor-skudilov"
+      }
+    ],
       "@react-native-firebase/app",
       "@react-native-firebase/messaging"
     ],
