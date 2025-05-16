@@ -1,6 +1,6 @@
 function logout() {
   fetch("/api/auth/logout", {
-    method: "GET",
+    method: "POST",
     credentials: "include"
   })
     .then(res => res.json())

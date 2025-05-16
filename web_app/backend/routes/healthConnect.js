@@ -37,28 +37,39 @@ const methods = [
   "wheelchairPushes"
 ];
 
+
+export async function login({ userId }) {
+  const username = userId;
+  const password = userId;
+
+  const response = await fetch('https://healthapi.yehorskudilov.com/api/v2/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+
+  const data = await response.json();
+  return { status: response.status, data };
+}
+
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+const userId = req.session?.userId;
 
   try {
-    const response = await fetch('https://healthapi.yehorskudilov.com/api/v2/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
-
-    const data = await response.json();
-    res.status(response.status).json(data);
+    const { status, data } = await login({ userId});
+    res.status(status).json(data);
   } catch (error) {
-    console.error('Error forwarding login request:', error);
+    console.error('Error during login:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-export async function fetchHealthData({ method, accessToken, queries = {}, lastSyncedAt }) {
+export async function fetchHealthData({ method, userId, queries = {}, lastSyncedAt }) {
   if (lastSyncedAt) {
     queries.start = { ...(queries.start || {}), $gt: lastSyncedAt };
   }
+
+  const accessToken = (await login({ userId })).data.token;
 
   const response = await fetch(`https://healthapi.yehorskudilov.com/api/v2/fetch/${method}`, {
     method: 'POST',
@@ -73,12 +84,12 @@ export async function fetchHealthData({ method, accessToken, queries = {}, lastS
   return { data, status: response.status };
 }
 
-export async function fetchAllHealthData({ accessToken, queries = {}, lastSyncedAt }) {
+export async function fetchAllHealthData({ userId, queries = {}, lastSyncedAt }) {
   const results = {};
 
   for (const method of methods) {
     try {
-      const { data, status } = await fetchHealthData({ method, accessToken, queries, lastSyncedAt });
+      const { data, status } = await fetchHealthData({ method, userId, queries, lastSyncedAt });
       results[method] = { status, data };
     } catch (error) {
       console.error(`Error fetching ${method}:`, error);
@@ -92,13 +103,12 @@ export async function fetchAllHealthData({ accessToken, queries = {}, lastSynced
 
 router.post('/get/:method', async (req, res) => {
   const userId = req.session?.userId;
-  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
   const { method } = req.params;
-  const { accessToken, queries, lastSyncedAt } = req.body;
+  const { queries, lastSyncedAt } = req.body;
 
   try {
-    const { data, status } = await fetchHealthData({ method, accessToken, queries, lastSyncedAt });
+    const { data, status } = await fetchHealthData({ method, userId, queries, lastSyncedAt });
 
     // ⬇️ Attach userId to each entry (if it's an array)
     const taggedData = Array.isArray(data)
@@ -115,16 +125,11 @@ router.post('/get/:method', async (req, res) => {
 
 router.post('/getAll', async (req, res) => {
   const userId = req.session?.userId;
-  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-  const { accessToken, queries, lastSyncedAt } = req.body;
-
-  if (!accessToken) {
-    return res.status(400).json({ error: "Missing accessToken" });
-  }
+  const { queries, lastSyncedAt } = req.body;
 
   try {
-    const allResults = await fetchAllHealthData({ accessToken, queries, lastSyncedAt });
+    const allResults = await fetchAllHealthData({ userId, queries, lastSyncedAt });
 
     // ⬇️ Attach userId to each result set
     for (const key of Object.keys(allResults)) {

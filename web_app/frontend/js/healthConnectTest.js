@@ -1,26 +1,4 @@
-async function login(username, password) {
-  try {
-    const response = await fetch('/api/healthConnect/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Login failed with status ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log('Login response:', data);
-    return data.token; // or data.access_token, depending on what your backend returns
-  } catch (error) {
-    console.error('Login request failed:', error);
-    return null;
-  }
-}
-
-
-async function getData(token, method) {
+async function getData(method) {
   try {
     let date = new Date();
     const customDate = new Date(2024, 3, 30, 10, 30, 0);
@@ -32,7 +10,6 @@ async function getData(token, method) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        accessToken: token,
         lastSyncedAt: customDate,
         queries: {}
       })
@@ -47,7 +24,7 @@ async function getData(token, method) {
   }
 }
 
-async function getAllData(token) {
+async function getAllData() {
   try {
     const customDate = new Date(2024, 3, 30, 10, 30, 0); // April is month 3 (0-based)
     console.log('Custom date:', customDate);
@@ -58,7 +35,6 @@ async function getAllData(token) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        accessToken: token,
         lastSyncedAt: customDate,
         queries: {}
       })
@@ -111,7 +87,7 @@ function displayResults(data) {
   }
 }
 
-async function syncAllHealthData(token) {
+async function syncAllHealthData() {
   try {
     const customDate = new Date(2024, 3, 30, 10, 30, 0); // April 30, 2024 10:30:00
     console.log("Syncing since:", customDate.toISOString());
@@ -122,7 +98,6 @@ async function syncAllHealthData(token) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        accessToken: token,
         lastSyncedAt: customDate.toISOString(),
         queries: {} // optional filters
       })
@@ -149,21 +124,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const password = document.getElementById('password').value;
     const method = document.getElementById('method').value;
 
-    const token = await login(username, password); // await is now valid
-    console.log('Token:', token); // Log the token for debugging
-    if (token) {
+   
       let data
       if(method == "GetAll"){
-        data = await getAllData(token);
-        syncAllHealthData(token); // Call your data fetcher
+        data = await getAllData();
+        syncAllHealthData(); // Call your data fetcher
       }
       else{
-         data = await getData(token, method); // Call your data fetcher
+         data = await getData(method); // Call your data fetcher
 
       }
       displayResults(data); // Display the results
-    } else {
-      console.error('Login failed — no token received');
-    }
+ 
   });
 });
