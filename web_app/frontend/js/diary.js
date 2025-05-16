@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".editItem").forEach((editIcon) => {
     attachEditFoodItem(editIcon);
   });
+
+  document.querySelectorAll(".generateRecipe").forEach((recipeIcon) => {
+    attachGenerateRecipe(recipeIcon);
+  });
 });
 
 function attachDelete(element) {
@@ -133,5 +137,49 @@ async function editFoodItem(foodItemId, name, amount, calorie) {
     console.error("Error editing food item:", response.statusText);
   } else {
     return (window.location.href = "/diary");
+  }
+}
+
+async function attachGenerateRecipe(element) {
+  element.addEventListener("click", (e) => {
+    const foodItem = e.target.closest("tr.foodItem");
+    const foodName = foodItem.querySelector(".foodName").innerText;
+
+    if (foodName) {
+      generateRecipe(foodName);
+    } else {
+      alert("Please enter an ingredient.");
+    }
+  });
+}
+
+// Used deepseek to generate this function
+async function generateRecipe(ingredient) {
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("recipe-container").innerHTML = "";
+
+  try {
+    const response = await fetch("/api/diary/generate-recipe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ingredient }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    document.getElementById("recipe-container").innerHTML = marked.parse(
+      `${data.recipe}`
+    );
+  } catch (error) {
+    document.getElementById("recipe-container").innerHTML =
+      "Error generating recipe. Please try again.";
+    console.error("Error:", error);
+  } finally {
+    document.getElementById("loading").style.display = "none";
   }
 }

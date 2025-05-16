@@ -91,7 +91,13 @@ const lifecycle = process.env.npm_lifecycle_event;
 
 if (!["dev", "server"].includes(lifecycle)) {
   app.use((req, res, next) => {
-    const frontendRoutes = ["/", "/login", "/initDB", "/register", "/files/health_connect.apk"];
+    const frontendRoutes = [
+      "/",
+      "/login",
+      "/initDB",
+      "/register",
+      "/files/health_connect.apk",
+    ];
 
     if (!req.session.authenticated && !frontendRoutes.includes(req.path)) {
       return res.redirect("/login");

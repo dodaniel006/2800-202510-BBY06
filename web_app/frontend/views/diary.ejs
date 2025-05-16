@@ -70,6 +70,11 @@
           <td>
             <div class="d-flex align-items-center">
               <button
+                class="btn btn-secondary me-2 bb-bg-surface border-0 generateRecipe"
+              >
+                <i class="fas fa-utensils"></i>
+              </button>
+              <button
                 class="btn btn-primary me-2 bb-bg-wallet-green-dark border-0 editItem"
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModal"
@@ -114,6 +119,12 @@
     </a>
   </div>
 </div>
+
+<div class="loading" id="loading">
+  Generating recipe... Please wait. (Should take about 10 seconds).
+</div>
+
+<div id="recipe-container"></div>
 
 <!-- Modal -->
 <div
@@ -180,3 +191,8 @@
     </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  document.getElementById("recipe-container").innerHTML = marked.parse(``);
+</script>
