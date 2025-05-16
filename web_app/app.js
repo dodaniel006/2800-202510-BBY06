@@ -17,6 +17,7 @@ import user from "./backend/routes/user.js";
 import diary from "./backend/routes/diary.js";
 import gym from "./backend/routes/gym.js";
 import authRouter from "./backend/routes/authentication.js"; // Import authRouter
+import magicAI from "./backend/routes/magicAI.js"; // Import magicAI route
 
 // Model imports
 import { connectToMongo } from "./backend/config/db.js";
@@ -85,6 +86,7 @@ app.use("/api/task", task);
 app.use("/api/files", files);
 app.use("/api/gym", gym);
 app.use("/api/user", user);
+app.use("/api/magicAI", magicAI);
 app.use("/api/auth", authRouter); // Use authRouter for /api/auth routes
 
 const lifecycle = process.env.npm_lifecycle_event;
