@@ -374,7 +374,7 @@ setProgressCallback(prev => ({ ...prev, total: numRecords }));
 
             ReactNativeForegroundService.update({
               id: 1244,
-              title: 'HCGateway Sync Progress',
+              title: 'Japples Sync Progress',
               message: `Syncing... [${numRecordsSynced}/${numRecords}]`,
               icon: 'ic_launcher',
               progress: { max: numRecords, curr: numRecordsSynced },
@@ -397,7 +397,7 @@ setProgressCallback(prev => ({ ...prev, total: numRecords }));
 
         ReactNativeForegroundService.update({
           id: 1244,
-          title: 'HCGateway Sync Progress',
+          title: 'Japples Sync Progress',
           message: `Syncing... [${numRecordsSynced}/${numRecords}]`,
           icon: 'ic_launcher',
           progress: { max: numRecords, curr: numRecordsSynced },
@@ -427,7 +427,7 @@ setSyncingCallback(false);
 
 ReactNativeForegroundService.update({
   id: 1244,
-  title: 'HCGateway Sync Service',
+  title: 'Japples Sync Service',
   message: '✅ Sync finished',
   icon: 'ic_launcher',
 });
@@ -597,7 +597,7 @@ React.useEffect(() => {
         ReactNativeForegroundService.add_task(() => sync(), {
           delay: taskDelay,
           onLoop: true,
-          taskId: 'hcgateway_sync',
+          taskId: 'Japples_sync',
           onError: e => console.log(`Error logging:`, e),
         });
 
@@ -610,8 +610,8 @@ React.useEffect(() => {
 
         ReactNativeForegroundService.start({
           id: 1244,
-          title: 'HCGateway Sync Service',
-          message: 'HCGateway is working in the background to sync your data.',
+          title: 'Japples Sync Service',
+          message: 'Japples is working in the background to sync your data.',
           icon: 'ic_launcher',
           setOnlyAlertOnce: true,
           color: '#000000',
