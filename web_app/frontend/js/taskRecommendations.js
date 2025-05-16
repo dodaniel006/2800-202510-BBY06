@@ -46,16 +46,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 throw new Error(`Server responded with status: ${response.status}`);
-            }
-
-            let data = await response.json();
+            }            let data = await response.json();
             
             // If the response is a string (JSON string), parse it
             if (typeof data === 'string') {
                 try {
-                    data = JSON.parse(data);
+                    // Check if the string contains markdown-formatted JSON code blocks
+                    const jsonRegex = /```json\s*([\s\S]*?)\s*```/g;
+                    const markdownMatches = [...data.matchAll(jsonRegex)];
+                    
+                    if (markdownMatches.length > 0) {
+                        // Extract JSON objects from markdown code blocks
+                        const extractedObjects = markdownMatches
+                            .map(match => {
+                                try {
+                                    // Clean and parse the JSON content from the code block
+                                    const cleanJson = match[1].trim();
+                                    return JSON.parse(cleanJson);
+                                } catch (parseErr) {
+                                    console.warn('Failed to parse JSON from markdown block:', parseErr);
+                                    return null;
+                                }
+                            })
+                            .filter(obj => obj !== null);
+                        
+                        if (extractedObjects.length > 0) {
+                            // Use the extracted objects as our data
+                            data = Array.isArray(extractedObjects[0]) ? extractedObjects[0] : extractedObjects;
+                        } else {
+                            // If extraction failed, use the original string
+                            data = [{ 
+                                name: "AI Generated Suggestions", 
+                                description: data 
+                            }];
+                        }
+                    } else {
+                        // Regular JSON parsing if no markdown code blocks
+                        data = JSON.parse(data);
+                    }
                 } catch (e) {
-                    // If parsing fails, wrap the text response in our own format
+                    // If all parsing fails, wrap the text response in our own format
                     data = [{ 
                         name: "AI Generated Suggestions", 
                         description: data 
