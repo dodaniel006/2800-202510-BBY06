@@ -15,11 +15,15 @@ const geolocation = new ol.Geolocation({
 
 let map = null; // Declare map variable outside the function
 let lon, lat; // Declare lon and lat variables outside the function
+let gymEntered = false; // Flag to check if gym is entered
 
 // =========================
 // 2. Map Initialization
 // =========================
 function initMap(lon, lat) {
+
+  checkDistance(lon, lat); // Check distance to gym when map is initialized
+
   if (map) {
     // Update the map view with the new coordinates
     map.getView().setCenter(ol.proj.fromLonLat([lon, lat]));
@@ -69,6 +73,25 @@ function initMap(lon, lat) {
   reverseGeocode(lon, lat); // Call reverse geocoding function with the current position
 }
 
+async function checkDistance(lon, lat) {
+  fetch(`/api/gym/checkDistance?lon=${lon}&lat=${lat}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok ${response.status} ${response.error}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Gym found within radius!", data);
+      let message = `${data.message}<br>You are currently ${data.distance.toFixed(3)} km away from the gym.`;
+      document.getElementById("checkDistance").innerHTML = message;
+
+    })
+    .catch((error) => {
+      console.error("No gym found in radius", error);
+    });
+}
+
 // =========================
 // 3. Reverse Geocoding
 // =========================
@@ -100,6 +123,36 @@ async function reverseGeocode(lon, lat) {
     })
     .catch((error) => {
       console.error("Error in reverse geocoding:", error);
+    });
+}
+
+async function submitUserInfo() {
+  const gymName = document.getElementById("gymName").value;
+  const place = document.getElementById("place").value;
+  const userLocation = document.getElementById("userArea").innerText;
+  // Send the user info to the server
+  fetch("/api/gym/submitGymInfo", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      gymName,
+      place,
+      userLocation,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok ${response.status} ${response.error}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Location Successfully Parsed", data.data[0]);
+      document.getElementById("gymLocation").innerHTML = data.data[0].display_name;
+      checkDistance(lon, lat); // Check distance to gym after submitting user info
+    })
+    .catch((error) => {
+      console.error("Error submitting user info:", error.message);
     });
 }
 
@@ -139,33 +192,8 @@ document.getElementById("updateLocation").addEventListener("click", () => {
   timeout(); // Start the timeout for tracking
 });
 
-document.getElementById("submitUserInfo").addEventListener("click", async () => {
-  const gymName = document.getElementById("gymName").value;
-  const place = document.getElementById("place").value;
-  const userLocation = document.getElementById("userArea").innerText;
-  // Send the user info to the server
-  fetch("/api/gym/submitGymInfo", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      gymName,
-      place,
-      userLocation,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Network response was not ok ${response.status} ${response.error}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Location Successfully Parsed", data.data[0]);
-      document.getElementById("gymLocation").innerHTML = data.data[0].display_name;
-    })
-    .catch((error) => {
-      console.error("Error submitting user info:", error);
-    });
+document.getElementById("submitUserInfo").addEventListener("click", () => {
+  submitUserInfo();
 });
 
 // =========================
