@@ -22,10 +22,33 @@ import { BackHandler } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { FlatList } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { ProgressBarAndroid, Platform, ProgressViewIOS } from 'react-native';
+import { Platform, ProgressViewIOS } from 'react-native';
+import { ProgressBarAndroid } from 'react-native';
+import { ScrollView } from 'react-native';
+import { Image } from 'react-native';
 
-let userName;
-let userId;
+let isSentryEnabled = true;
+
+// ✅ Sentry.init must run IMMEDIATELY and SYNCHRONOUSLY
+Sentry.init({
+  dsn: 'https://e4a201b96ea602d28e90b5e4bbe67aa6@sentry.shuchir.dev/6',
+});
+
+// 🔄 Now check storage asynchronously to disable it afterward if needed
+AsyncStorage.getItem('sentryEnabled')
+  .then(res => {
+    if (res === "false") {
+      Sentry.close();
+      isSentryEnabled = false;
+      console.log("Sentry disabled via storage");
+    } else {
+      console.log("Sentry enabled via default or storage");
+    }
+  })
+  .catch(err => {
+    console.log("Failed to read sentryEnabled", err);
+  });
+
 
 const setObj = async (key, value) => { try { const jsonValue = JSON.stringify(value); await AsyncStorage.setItem(key, jsonValue) } catch (e) { console.log(e) } }
 const setPlain = async (key, value) => { try { await AsyncStorage.setItem(key, value) } catch (e) { console.log(e) } }
@@ -33,6 +56,21 @@ const get = async (key) => { try { const value = await AsyncStorage.getItem(key)
 const delkey = async (key, value) => { try { await AsyncStorage.removeItem(key) } catch (e) { console.log(e) } }
 const getAll = async () => { try { const keys = await AsyncStorage.getAllKeys(); return keys } catch (error) { console.error(error) } }
 const CustomButton = ({ title, onPress, color = 'white', textColor = 'black' }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{
+      backgroundColor: color,
+      padding: 12,
+      borderRadius: 6,
+      alignItems: 'center',
+      marginVertical: 7,
+    }}
+  >
+    <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
+  </TouchableOpacity>
+);
+
+const CustomButton2 = ({ title, onPress, color = 'black', textColor = 'white' }) => (
   <TouchableOpacity
     onPress={onPress}
     style={{
@@ -60,33 +98,7 @@ Notifications.setNotificationChannel({
   vibrationPattern: [200, 1000, 500, 1000, 500],
 })
 
-let isSentryEnabled = true;
-get('sentryEnabled')
-  .then(res => {
-    if (res != "false") {
-      Sentry.init({
-        dsn: 'https://e4a201b96ea602d28e90b5e4bbe67aa6@sentry.shuchir.dev/6',
-        // enableSpotlight: __DEV__,
-      });
-      // Toast.show({
-      //   type: 'success',
-      //   text1: "Sentry enabled from settings",
-      // });
-    } else {
-      isSentryEnabled = false;
-      // Toast.show({
-      //   type: 'info',
-      //   text1: "Sentry is disabled",
-      // });
-    }
-  })
-  .catch(err => {
-    console.log(err);
-    Toast.show({
-      type: 'error',
-      text1: "Failed to check Sentry settings",
-    });
-  });
+
 ReactNativeForegroundService.register();
 
 const requestUserPermission = async () => {
@@ -318,6 +330,10 @@ setProgressCallback({ current: 0, total: 0 });
   ];
 
   for (let type of recordTypes) {
+    const token = await get('login');
+    if (!token) {
+      return resolve();
+    }
     let records = [];
     try {
       const result = await readRecords(type, {
@@ -340,6 +356,10 @@ setProgressCallback(prev => ({ ...prev, total: numRecords }));
         const promise = new Promise(resolve => {
           setTimeout(async () => {
             try {
+              if (!token) {
+                return resolve();
+              }
+
               const record = await readRecord(type, records[j].metadata.id);
               await axios.post(`${apiBase}/api/v2/sync/${type}`, { data: record }, {
                 headers: { "Authorization": `Bearer ${login}` }
@@ -405,6 +425,13 @@ setSyncingCallback(false);
 
   setSyncSummaryCallback(Object.entries(syncedSummary));
 
+ReactNativeForegroundService.update({
+  id: 1244,
+  title: 'HCGateway Sync Service',
+  message: '✅ Sync finished',
+  icon: 'ic_launcher',
+});
+
 
   Toast.show({
     type: 'success',
@@ -461,21 +488,20 @@ export default Sentry.wrap(function App() {
   const [showWeb, setShowWeb] = React.useState(false);
 const [syncSummary, setSyncSummary] = React.useState([]);
 const [showSyncSummary, setShowSyncSummary] = React.useState(false);
-const [userNameState, setUserNameState] = React.useState("");
 const [syncProgress, setSyncProgress] = React.useState({ current: 0, total: 0 });
 const [syncing, setSyncing] = React.useState(false);
-
+const [username, setUsername] = React.useState('');
 
 React.useEffect(() => {
-  get('userName').then(res => {
-    if (res) {
-      userName = res;
-      setUserNameState(res);
+  const loadUsername = async () => {
+    const storedUsername = await get('userName');
+    if (storedUsername) {
+      setUsername(storedUsername);
     }
-  });
+  };
+
+  loadUsername();
 }, []);
-
-
 
   const loginFunc = async () => {
     Toast.show({
@@ -499,10 +525,12 @@ React.useEffect(() => {
 
     const data = await res.json();
 
-    userName = data.username;
-    userId = data.userId;
+    let userId = data.userId;
+    let userName = data.username;
+
     await setPlain('userId', userId); 
     await setPlain('userName', userName); 
+    setUsername(userName);
 
     console.log("ahssawsas " + JSON.stringify(data));
     let fcmToken = await requestUserPermission();
@@ -613,11 +641,18 @@ return showWeb ? (
     style={{ flex: 1 }}
   />
 ) : (
-    <View style={styles.container}>
-      {login &&
+  <ScrollView contentContainerStyle={styles.container}>      
+  {login &&
         <View>
+<Image
+  source={require('./assets/icon.png')}
+  style={{ width: 100, height: 100, marginBottom: 20, marginHorizontal: 'auto' }}
+  resizeMode="contain"
+/>
+
+
           <Text style={{ fontSize: 20,textAlign: 'center' , marginBottom: 40, color: 'white' }}>
-            You are currently logged in as {userNameState || "unknown user"}
+            You are currently logged in as {username  || "unknown user"}
           </Text>
 
             <Text style={{ fontSize: 17, marginVertical: 10,marginBottom: 40, marginHorizontal:'auto', color: 'white' }}>
@@ -744,13 +779,13 @@ return showWeb ? (
                 You may miss data if the app stops abruptly.
               </Text>
               <View style={styles.warningButtons}>
-                <Button
+                <CustomButton2
                   title="Cancel"
                   onPress={() => {
                     setShowSyncWarning(false);
                   }}
                 />
-                <Button
+                <CustomButton2
                   title="Continue"
                   onPress={async () => {
                     fullSyncMode = false;
@@ -769,7 +804,7 @@ return showWeb ? (
           )}
 
           {syncing && (
-  <View style={{ marginVertical: 20, width: '100%', alignItems: 'center' }}>
+  <View style={{ marginVertical: 20, width: '100%', alignItems: 'center', marginHorizontal: 'auto' }}>
     <Text style={{ color: 'white', marginBottom: 10 }}>
       Syncing... {syncProgress.current} / {syncProgress.total}
     </Text>
@@ -783,7 +818,7 @@ return showWeb ? (
             : 0
         }
         color="#ffffff"
-        style={{ width: 300 }}
+        style={{ width: 300, }}
       />
     ) : (
       <ProgressViewIOS
@@ -860,11 +895,8 @@ return showWeb ? (
       text1: "Sync completed",
     });
     
-    if (!userId) userId = await get('userId');
-    if (!userId) {
-      console.error("❌ userId is undefined, aborting syncFinished");
-      return;
-    }
+    const userId = await get('userId');
+
 
     const response = await fetch('https://japples.yehorskudilov.com/api/db/syncAll', {
       method: 'POST',
@@ -889,7 +921,9 @@ return showWeb ? (
           <View style={{ marginTop: 0 }}>
             <CustomButton
               title="Logout"
-              onPress={() => {
+              onPress={async () => {
+              const userId = await get('userId');
+
               fetch('https://japples.yehorskudilov.com/api/auth/logout', {
                   method: 'POST',
                   headers: {
@@ -908,7 +942,10 @@ return showWeb ? (
                     console.error('Logout failed:', err);
                   });
 
-                delkey('login');
+                await delkey('login');
+                await delkey('refreshToken');
+                await delkey('userId');
+                await delkey('userName');
                 login = null;
                 Toast.show({
                   type: 'success',
@@ -921,7 +958,14 @@ return showWeb ? (
         </View>
       }
       {!login &&
-              <View>
+              <View style={{marginBottom: 100}}>
+
+              <Image
+                source={require('./assets/icon.png')}
+                style={{ width: 100, height: 100, marginHorizontal: 'auto' }}
+                resizeMode="contain"
+              />
+
                  <Text style={{ 
                    fontSize: 30,
                    color: 'white',
@@ -956,7 +1000,7 @@ return showWeb ? (
 
     <StatusBar style="dark" />
     <Toast />
-    </View>
+    </ScrollView>
   );
 });;
 
@@ -984,15 +1028,15 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   warningContainer: {
-    backgroundColor: '#fff3cd',
-    borderColor: '#ffeeba',
+    backgroundColor: 'white',
+    borderColor: 'white',
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
     marginVertical: 10,
   },
   warningText: {
-    color: '#ffffff', // changed to white
+    color: 'black', // changed to white
     marginBottom: 10,
   },
   warningButtons: {

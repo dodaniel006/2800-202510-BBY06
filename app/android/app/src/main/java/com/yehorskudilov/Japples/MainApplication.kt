@@ -1,4 +1,4 @@
-package dev.shuchir.hcgateway
+package com.yehorskudilov.Japples
 
 import android.app.Application
 import android.content.res.Configuration

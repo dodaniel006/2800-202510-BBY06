@@ -1,4 +1,4 @@
-package dev.shuchir.hcgateway
+package com.yehorskudilov.Japples
 
 import android.os.Build
 import android.os.Bundle
