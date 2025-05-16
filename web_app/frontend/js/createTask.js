@@ -7,6 +7,23 @@ function getValue() {
     document.getElementById("sliderLabel").innerHTML = "Point Value: " + value;
 }
 
+// Check for URL parameters and prefill form
+document.addEventListener('DOMContentLoaded', function() {
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+    const description = urlParams.get('description');
+    
+    // Prefill form if parameters exist
+    if (name) {
+        document.getElementById('name').value = name;
+    }
+    
+    if (description) {
+        document.getElementById('description').value = description;
+    }
+});
+
 // Create Task
 
 document.getElementById("create").addEventListener("click", createTask);
