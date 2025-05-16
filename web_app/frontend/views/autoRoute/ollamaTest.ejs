@@ -1,0 +1,55 @@
+<div class="container mt-5">
+    <h1>Test Ollama AI</h1>
+    <form action="/api/magicAI/ollama" method="POST" id="ollamaForm">
+        <div class="mb-3">
+            <label for="prompt" class="form-label">Prompt:</label>
+            <textarea class="form-control" id="prompt" name="prompt" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div class="mt-4" id="responseContainer" style="display: none;">
+        <h2>Response:</h2>
+        <pre id="ollamaResponse"></pre>
+    </div>
+</div>
+
+<script>
+    document.getElementById('ollamaForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const prompt = document.getElementById('prompt').value;
+        const responseContainer = document.getElementById('responseContainer');
+        const ollamaResponse = document.getElementById('ollamaResponse');
+
+        try {
+            const response = await fetch('/api/magicAI/ollama', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: prompt }),
+            });
+
+            responseContainer.style.display = 'block';
+            if (response.ok) {
+                const data = await response.json(); // data is the string from response.message.content
+                try {
+                    // If 'data' is a string that represents a JSON object or array,
+                    // parse it and then re-stringify it with pretty printing.
+                    const parsedJson = JSON.parse(data);
+                    ollamaResponse.textContent = JSON.stringify(parsedJson, null, 2);
+                } catch (e) {
+                    // If 'data' is not a valid JSON string (e.g., it's plain text),
+                    // display it directly. The <pre> tag will preserve newlines if they exist in 'data'.
+                    ollamaResponse.textContent = data;
+                }
+            } else {
+                const errorData = await response.text(); // Get raw text for non-JSON errors
+                ollamaResponse.textContent = `Error: ${response.status} ${response.statusText}\n${errorData}`;
+            }
+        } catch (error) {
+            responseContainer.style.display = 'block';
+            ollamaResponse.textContent = 'Error: ' + error.message;
+        }
+    });
+</script>
