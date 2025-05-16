@@ -1,19 +1,7 @@
 import { add_user, send_data } from "../config/game_interface.js";
 import { Router } from 'express';
-import fs from 'fs';
-import User from "../config/db_schemas/User.js";
 
 const router = Router();
-
-router.post('/write', async (req, res) => {
-  const { datapath } = req.body;
-  console.log("Wrote");
-  fs.writeFileSync(datapath, JSON.stringify([{"roadAdd":50.0, "roadScore":0}]));
-  setTimeout(function(){
-    fs.writeFileSync(datapath, JSON.stringify([{"roadAdd":0.0, "roadScore":0}]));
-  }, 1000);
-  res.status(200);
-});
 
 router.post('/points', (req, res) => {
   const { data } = req.body;

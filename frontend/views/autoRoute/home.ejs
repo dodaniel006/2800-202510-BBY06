@@ -10,7 +10,7 @@
 <body>
 
 <template id="taskTemplate">
-    <div class="card text-bg-dark text-start mb-2">
+    <div class="card text-bg-dark text-start mb-2" id="parent">
         <div class="card-body">
             <div class="row">
                 <div class="col">
@@ -20,7 +20,7 @@
                 </div>
                 <div class="col d-grid gap-2">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary button" taskValue="0" taskId="681d9e21e318cf8157224819" data-bs-toggle="modal" data-bs-target="#confirmationPoppup">
+                    <button type="button" class="btn btn-primary button taskButton" taskValue="0" data-bs-toggle="modal" data-bs-target="#confirmationPoppup">
                         Complete Task
                     </button>
                 </div>
