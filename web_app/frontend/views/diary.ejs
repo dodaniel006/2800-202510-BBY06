@@ -1,0 +1,198 @@
+<div class="container-fluid mt-4 mb-2">
+  <h1 class="display-6">Food Diary</h1>
+  <form>
+    <label for="inputFood" class="form-label">What did you eat?</label>
+    <input
+      type="text"
+      name="foodItem"
+      class="form-control"
+      id="foodInput"
+      placeholder="Enter food item..."
+      aria-describedby="foodHelp"
+      required
+    />
+
+    <div class="row">
+      <div class="col">
+        <label for="calorieInput" class="form-label">Calorie</label>
+        <input
+          type="number"
+          name="foodCalories"
+          class="form-control"
+          id="calorieInput"
+          min="0"
+          max="10000"
+          placeholder="e.g. 100..."
+          aria-describedby="calorieHelp"
+        />
+      </div>
+      <div class="col">
+        <label for="quantityInput" class="form-label">Amount</label>
+        <input
+          type="number"
+          name="foodAmount"
+          class="form-control"
+          id="quantityInput"
+          min="0"
+          max="10000"
+          placeholder="e.g. 1, 2..."
+          aria-describedby="quantityHelp"
+        />
+      </div>
+      <div class="col d-flex align-items-end mx-auto">
+        <button
+          type="submit"
+          id="addFoodItem"
+          class="btn btn-primary bb-bg-wallet-green-dark border-0"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="container-fluid foodWindow mt-3 px-0">
+    <table id="foodTable" class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Amount</th>
+          <th scope="col">Food</th>
+          <th scope="col">Calories</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="foodListBody">
+        <% if (foodList) { %> <% for (const food of foodList) { %>
+        <tr class="foodItem" data-id="<%= food._id %>">
+          <td class="foodAmount"><%= food.foodAmount %></td>
+          <td class="foodName"><%= food.foodName %></td>
+          <td class="foodCalories"><%= food.foodCalorie %></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <button
+                class="btn btn-secondary me-2 bb-bg-surface border-0 generateRecipe"
+              >
+                <i class="fas fa-utensils"></i>
+              </button>
+              <button
+                class="btn btn-primary me-2 bb-bg-wallet-green-dark border-0 editItem"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-pen"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"
+                  />
+                </svg>
+              </button>
+              <div class="deleteItem">
+                <img class="foodTrash" src="/images/trash.png" alt="delete" />
+              </div>
+            </div>
+          </td>
+        </tr>
+        <% } %> <% } %>
+      </tbody>
+    </table>
+  </div>
+  <div class="container-fluid">
+    Total Calories:
+    <span id="totalCalories" class="fw-bold">
+      <% if (foodList && foodList.length > 0) { %> <%= foodList.reduce((total,
+      food) => Number(total) + Number(food.foodCalorie) *
+      Number(food.foodAmount), 0) %> <% } else { %> 0 <% } %>
+    </span>
+  </div>
+  <div>
+    <a
+      href="/calorieChart"
+      class="btn btn-primary bb-bg-wallet-green-dark border-0"
+    >
+      Weekly Calorie Chart
+    </a>
+  </div>
+</div>
+
+<div class="loading" id="loading">
+  Generating recipe... Please wait. (Should take about 10 seconds).
+</div>
+
+<div id="recipe-container"></div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit entry</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- 3 inputs pre-filled with the details from the closest tr entry -->
+        <p>Food item:</p>
+        <input
+          type="text"
+          class="form-control"
+          id="editFoodItem"
+          placeholder="Enter food item..."
+          aria-describedby="foodHelp"
+          required
+        />
+        <p>Calories:</p>
+        <input
+          type="number"
+          class="form-control"
+          id="editCalorieInput"
+          min="0"
+          max="10000"
+          placeholder="e.g. 100..."
+          aria-describedby="calorieHelp"
+        />
+        <p>Amount:</p>
+        <input
+          type="number"
+          class="form-control"
+          id="editAmountInput"
+          min="0"
+          max="10000"
+          placeholder="e.g. 1, 2..."
+          aria-describedby="quantityHelp"
+        />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          id="saveEdit"
+          type="button"
+          class="btn btn-primary bb-bg-wallet-green-dark border-0"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  document.getElementById("recipe-container").innerHTML = marked.parse(``);
+</script>

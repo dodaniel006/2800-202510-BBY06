@@ -1,0 +1,105 @@
+<div class="container-fluid">
+  <canvas id="myChart" class="mt-5"></canvas>
+
+  <div class="d-flex justify-content-between mt-3">
+    <button
+      id="previousWeek"
+      class="btn btn-primary bb-bg-wallet-green-dark border-0"
+    >
+      Previous Week
+    </button>
+    <button
+      id="nextWeek"
+      class="btn btn-primary bb-bg-wallet-green-dark border-0"
+    >
+      Next Week
+    </button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById("myChart");
+  let chart = new Chart(ctx);
+
+  let today = new Date();
+  let startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+  let endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+
+  // when previous week button is clicked, it will call the previousWeek function and update it
+  document
+    .querySelector("#previousWeek")
+    .addEventListener("click", previousWeek);
+  document.querySelector("#nextWeek").addEventListener("click", nextWeek);
+
+  async function fetchData() {
+    const response = await fetch(
+      `/api/diary/calorieChart/${startOfWeek}/${endOfWeek}`
+    );
+    const data = await response.json();
+    return data;
+  }
+
+  // Immediately invoked function to fetch data and render the chart
+  async function getCurrentWeek() {
+    const data = await fetchData();
+    const labels = Object.keys(data);
+    chart.destroy(); // Destroy the previous chart instance
+    renderChart(data, labels);
+  }
+  getCurrentWeek();
+
+  async function previousWeek() {
+    startOfWeek.setDate(startOfWeek.getDate() - 7);
+    endOfWeek.setDate(endOfWeek.getDate() - 7);
+    const data = await fetchData();
+    const labels = Object.keys(data);
+    await chart.destroy(); // Destroy the previous chart instance
+    renderChart(data, labels);
+  }
+
+  async function nextWeek() {
+    startOfWeek.setDate(startOfWeek.getDate() + 7);
+    endOfWeek.setDate(endOfWeek.getDate() + 7);
+    const data = await fetchData();
+    const labels = Object.keys(data);
+    await chart.destroy(); // Destroy the previous chart instance
+    renderChart(data, labels);
+  }
+
+  function renderChart(weekData, labels) {
+    const config = {
+      type: "bar",
+
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Calories",
+            data: weekData,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        repsponsive: true,
+        maintainAspectRatio: true,
+        // onResize: function (chart) {
+        //   chart.resize();
+        // },
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    };
+    if (chart) {
+      chart.destroy(); // Destroy the previous chart instance
+      chart = new Chart(ctx, config);
+    } else {
+      chart = new Chart(ctx, config);
+    }
+  }
+</script>

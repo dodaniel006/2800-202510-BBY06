@@ -1,0 +1,42 @@
+body {
+  overflow-x: hidden;
+}
+
+.foodWindow {
+  overflow-y: auto;
+  max-height: 40vh; /* Adjust height as needed */
+}
+
+#foodList {
+  padding-left: 0;
+  margin: 0;
+}
+
+.deleteItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 40px;
+  background-color: rgb(0, 0, 0);
+  border-radius: 0.375em;
+  cursor: pointer;
+  user-select: none; /* Prevents text highlighting */
+}
+
+.deleteItem:hover {
+  background-color: rgb(50, 50, 50);
+}
+
+#recipe-container {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  white-space: pre-wrap;
+}
+.loading {
+  display: none;
+  margin-top: 20px;
+}
