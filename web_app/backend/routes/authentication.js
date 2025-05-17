@@ -25,7 +25,21 @@ function ensureLoggedIn(req, res, next) {
 export { ensureLoggedIn };
 
 // GET /api/auth/logout
-authRouter.get("/logout", (req, res) => {
+authRouter.post("/logout", async (req, res) => {
+    const isHealthAppLinked = req.body?.isHealthAppLinked;
+    const _id = req.body?.userId;
+
+    // Only update user if data is provided
+    if (typeof isHealthAppLinked === 'boolean' && _id) {
+      const user = await User.findOne({ _id});
+      console.log("User found:", user);
+      if (user) {
+        user.isHealthAppLinked = isHealthAppLinked;
+        await user.save(); // ✅ Save changes
+        console.log("User updated:", user);
+      }
+    }
+
   if (!req.session) {
     return res.status(400).json({ message: "No active session" });
   }
@@ -99,7 +113,7 @@ authRouter.post("/register", async (req, res) => {
 
 // POST /api/auth/login
 authRouter.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, isHealthAppLinked } = req.body;
 
   if (!email || !password) {
     return res
@@ -108,22 +122,31 @@ authRouter.post("/login", async (req, res) => {
   }
 
   try {
+
+
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    const isPassMatch = await user.comparePassword(password);
-    if (isPassMatch) {
+      const isPassMatch = await user.comparePassword(password);
+      if (isPassMatch) {
       // Login success
+      if (isHealthAppLinked) {
+            user.isHealthAppLinked = isHealthAppLinked;
+      }
+      await user.save(); // Save the updated user object
+
       // TODO hadnle session stuffs
       req.session.authenticated = true;
       req.session.userId = user._id; // Store user ID in session
       req.session.email = user.email; // Store email in session
       req.session.username = user.username; // Store username in session
 
-      res.status(200).json({ message: "Login success", userId: user._id, username: user.username });
+
+      res.status(200).json({ message: "Login success", userId: user._id, username: user.username});
+
     } else {
       return res.status(401).json({ message: "Invalid credentials." });
     }

@@ -39,7 +39,6 @@
   <uses-permission android:name="android.permission.health.READ_VO2_MAX"/>
   <uses-permission android:name="android.permission.health.READ_WEIGHT"/>
   <uses-permission android:name="android.permission.health.READ_WHEELCHAIR_PUSHES"/>
-
   <uses-permission android:name="android.permission.health.WRITE_ACTIVE_CALORIES_BURNED"/>
   <uses-permission android:name="android.permission.health.WRITE_BASAL_BODY_TEMPERATURE"/>
   <uses-permission android:name="android.permission.health.WRITE_BASAL_METABOLIC_RATE"/>
@@ -101,8 +100,8 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="dev.shuchir.hcgateway"/>
-        <data android:scheme="exp+hcgateway"/>
+        <data android:scheme="com.yehorskudilov.Japples"/>
+        <data android:scheme="exp+japples"/>
       </intent-filter>
       <intent-filter>
         <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE"/>

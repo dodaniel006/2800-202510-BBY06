@@ -4,6 +4,11 @@ import bcrypt from 'bcrypt';
 const userSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
+    lastSyncedAt: {
+        type: Date,
+        default: Date.now
+    },
+    isHealthAppLinked: Boolean,
     age: {
         type: Number,
         min: 0,
