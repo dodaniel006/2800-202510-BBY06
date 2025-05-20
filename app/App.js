@@ -1007,7 +1007,7 @@ await setPlain('syncStopped', 'true');
         </View>
       }
       {!login &&
-              <View style={{marginBottom: 100}}>
+              <View style={{marginVertical: 120}}>
 
               <Image
                 source={require('./assets/icon.png')}
@@ -1068,7 +1068,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 10,
-    width: 350,
+    width: '100%',
     fontSize: 17,
     backgroundColor: '#fff',
     borderColor: '#ccc',
