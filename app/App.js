@@ -298,9 +298,20 @@ const refreshTokenFunc = async () => {
 }
 
 const sync = async (setSyncSummaryCallback, setSyncingCallback, setProgressCallback) => {
+  const token = await get('login');
+if (!token) {
+  console.log("⛔ No login token. Aborting sync.");
+  return;
+}
 
-setSyncingCallback(true);
-setProgressCallback({ current: 0, total: 0 });
+  const syncStopped = await get('syncStopped');
+  if (syncStopped === 'true') {
+    console.log('⛔ Sync aborted: syncStopped flag is true');
+    return;
+  }
+
+  setSyncingCallback(true);
+  setProgressCallback({ current: 0, total: 0 });
 
   const isInitialized = await initialize();
   console.log("🔄 Syncing data...");
@@ -328,22 +339,27 @@ setProgressCallback({ current: 0, total: 0 });
     "Nutrition", "OvulationTest", "OxygenSaturation", "Power", "RespiratoryRate", "RestingHeartRate", "SleepSession", "Speed",
     "Steps", "StepsCadence", "TotalCaloriesBurned", "Vo2Max", "Weight", "WheelchairPushes"
   ];
+    let records = [];
 
   for (let type of recordTypes) {
     const token = await get('login');
-    if (!token) {
-      return resolve();
-    }
-    let records = [];
+    console.log(`🔄 Token ${token}...`);
+    if (!token || typeof token === 'undefined') {
+                console.log(`Broekekekeeeeeeeeeee`);
+
+      break;
+
+    } else{
     try {
       const result = await readRecords(type, {
         timeRangeFilter: { operator: "between", startTime, endTime: currentTime }
       });
       records = result.records;
     } catch (err) {
-      console.log(`❌ Error reading ${type}:`, err);
       continue;
     }
+    }
+
 
     numRecords += records.length;
 setProgressCallback(prev => ({ ...prev, total: numRecords }));
@@ -491,6 +507,7 @@ const [showSyncSummary, setShowSyncSummary] = React.useState(false);
 const [syncProgress, setSyncProgress] = React.useState({ current: 0, total: 0 });
 const [syncing, setSyncing] = React.useState(false);
 const [username, setUsername] = React.useState('');
+const [taskDelayState, setTaskDelayState] = React.useState(2 * 60 * 60 * 1000); // default: 2 hr
 
 React.useEffect(() => {
   const loadUsername = async () => {
@@ -504,6 +521,8 @@ React.useEffect(() => {
 }, []);
 
   const loginFunc = async () => {
+    await setPlain('syncStopped', 'false');
+
     Toast.show({
       type: 'info',
       text1: "Logging in...",
@@ -589,10 +608,15 @@ React.useEffect(() => {
     .then(res => {
       if (res) {
         login = res;
-        get('taskDelay')
-        .then(res => {
-          if (res) taskDelay = Number(res);
-        })
+   get('taskDelay')
+.then(res => {
+  if (res) {
+    const delay = Number(res);
+    taskDelay = delay;
+    setTaskDelayState(delay);
+  }
+})
+
 
         ReactNativeForegroundService.add_task(() => sync(), {
           delay: taskDelay,
@@ -641,12 +665,12 @@ return showWeb ? (
     style={{ flex: 1 }}
   />
 ) : (
-  <ScrollView contentContainerStyle={styles.container}>      
+<ScrollView contentContainerStyle={{ padding: 20 }} style={{ flex: 1, backgroundColor: '#2d6242' }}>
   {login &&
         <View>
 <Image
   source={require('./assets/icon.png')}
-  style={{ width: 100, height: 100, marginBottom: 20, marginHorizontal: 'auto' }}
+  style={{ width: 100, height: 100, marginTop:30, marginBottom: 30, marginHorizontal: 'auto' }}
   resizeMode="contain"
 />
 
@@ -686,19 +710,26 @@ return showWeb ? (
   justifyContent: 'center',
   overflow: 'hidden',
 }}>
-  <Picker
-    selectedValue={taskDelay}
-    onValueChange={(value) => {
-      taskDelay = value;
-      setPlain('taskDelay', String(value));
-      ReactNativeForegroundService.update_task(() => sync(), {
-        delay: taskDelay,
-      });
-      Toast.show({
-        type: 'success',
-        text1: 'Sync interval updated',
-      });
-    }}
+<Picker
+  selectedValue={taskDelayState}
+  onValueChange={(value) => {
+    taskDelay = value;
+    setTaskDelayState(value); // ✅ update UI
+    setPlain('taskDelay', String(value));
+ReactNativeForegroundService.remove_task('Japples_sync');
+ReactNativeForegroundService.add_task(async () =>     await sync(setSyncSummary, setSyncing, setSyncProgress), {
+  delay: value,
+  onLoop: true,
+  taskId: 'Japples_sync',
+  onError: e => console.log(`Error logging:`, e),
+});
+
+    Toast.show({
+      type: 'success',
+      text1: 'Sync interval updated',
+    });
+  }}
+
     style={{
       height: 40,
       marginTop: 0, // ✅ nudge text upward slightly for vertical centering
@@ -918,6 +949,7 @@ return showWeb ? (
 
           </View>
 
+
           <View style={{ marginTop: 0 }}>
             <CustomButton
               title="Logout"
@@ -941,6 +973,7 @@ return showWeb ? (
                   .catch(err => {
                     console.error('Logout failed:', err);
                   });
+await setPlain('syncStopped', 'true');
 
                 await delkey('login');
                 await delkey('refreshToken');
@@ -951,6 +984,22 @@ return showWeb ? (
                   type: 'success',
                   text1: "Logged out successfully",
                 })
+                forceUpdate();
+
+                 await AsyncStorage.clear();
+                ReactNativeForegroundService.remove_all_tasks();
+                await ReactNativeForegroundService.stop();
+
+                login = null;
+                setForm(null);
+                setUsername('');
+                setSyncSummary([]);
+                setSyncing(false);
+                setShowSyncSummary(false);
+                setSyncProgress({ current: 0, total: 0 });
+                setTaskDelayState(2 * 60 * 60 * 1000); // reset to 2 hours
+
+                Toast.show({ type: 'success', text1: "Logged out and reset" });
                 forceUpdate();
               }}
             />
@@ -994,6 +1043,7 @@ return showWeb ? (
                  title="Login"
                  onPress={loginFunc}
                />
+               
        
                </View>
       }
