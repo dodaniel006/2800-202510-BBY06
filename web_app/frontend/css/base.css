@@ -100,7 +100,7 @@ footer {
 
 
 .mobile-nav {
-  background: #F1F1F1;
+  background: #2f6644;
   position: fixed;
   bottom: 0;
   height: 65px;
@@ -114,22 +114,23 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-    font-size: 28pt; /* or 32px, 36px — adjust as needed */
-  color: #333; 
-    text-decoration: none;
+  font-size: 28pt;
+  color: white;
+  text-decoration: none;
+  flex: 1;
+  height: 100%;
 }
 
-.bloc-icon img {
-  width: 30px;
-}
 
-@media screen and (min-width: 600px) {
+
+
+@media screen and (min-width: 1000px) {
   .mobile-nav {
   display: none;
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 999px) {
   header {
   display: none;
   }

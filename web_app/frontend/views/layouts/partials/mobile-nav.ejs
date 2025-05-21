@@ -1,17 +1,27 @@
 <nav class="mobile-nav">
-  <a href="#" class="bloc-icon">
+  <a href="/diary" class="bloc-icon">
+    <i class="fas fa-utensils"></i>
+  </a>
+  <a href="/stats" class="bloc-icon">
+    <i class="fas fa-chart-simple"></i>
+  </a>
+  <a href="/home" class="bloc-icon">
     <i class="fas fa-home"></i>
   </a>
-  <a href="#" class="bloc-icon">
-    <i class="fas fa-heart"></i>
+  <a href="/gymlog" class="bloc-icon">
+    <i class="fas fa-dumbbell"></i>
   </a>
-  <a href="#" class="bloc-icon">
-    <i class="fas fa-search"></i>
-  </a>
-  <a href="#" class="bloc-icon">
-    <i class="fas fa-plus"></i>
-  </a>
-  <a href="#" class="bloc-icon">
-    <i class="fas fa-user"></i>
-  </a>
+  
+  <!-- Fixed Profile Dropdown -->
+  <div class="dropdown">
+    <a class="bloc-icon" id="mobileDropdown" data-bs-toggle="dropdown" role="button">
+      <i class="fas fa-user"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileDropdown">
+      <li><a class="dropdown-item" href="/account">My Account</a></li>
+      <li><a class="dropdown-item" href="/settings">Settings</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><button class="dropdown-item" id="logout">Logout</button></li>
+    </ul>
+  </div>
 </nav>
