@@ -1,0 +1,43 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+<style>
+    canvas {
+      touch-action: pan-y;
+    }
+    .chart-container {
+      margin-bottom: 40px;
+    }
+    #fitnessChart, #heartRateChart, #sleepChart {
+      max-width: 100%;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 1rem;
+      margin-bottom: 20px;
+    }
+    button {
+      margin-bottom: 40px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background-color: #eee;
+      cursor: pointer;
+    }
+  </style>
+  <div class="chart-container">
+    <h2>Steps Over Time</h2>
+    <canvas id="fitnessChart" height="100"></canvas>
+    <button onclick="resetZoom('fitnessChart')">Reset Zoom</button>
+  </div>
+  
+  <div class="chart-container">
+    <h2>Heart Rate Over Time</h2>
+    <canvas id="heartRateChart" height="100"></canvas>
+    <button onclick="resetZoom('heartRateChart')">Reset Zoom</button>
+  </div>
+  
+  <div class="chart-container">
+    <h2>Sleep Stages Over Time</h2>
+    <canvas id="sleepChart" height="100"></canvas>
+  </div>

@@ -1,0 +1,46 @@
+{
+  "name": "2800-202510-bby06",
+  "version": "1.0.0",
+  "description": "![Static Badge](https://img.shields.io/badge/BCIT%20-%20Comp2800%20-%20blue)\r ![Static Badge](https://img.shields.io/badge/group%20-%20BBY6%20-%20blue?color=%23f60665)",
+  "homepage": "https://github.com/dodaniel006/2800-202510-BBY06#readme",
+  "bugs": {
+    "url": "https://github.com/dodaniel006/2800-202510-BBY06/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dodaniel006/2800-202510-BBY06.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "browser-sync start --proxy localhost:8100 --files \"frontend/views/**/*.ejs, frontend/js/**/*.js, frontend/css/**/*.css\" --port 3000",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect-mongo": "^5.1.0",
+    "deno": "^2.2.13",
+    "dgram": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.1",
+    "fs": "^0.0.1-security",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.1",
+    "nodemon": "^3.1.10",
+    "ol": "^10.5.0",
+    "ws": "^8.18.2",
+    "ollama": "^0.5.15",
+    "parse-address": "^1.1.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "concurrently": "^9.1.2"
+  }
+}
