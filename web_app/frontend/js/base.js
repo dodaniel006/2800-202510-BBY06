@@ -12,7 +12,11 @@ function logout() {
   // window.location.href = "/"; // Redirect after successful logout
 }
 
-document.getElementById("logout")?.addEventListener("click", logout);
+const logoutButtons = document.getElementsByClassName("logout");
+
+for (const btn of logoutButtons) {
+  btn.addEventListener("click", logout);
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const currentPath = window.location.pathname;
