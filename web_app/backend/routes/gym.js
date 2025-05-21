@@ -138,6 +138,7 @@ router.post("/submitGymInfo", async (req, res) => {
                             region: userLocation,
                             gymName: gymName,
                             gymAddress: place,
+                            updatedAt: new Date(),
                             gymCoordinates: {
                                 type: "Point",
                                 coordinates: [Number(jsonData[0].lon), Number(jsonData[0].lat)],
