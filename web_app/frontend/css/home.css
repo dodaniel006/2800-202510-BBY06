@@ -5,11 +5,16 @@
     padding: 0; 
     height: 41vw;
     width: 40vw;
+
     overflow: hidden 
 }
     .resizer > .resized { 
         flex-grow: 1; 
         border: 0 
+    }
+
+    #generateRecommendations {
+    z-index: 0 !important;
     }
 
 @media only screen and (max-width: 740px) {

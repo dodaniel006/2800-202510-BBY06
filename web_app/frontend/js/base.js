@@ -14,8 +14,14 @@ function logout() {
 
 document.getElementById("logout")?.addEventListener("click", logout);
 
-function goToDiary() {
-  window.location.href = "/diary"; // Redirect to diary page
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const currentPath = window.location.pathname;
 
-document.getElementById("diary")?.addEventListener("click", goToDiary);
+  // Combine both selectors
+  document.querySelectorAll(".mobile-nav .bloc-icon[href], .nav-link[href]").forEach(link => {
+    const href = link.getAttribute("href");
+    if (href && (currentPath === href || currentPath.startsWith(href))) {
+      link.classList.add("active-link");
+    }
+  });
+});

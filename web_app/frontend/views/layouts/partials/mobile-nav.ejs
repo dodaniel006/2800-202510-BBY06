@@ -11,17 +11,15 @@
   <a href="/gymlog" class="bloc-icon">
     <i class="fas fa-dumbbell"></i>
   </a>
-  
-  <!-- Fixed Profile Dropdown -->
-  <div class="dropdown">
     <a class="bloc-icon" id="mobileDropdown" data-bs-toggle="dropdown" role="button">
-      <i class="fas fa-user"></i>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileDropdown">
-      <li><a class="dropdown-item" href="/account">My Account</a></li>
-      <li><a class="dropdown-item" href="/settings">Settings</a></li>
-      <li><hr class="dropdown-divider"></li>
-      <li><button class="dropdown-item" id="logout">Logout</button></li>
+    <i class="fas fa-user"></i>
+  </a>
+
+    <ul class="dropdown-menu dropdown-menu-end mb-4 bb-bg-surface text-white" aria-labelledby="mobileDropdown">
+      <li><a class="profile-nav" href="/account">My Account</a></li>
+      <li><a class="profile-nav" href="/about">About</a></li>
+      <li><hr class="dropdown-divider bg-neon-blue"></li>
+      <li><button type="button" id="logout" class="profile-nav">Logout</button></li>
     </ul>
-  </div>
+
 </nav>

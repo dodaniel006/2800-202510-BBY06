@@ -38,6 +38,7 @@
 
 main {
   flex: 1;
+  margin-bottom: 70px;
 }
 
 footer {
@@ -106,21 +107,46 @@ footer {
   height: 65px;
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
     text-decoration: none;
 }
 
 .bloc-icon {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28pt;
-  color: white;
-  text-decoration: none;
-  flex: 1;
   height: 100%;
+  color: var(--text-primary);
+  background: transparent !important;
+  text-decoration: none;
+  font-size: 22pt;
+  position: relative;
+  transition: color 0.2s ease;
 }
 
+/* active = draw a circle behind the icon */
+.bloc-icon.active-link::before {
+  content: "";
+  position: absolute;
+  width: 62px;
+  height: 52px;
+  border-radius: 20%;
+  background-color: var(--color-white);
+  z-index: 0;
+  
+}
+
+/* elevate icon above background */
+.bloc-icon i {
+  z-index: 1;
+
+}
+
+/* active = icon turns black */
+.bloc-icon.active-link i {
+  color: black;
+}
 
 
 
@@ -133,6 +159,9 @@ footer {
 @media screen and (max-width: 999px) {
   header {
   display: none;
+  }
+  footer{
+    display: none;
   }
 }
 
