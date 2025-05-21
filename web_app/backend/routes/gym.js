@@ -35,6 +35,15 @@ function haversine(lon1, lat1, lon2, lat2) {
     return R * c; // Distance in kilometers
 }
 
+function checkDaily(lastUpdate) {
+    let currentDate = new Date();
+    let diff = currentDate.getTime() - lastUpdate.getTime();
+    console.log("Time difference: " + diff);
+    let diffHours = diff / 3.6000E6;
+    console.log("Time difference in hours: " + diffHours);
+    return diffHours;
+}
+
 router.get("/reverseGeocode", async (req, res) => {
     let { lon, lat } = req.query;
     lon = Number(lon);
@@ -74,6 +83,8 @@ router.get("/checkDistance", async (req, res) => {
     lon = Number(lon);
     lat = Number(lat);
 
+    console.log("-------------------------------------------------------------");
+
     if (!validateCoordinates(lon, lat)) {
         console.log("Invalid coordinates provided.");
         res.status(400).json({ error: "Invalid coordinates provided" });
@@ -85,6 +96,34 @@ router.get("/checkDistance", async (req, res) => {
             const gym = await Gym.findOne({
                 userId: req.session.userId,
             });
+
+            let daily = checkDaily(gym.updatedAt);
+            if (daily >= 24) {
+
+                // console.log("Granting points...");
+                // await Gym.updateOne(
+                //     { userId: req.session.userId },
+                //     {
+                //         $set: {
+                //             updatedAt: new Date(),
+                //         },
+                //     }
+                // );
+
+            } else {
+
+                let remaining = 24 - daily;
+                let hours = Math.floor(remaining);
+                console.log("Remaining minutes: " + (remaining - hours));
+                let minutes = Math.ceil((remaining - hours) * 60);
+
+                if (minutes == 60) {
+                    hours += 1;
+                    minutes = 0;
+                }
+
+                console.log(`Please wait ${hours} hours and ${minutes} minutes`);
+            }
 
             let gymCoordinates = gym.gymCoordinates.coordinates;
             let distance = haversine(gymCoordinates[0], gymCoordinates[1], lon, lat);
@@ -138,7 +177,7 @@ router.post("/submitGymInfo", async (req, res) => {
                             region: userLocation,
                             gymName: gymName,
                             gymAddress: place,
-                            updatedAt: new Date(),
+                            updatedAt: new Date("May 20, 2025 00:00:00"),
                             gymCoordinates: {
                                 type: "Point",
                                 coordinates: [Number(jsonData[0].lon), Number(jsonData[0].lat)],

@@ -130,30 +130,37 @@ async function submitUserInfo() {
   const gymName = document.getElementById("gymName").value;
   const place = document.getElementById("place").value;
   const userLocation = document.getElementById("userArea").innerText;
-  // Send the user info to the server
-  fetch("/api/gym/submitGymInfo", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      gymName,
-      place,
-      userLocation,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Network response was not ok ${response.status} ${response.error}`);
-      }
-      return response.json();
+
+  if (gymName == "") {
+    alert("Gym Name is required!");
+  } else if (place == "") {
+    alert("Location is required!");
+  } else {
+    // Send the user info to the server
+    fetch("/api/gym/submitGymInfo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        gymName,
+        place,
+        userLocation,
+      }),
     })
-    .then((data) => {
-      console.log("Location Successfully Parsed", data.data[0]);
-      document.getElementById("gymLocation").innerHTML = data.data[0].display_name;
-      checkDistance(lon, lat); // Check distance to gym after submitting user info
-    })
-    .catch((error) => {
-      console.error("Error submitting user info:", error.message);
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok ${response.status} ${response.error}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Location Successfully Parsed", data.data[0]);
+        document.getElementById("gymLocation").innerHTML = data.data[0].display_name;
+        checkDistance(lon, lat); // Check distance to gym after submitting user info
+      })
+      .catch((error) => {
+        console.error("Error submitting user info:", error.message);
+      });
+  }
 }
 
 // =========================
