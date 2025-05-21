@@ -40,7 +40,7 @@ function transformData(data) {
   const averagedCounts = [];
   for (const key of Object.keys(buckets).sort()) {
     const avg = buckets[key].reduce((a, b) => a + b, 0) / buckets[key].length;
-    labels.push(new Date(key).toLocaleTimeString());
+labels.push(new Date(key));
     averagedCounts.push(Math.round(avg));
   }
 
@@ -99,10 +99,53 @@ async function renderChart() {
         title: { display: true, text: 'Steps Over Time' },
         zoom: getZoomOptions()
       },
-      scales: {
-        x: { title: { display: true, text: 'Time' }, ticks: { maxTicksLimit: 10 } },
-        y: { beginAtZero: true, title: { display: true, text: 'Steps per 5-Minute Interval' } }
+scales: {
+  x: {
+    title: {
+      display: true,
+      text: 'Time'
+    },
+    type: 'time',
+    time: {
+      unit: 'hour',
+      displayFormats: {
+        hour: 'HH:mm'
       }
+    },
+    ticks: {
+      maxTicksLimit: 10,
+      callback: function(value) {
+        const date = new Date(value);
+        return date.toLocaleString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+      }
+    },
+    // 👇 Default zoom to current day
+    min: (() => {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      return now;
+    })(),
+    max: (() => {
+      const now = new Date();
+      now.setHours(23, 59, 59, 999);
+      return now;
+    })()
+  },
+  y: {
+    beginAtZero: true,
+    title: {
+      display: true,
+      text: 'Steps per 5-Minute Interval'
+    }
+  }
+}
+
     }
   });
 }
@@ -132,125 +175,10 @@ async function renderHeartRateChart() {
 }
   
 
-async function fetchSleepData() {
-  const res = await fetch('/api/db/data/sleepsessions');
-  if (!res.ok) throw new Error('Failed to fetch sleep data');
-  const sessions = await res.json();
-
-  // Get the session with the latest start time
-  const latest = sessions
-    .filter(s => !!s.start) // make sure it has a valid start
-    .sort((a, b) => new Date(b.start) - new Date(a.start))[0];
-
-  if (!latest) return [];
-
-  let stagesRaw = [];
-
-  try {
-    const rawStages = typeof latest.data.stages === 'string'
-      ? JSON.parse(latest.data.stages)
-      : latest.data.stages;
-
-    stagesRaw = rawStages.map(s => typeof s === 'string' ? JSON.parse(s) : s);
-  } catch (e) {
-    console.warn('Failed to parse sleep stages:', e);
-    return [];
-  }
-
-  return stagesRaw.map(stage => ({
-    stage: stage.stage,
-    start: new Date(stage.startTime),
-    end: new Date(stage.endTime)
-  }));
-}
 
 
-function getStageLabel(stage) {
-  const map = {
-    1: 'Awake',
-    4: 'Light',
-    5: 'REM',
-    6: 'Deep'
-  };
-  return map[stage] ?? `Stage ${stage}`;
-}
 
-function getStageColor(stage) {
-  const map = {
-    1: '#f39c12', // Awake
-    4: '#3498db', // Light
-    5: '#9b59b6', // REM
-    6: '#2ecc71'  // Deep
-  };
-  return map[stage] ?? '#95a5a6';
-}
 
-function transformSleepData(sleepStages) {
-  return {
-    labels: ['Sleep Session'],
-    datasets: sleepStages.map((s, index) => ({
-      label: getStageLabel(s.stage),
-      data: [{
-        x: [s.start, s.end],
-        y: 'Sleep Session'
-      }],
-      backgroundColor: getStageColor(s.stage),
-      borderSkipped: false,
-      borderRadius: 3
-    }))
-  };
-}
-
-async function renderSleepChart() {
-  const stages = await fetchSleepData();
-  const chartData = transformSleepData(stages);
-
-  if (sleepChartInstance) {
-    sleepChartInstance.destroy();
-  }
-
-  sleepChartInstance = new Chart(document.getElementById('sleepChart').getContext('2d'), {
-    type: 'bar',
-    data: chartData,
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      animation: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const range = context.raw.x;
-              return `${context.dataset.label}: ${new Date(range[0]).toLocaleTimeString()} - ${new Date(range[1]).toLocaleTimeString()}`;
-            }
-          }
-        },
-        title: {
-          display: true,
-          text: 'Sleep Stages Over Time'
-        },
-        zoom: getZoomOptions()
-      },
-      parsing: false,
-      scales: {
-        x: {
-          type: 'time',
-          time: {
-            displayFormats: { minute: 'h:mm a' }
-          },
-          title: {
-            display: true,
-            text: 'Time'
-          }
-        },
-        y: {
-          title: { display: false }
-        }
-      }
-    }
-  });
-}
 
 async function fetchCaloriesData() {
   const res = await fetch('/api/db/data/energy');
@@ -440,7 +368,7 @@ function transformSpeedData(samples) {
   const filtered = samples.filter((_, i) => i % STEP === 0);
 
   const result = {
-    labels: filtered.map(s => s.time.toLocaleTimeString()),
+labels: filtered.map(s => s.time),
     datasets: [{
       label: 'Speed (km/h)',
       data: filtered.map(s => s.kmh),
@@ -465,20 +393,58 @@ async function renderSpeedChart() {
     options: {
       responsive: true,
       animation: false,
-      interaction: { mode: 'index', intersect: false, axis: 'x' },
+      interaction: {
+        mode: 'index',
+        intersect: false,
+        axis: 'x'
+      },
       plugins: {
         legend: { display: true },
         tooltip: { enabled: true },
-        title: { display: true, text: 'Speed Over Time (km/h)' },
-        zoom: getZoomOptions()
+        title: {
+          display: true,
+          text: 'Speed Over Time (km/h)'
+        },
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: 'x'
+          },
+          zoom: {
+            wheel: {
+              enabled: true,
+              modifierKey: 'ctrl' // Zoom only when Ctrl is pressed
+            },
+            pinch: {
+              enabled: true
+            },
+            mode: 'x'
+          }
+        }
       },
-      scales: {
-        x: { title: { display: true, text: 'Time' }, ticks: { maxTicksLimit: 10 } },
-        y: { beginAtZero: true, title: { display: true, text: 'Speed (km/h)' } }
+     scales: {
+  x: {
+    type: 'time', // <-- enables time-based zoom
+    time: {
+      tooltipFormat: 'HH:mm:ss',
+      unit: 'minute',
+      displayFormats: {
+        minute: 'HH:mm'
       }
+    },
+    title: { display: true, text: 'Time' },
+    ticks: { maxTicksLimit: 10 }
+  },
+  y: {
+    beginAtZero: true,
+    title: { display: true, text: 'Speed (km/h)' }
+  }
+}
+
     }
   });
 }
+
 
 async function fetchWeightData() {
   const res = await fetch('/api/db/data/weight'); // adjust endpoint as needed
@@ -867,7 +833,6 @@ renderCaloriesChart();
 
 
     renderChart();
-    renderSleepChart();
 
 
     renderHeartRateChart();
