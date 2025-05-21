@@ -1,17 +1,18 @@
 <div class="page-wrapper">
-  <main>
-    <div class="container mt-5">
+  <main id="body">
+    <div class="container mt-5 text-center">
       <h1 class="text-center">Hello there! This is the gym log page.</h1>
       <p class="text-center">
         Here you can track your workouts, set goals, and monitor your progress.
       </p>
 
-      <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#userInfoForm"
+      <button class="btn btn-success mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#userInfoForm"
         aria-expanded="false" aria-controls="userInfoForm">
         Enter Gym Info
       </button>
+      
       <div id="userInfoForm" class="collapse">
-        <div class="card shadow-sm">
+        <div class="card border-success shadow-sm mb-3">
           <div class="p-3">
             <div class="mb-3">
               <label for="gymName" class="form-label">Gym Name</label>
@@ -21,21 +22,28 @@
               <label for="place" class="form-label">Gym Location</label>
               <input type="text" id="place" placeholder="Enter your Gym's Location" class="form-control" required>
             </div>
-            <button id="submitUserInfo" type="submit" class="btn btn-primary w-100">Submit</button>
+            <button id="submitUserInfo" type="submit" class="btn btn-success w-100">Submit</button>
           </div>
         </div>
       </div>
 
-      <div id="userLocation" class="mt-4"></div>
-      <div id="gymLocation" class="mt-4"></div>
-      <div id="checkDistance" class="mt-4"></div>
+      <div class="card border-success mb-3">
+        <div id="userLocation" class="card-body"></div>
+        <div id="gymLocation" class="card-body"></div>
+        <div id="checkDistance" class="card-body"></div>
+      </div>
+
       <div class="d-flex justify-content-between mt-3">
-        <button id="resetView" class="btn btn-secondary">Reset View</button>
-        <button id="updateLocation" class="btn btn-success">Update Location</button>
+        <button id="resetView" class="btn btn-secondary mt-3">Reset View</button>
+        <div class="d-flex flex-column align-items-center">
+          <div id="daily" class=""></div>
+          <button id="dailyCheckin" class="btn btn-secondary">Check-in</button>
+        </div>
+        <button id="updateLocation" class="btn btn-success mt-3">Update Location</button>
       </div>
     </div>
 
-    <div class="container mt-5">
+    <div class="container mt-1">
       <div id="map" class="border rounded mb-5"></div>
     </div>
   </main>

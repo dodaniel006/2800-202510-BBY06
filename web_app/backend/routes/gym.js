@@ -97,8 +97,14 @@ router.get("/checkDistance", async (req, res) => {
                 userId: req.session.userId,
             });
 
+            let dailyMessage = "Failed to fetch daily data.";
+            let dailyReady = false;
+
             let daily = checkDaily(gym.updatedAt);
             if (daily >= 24) {
+
+                dailyMessage = "Your daily check-in is ready!";
+                dailyReady = true;
 
                 // console.log("Granting points...");
                 // await Gym.updateOne(
@@ -122,27 +128,36 @@ router.get("/checkDistance", async (req, res) => {
                     minutes = 0;
                 }
 
-                console.log(`Please wait ${hours} hours and ${minutes} minutes`);
+                dailyMessage = `Please wait ${hours} hours and ${minutes} minutes for your next check-in`;
             }
 
             let gymCoordinates = gym.gymCoordinates.coordinates;
             let distance = haversine(gymCoordinates[0], gymCoordinates[1], lon, lat);
 
+            let successStatus;
+            let distanceMessage = "Failed to check location.";
             if (gym && distance <= 0.5) {
+
                 console.log("Gym found within 500m radius");
-                res.status(200).json({
-                    success: true,
-                    message: `${gym.gymName} found within 500m radius!`,
-                    distance: distance,
-                });
+                successStatus = true;
+                distanceMessage = `${gym.gymName} found within 500m radius!`;
+
             } else {
+
                 console.log("No gym found within 500m radius");
-                res.status(200).json({
-                    success: false,
-                    message: `${gym.gymName} was not found within 500m radius`,
-                    distance: distance,
-                });
+                successStatus = false;
+                distanceMessage = `${gym.gymName} was not found within 500m radius`;
+
             }
+
+            res.status(200).json({
+                success: successStatus,
+                distanceMessage: distanceMessage,
+                distance: distance,
+                dailyMessage: dailyMessage,
+                dailyReady: dailyReady
+            });
+
         } catch (error) {
             console.error("Error checking distance:", error);
             res.status(500).json({ error: "Failed to check distance" });

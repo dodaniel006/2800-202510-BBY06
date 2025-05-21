@@ -6,6 +6,14 @@ body {
   height: 100%;
 }
 
+.btn {
+  max-height: 50px;
+}
+
+#dailyCheckin {
+  width: 200px;
+}
+
 #map {
   height: 60vh;
   width: 100%;

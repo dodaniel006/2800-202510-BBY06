@@ -3,6 +3,8 @@
 // =========================
 console.log("Gym Log JS loaded");
 
+document.getElementById("body").style.visibility = "hidden";
+
 const geolocation = new ol.Geolocation({
   tracking: true,
   projection: "EPSG:3857",
@@ -82,14 +84,24 @@ async function checkDistance(lon, lat) {
       return response.json();
     })
     .then((data) => {
-      console.log("Gym found within radius!", data);
-      let message = `${data.message}<br>You are currently ${data.distance.toFixed(3)} km away from the gym.`;
-      document.getElementById("checkDistance").innerHTML = message;
+
+      if (data.distance) {
+        console.log("Gym found within radius!", data);
+        let distanceMessage = `${data.distanceMessage}<br>You are currently ${data.distance.toFixed(3)} km away from the gym.`;
+        document.getElementById("checkDistance").innerHTML = distanceMessage;
+      }
+
+      document.getElementById("daily").innerHTML = data.dailyMessage;
+      if (data.dailyReady) {
+
+      }
 
     })
     .catch((error) => {
       console.error("No gym found in radius", error);
     });
+
+  document.getElementById("body").style.visibility = "visible";
 }
 
 // =========================
