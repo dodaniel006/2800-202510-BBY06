@@ -611,23 +611,27 @@ async function renderDistanceChart() {
   },
   plugins: {
     legend: { display: true },
-    tooltip: {
-      enabled: true,
-      callbacks: {
-label: function(ctx) {
-  const kg = ctx.raw.toFixed(1);
-  const lb = (ctx.raw * 2.20462).toFixed(1);
-  return `Weight: ${kg} kg (${lb} lb)`;
+   tooltip: {
+  enabled: true,
+  callbacks: {
+  label: function(ctx) {
+  const meters = parseFloat(ctx.raw).toFixed(0); // round to nearest integer
+  const km = (ctx.raw / 1000).toFixed(2);
+  const miles = (ctx.raw / 1609.34).toFixed(2);
+  return `Distance: ${meters} m (${km} km / ${miles} mi)`;
 },
-        title: function(tooltipItems) {
-          return `Time: ${tooltipItems[0].label}`;
-        }
-      }
-    },
+
+    title: function(tooltipItems) {
+      return `Time: ${tooltipItems[0].label}`;
+    }
+  }
+},
+
     title: {
-      display: true,
-      text: 'Weight Over Time (kg)'
-    },
+  display: true,
+  text: 'Distance Over Time (meters)'
+},
+
     zoom: getZoomOptions()
   },
   scales: {
