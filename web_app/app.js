@@ -7,6 +7,7 @@ import expressLayouts from "express-ejs-layouts";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+
 //route imports
 import healthConnect from "./backend/routes/healthConnect.js";
 import db from "./backend/routes/db.js";
@@ -19,6 +20,9 @@ import gym from "./backend/routes/gym.js";
 import authRouter from "./backend/routes/authentication.js"; // Import authRouter
 import magicAI from "./backend/routes/magicAI.js"; // Import magicAI route
 
+// Import game interface
+// import gameInterface from './backend/config/game_interface.js'; 
+
 // Model imports
 import { connectToMongo } from "./backend/config/db.js";
 import Food from "./backend/config/db_schemas/Food.js";
@@ -28,7 +32,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 8100;
+const port = process.env.PORT || 8101;
 
 const TTL = 60 * 60;
 
@@ -120,6 +124,17 @@ if (!["dev", "server"].includes(lifecycle)) {
   );
 }
 
+const logFile = path.join(__dirname, 'server.log');
+const logStream = fs.createWriteStream(logFile, { flags: 'a' });
+
+const origConsoleLog = console.log;
+console.log = (...args) => {
+  const msg = args.join(' ') + '\n';
+  logStream.write(msg);
+  origConsoleLog(...args);
+};
+
+
 async function startServer() {
   try {
     await connectToMongo(); // Connect to MongoDB
@@ -177,6 +192,20 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
     }
   }
 });
+
+// Game - Server interface
+
+app.get('/view-logs', (req, res) => {
+  res.render("viewLogs", {
+    title: "Server Logs",
+    pageCSS: false,
+    pageJS: "/js/viewLogs.js",
+    showNav: false,
+    showFooter: false,
+    mapPage: false,
+  });
+});
+
 
 //Manual param routes
 app.get("/", (req, res) => {
@@ -246,6 +275,14 @@ app.get("/gymLog", (req, res) => {
   });
   res.render("gymLog", settings);
 });
+
+app.get('/logs', (req, res) => {
+  fs.readFile(logFile, 'utf8', (err, data) => {
+    if (err) return res.status(500).send('Could not read log file.');
+    res.type('text/plain').send(data);
+  });
+});
+
 
 app.get("/*dummy404", (req, res) => {
   let body = `<div class=\"h-100 d-flex flex-column justify-content-center text-center\"><h1 class=\"mb-0\">Error: 404 Page not found</h1><br>

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { connectToMongo } from "../config/db.js";
+import mongoose from "mongoose";
 import Task from "../config/db_schemas/Task.js";
 import User from "../config/db_schemas/User.js";
 
@@ -67,6 +68,34 @@ router.get("/readUserTasks", async (req, res) => {
         console.error("Error in /test:", error);
         res.status(500).json({ error: "MongoDB query failed" });
       }
+});
+
+router.post("/removeTaskEntry", async (req, res) => {
+  try {
+    const { taskId } = req.body;
+    let taskID = new mongoose.Types.ObjectId(taskId);
+
+    console.log(taskID)
+
+    await connectToMongo();
+    await Task.deleteOne({
+      _id: taskID
+    });
+    
+    await User.updateOne(
+        { _id: req.session.userId },
+        { $pull: { taskList: taskID } }
+    )
+    
+    return res.status(200).json({
+        success: true,
+        message: "Task entry removed successfully",
+    });
+
+  } catch (error) {
+    console.error("Error in /test:", error);
+    res.status(500).json({ error: "MongoDB query failed" });
+  }
 });
 
 export default router;
