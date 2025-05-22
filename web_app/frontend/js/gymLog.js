@@ -18,6 +18,7 @@ const geolocation = new ol.Geolocation({
 let map = null; // Declare map variable outside the function
 let lon, lat; // Declare lon and lat variables outside the function
 let gymEntered = false; // Flag to check if gym is entered
+let dailyReady = false; // Flag to check if the daily check-in is ready
 
 // =========================
 // 2. Map Initialization
@@ -87,13 +88,14 @@ async function checkDistance(lon, lat) {
 
       if (data.distance) {
         console.log("Gym found within radius!", data);
-        let distanceMessage = `${data.distanceMessage}<br>You are currently ${data.distance.toFixed(3)} km away from the gym.`;
+        let distanceMessage = `${data.distanceMessage}<br>You are currently ${data.distance.toFixed(2)} km away from the gym.`;
         document.getElementById("checkDistance").innerHTML = distanceMessage;
       }
 
       document.getElementById("daily").innerHTML = data.dailyMessage;
       if (data.dailyReady) {
-
+        document.getElementById("dailyCheckin").disabled = false;
+        dailyReady = true;
       }
 
     })
@@ -102,6 +104,18 @@ async function checkDistance(lon, lat) {
     });
 
   document.getElementById("body").style.visibility = "visible";
+}
+
+function dailyCheckin() {
+  if (dailyReady) {
+    fetch(`/api/gym/dailyCheckin`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok ${response.status} ${response.error}`);
+        }
+        location.reload();
+      })
+  }
 }
 
 // =========================
@@ -213,6 +227,10 @@ document.getElementById("updateLocation").addEventListener("click", () => {
 
 document.getElementById("submitUserInfo").addEventListener("click", () => {
   submitUserInfo();
+});
+
+document.getElementById("dailyCheckin").addEventListener("click", () => {
+  dailyCheckin();
 });
 
 // =========================

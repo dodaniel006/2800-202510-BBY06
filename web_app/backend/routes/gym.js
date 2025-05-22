@@ -36,12 +36,39 @@ function haversine(lon1, lat1, lon2, lat2) {
 }
 
 function checkDaily(lastUpdate) {
+
     let currentDate = new Date();
     let diff = currentDate.getTime() - lastUpdate.getTime();
     console.log("Time difference: " + diff);
     let diffHours = diff / 3.6000E6;
     console.log("Time difference in hours: " + diffHours);
-    return diffHours;
+
+    let dailyStatus = { dailyMessage: "Failed to fetch daily data.", dailyReady: false };
+
+    if (diffHours >= 24) {
+
+        dailyStatus.message = "Your daily check-in is ready!";
+        dailyStatus.ready = true;
+
+    } else {
+
+        let remaining = 24 - diffHours;
+        let hours = Math.floor(remaining);
+        console.log("Remaining minutes: " + (remaining - hours));
+        let minutes = Math.ceil((remaining - hours) * 60);
+
+        dailyStatus.message = `Please wait ${hours} hours and ${minutes} minutes for your next check-in`;
+
+        if (minutes == 60) {
+            hours += 1;
+            minutes = 0;
+            dailyStatus.message = `Please wait ${hours} hours for your next check-in`;
+        }
+
+    }
+
+    return dailyStatus;
+
 }
 
 router.get("/reverseGeocode", async (req, res) => {
@@ -97,40 +124,6 @@ router.get("/checkDistance", async (req, res) => {
                 userId: req.session.userId,
             });
 
-            let dailyMessage = "Failed to fetch daily data.";
-            let dailyReady = false;
-
-            let daily = checkDaily(gym.updatedAt);
-            if (daily >= 24) {
-
-                dailyMessage = "Your daily check-in is ready!";
-                dailyReady = true;
-
-                // console.log("Granting points...");
-                // await Gym.updateOne(
-                //     { userId: req.session.userId },
-                //     {
-                //         $set: {
-                //             updatedAt: new Date(),
-                //         },
-                //     }
-                // );
-
-            } else {
-
-                let remaining = 24 - daily;
-                let hours = Math.floor(remaining);
-                console.log("Remaining minutes: " + (remaining - hours));
-                let minutes = Math.ceil((remaining - hours) * 60);
-
-                if (minutes == 60) {
-                    hours += 1;
-                    minutes = 0;
-                }
-
-                dailyMessage = `Please wait ${hours} hours and ${minutes} minutes for your next check-in`;
-            }
-
             let gymCoordinates = gym.gymCoordinates.coordinates;
             let distance = haversine(gymCoordinates[0], gymCoordinates[1], lon, lat);
 
@@ -150,18 +143,53 @@ router.get("/checkDistance", async (req, res) => {
 
             }
 
+            let dailyStatus = checkDaily(gym.updatedAt);
+
             res.status(200).json({
                 success: successStatus,
                 distanceMessage: distanceMessage,
                 distance: distance,
-                dailyMessage: dailyMessage,
-                dailyReady: dailyReady
+                dailyMessage: dailyStatus.message,
+                dailyReady: dailyStatus.ready
             });
 
         } catch (error) {
             console.error("Error checking distance:", error);
             res.status(500).json({ error: "Failed to check distance" });
         }
+    }
+});
+
+router.get("/dailyCheckin", async (req, res) => {
+
+    const gym = await Gym.findOne({
+        userId: req.session.userId,
+    });
+
+    if (!checkDaily(gym.updatedAt).ready) {
+        res.status(429).json({ error: "Daily Check-in is not ready yet!" });
+    } else {
+
+        console.log(req.session.userId);
+        const user = await User.findOne({
+            _id: req.session.userId,
+        })
+
+        let roadScore = user.roadScore;
+        console.log(`roadScore: ${roadScore}`);
+
+        await user.updateOne(
+            { roadScore: (roadScore + 50) },
+            { upsert: true }
+        );
+
+        await gym.updateOne(
+            { updatedAt: new Date() }
+        );
+
+        res.status(200).json({
+            success: true
+        });
     }
 });
 
@@ -192,7 +220,7 @@ router.post("/submitGymInfo", async (req, res) => {
                             region: userLocation,
                             gymName: gymName,
                             gymAddress: place,
-                            updatedAt: new Date("May 20, 2025 00:00:00"),
+                            updatedAt: new Date(),
                             gymCoordinates: {
                                 type: "Point",
                                 coordinates: [Number(jsonData[0].lon), Number(jsonData[0].lat)],
@@ -225,7 +253,6 @@ router.post("/submitGymInfo", async (req, res) => {
         console.error("Error fetching place data:", error);
         res.status(500).json({ error: "Failed to fetch place data" });
     }
-
 
 });
 

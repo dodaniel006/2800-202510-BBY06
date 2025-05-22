@@ -10,6 +10,10 @@ body {
   max-height: 50px;
 }
 
+#dailyContainer {
+  height: 62px;
+}
+
 #dailyCheckin {
   width: 200px;
 }
