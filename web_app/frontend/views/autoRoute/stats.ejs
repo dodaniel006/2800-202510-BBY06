@@ -22,22 +22,27 @@
 </div>
 
   
-  <div class="chart-container">
-    <h2>Heart Rate Over Time</h2>
-    <div class="chart-canvas">
-      <canvas id="heartRateChart" height="100"></canvas>
-    </div>
-
-    <button class="button"  onclick="resetZoom('heartRateChart')">Reset Zoom</button>
+<div class="chart-container">
+  <h2>Heart Rate Over Time</h2>
+<div style="text-align: center;">
+  <input type="date" id="heartDatePicker" />
+</div>
+  <div class="chart-canvas">
+    <canvas id="heartRateChart" height="100"></canvas>
   </div>
+  <button class="button" onclick="resetZoom('heartRateChart')">Reset Zoom</button>
+</div>
 
 <div class="chart-container">
   <h2>Speed Over Time</h2>
-  <div class="chart-canvas">
-   <canvas id="speedChart" height="100"></canvas>
-  </div>
+<div style="text-align: center;">
+  <input type="date" id="speedDatePicker" />
+</div>
 
-  <button class="button"  onclick="resetZoom('speedChart')">Reset Zoom</button>
+  <div class="chart-canvas">
+    <canvas id="speedChart" height="100"></canvas>
+  </div>
+  <button class="button" onclick="resetZoom('speedChart')">Reset Zoom</button>
 </div>
 
 <div class="chart-container">
@@ -45,19 +50,20 @@
   <div class="chart-canvas">
     <canvas id="weightChart" height="100"></canvas>
   </div>
-  <button class="button"  onclick="resetZoom('weightChart')">Reset Zoom</button>
+  <button class="button" onclick="resetZoom('weightChart')">Reset Zoom</button>
 </div>
-
 
 <div class="chart-container">
   <h2>Distance Over Time</h2>
-
+  <div style="text-align: center;">
+    <input id="distanceDatePicker" type="date" />
+  </div>
   <div class="chart-canvas">
     <canvas id="distanceChart" height="100"></canvas>
   </div>
-
-  <button class="button"  onclick="resetZoom('distanceChart')">Reset Zoom</button>
+  <button class="button" onclick="resetZoom('distanceChart')">Reset Zoom</button>
 </div>
+
 
 <div class="chart-container sleep-clock-container">
   <h2>Sleep Phases</h2>

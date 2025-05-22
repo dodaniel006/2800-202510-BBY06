@@ -2,7 +2,7 @@ canvas {
   width: 100% !important;
   height: auto !important;
   display: block;
-  touch-action: pan-y pinch-zoom !important;
+  touch-action: pan-y !important;
 
 }
 

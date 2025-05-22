@@ -1,6 +1,7 @@
 Chart.register(window.ChartZoom);
 
   let sleepChartInstance = null;
+let heartChartInstance = null;
 
 function getZoomOptions(min, max) {
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -207,15 +208,29 @@ function transformHeartRateData(samples) {
   };
 }
 
-async function renderHeartRateChart() {
+async function renderHeartRateChart(date = null) {
   const samples = await fetchHeartData();
-  const chartData = transformHeartRateData(samples);
-  new Chart(document.getElementById('heartRateChart').getContext('2d'), {
+
+  const filtered = date
+    ? samples.filter(s => {
+        const sampleDate = new Date(s.time).toISOString().split("T")[0];
+        return sampleDate === date;
+      })
+    : samples;
+
+  const chartData = transformHeartRateData(filtered);
+
+  // ✅ Destroy existing chart if needed
+  if (heartChartInstance) {
+    heartChartInstance.destroy();
+  }
+
+  heartChartInstance = new Chart(document.getElementById('heartRateChart').getContext('2d'), {
     type: 'line',
     data: chartData,
     options: {
       responsive: true,
-  maintainAspectRatio: false, 
+      maintainAspectRatio: false,
       animation: false,
       interaction: { mode: 'index', intersect: false, axis: 'x' },
       plugins: {
@@ -232,7 +247,36 @@ async function renderHeartRateChart() {
   });
 }
 
-    renderHeartRateChart();
+
+// HEART RATE SELECTOR
+async function fetchAvailableHeartDates() {
+  const res = await fetch('/api/db/data/heartRate');
+  if (!res.ok) throw new Error("Failed to fetch heart rate data");
+
+  const raw = await res.json();
+  const all = raw.flatMap(entry => entry.data.samples);
+  const uniqueDates = Array.from(new Set(
+    all.map(s => new Date(s.time).toISOString().split('T')[0])
+  ));
+
+  const latest = uniqueDates.sort().at(-1);
+  document.getElementById('heartDatePicker').value = latest;
+
+  flatpickr("#heartDatePicker", {
+    dateFormat: "Y-m-d",
+    enable: uniqueDates,
+    defaultDate: latest,
+    onChange: async function([selected]) {
+      if (selected) {
+        await renderHeartRateChart(selected.toISOString().split("T")[0]);
+      }
+    }
+  });
+
+  await renderHeartRateChart(latest);
+}
+fetchAvailableHeartDates();
+
 
 
 async function fetchSpeedData() {
@@ -361,7 +405,39 @@ async function renderSpeedChart() {
   });
 }
 
-renderSpeedChart();
+async function fetchAvailableSpeedDates() {
+  const res = await fetch('/api/db/data/speed');
+  if (!res.ok) throw new Error("Failed to fetch speed data");
+  const raw = await res.json();
+  const parsed = raw.flatMap(e => {
+    try {
+      const arr = Array.isArray(e.data.samples) ? e.data.samples : JSON.parse(e.data.samples);
+      return arr.map(s => new Date(JSON.parse(typeof s === 'string' ? s : s).time));
+    } catch {
+      return [];
+    }
+  });
+
+  const uniqueDates = Array.from(new Set(parsed.map(d => d.toISOString().split('T')[0])));
+  const latest = uniqueDates.sort().at(-1);
+  document.getElementById('speedDatePicker').value = latest;
+
+  flatpickr("#speedDatePicker", {
+    dateFormat: "Y-m-d",
+    enable: uniqueDates,
+    defaultDate: latest,
+    onChange: async function([selected]) {
+      if (selected) {
+        await renderSpeedChart(selected.toISOString().split("T")[0]);
+      }
+    }
+  });
+
+  await renderSpeedChart(latest);
+}
+fetchAvailableSpeedDates();
+
+
 
 
 async function fetchWeightData() {
@@ -569,7 +645,31 @@ label: function(ctx) {
   });
 }
 
-renderDistanceChart();
+async function fetchAvailableDistanceDates() {
+  const res = await fetch('/api/db/data/distance');
+  if (!res.ok) throw new Error("Failed to fetch distance data");
+  const raw = await res.json();
+  const uniqueDates = Array.from(new Set(
+    raw.map(e => new Date(e.start).toISOString().split('T')[0])
+  ));
+
+  const latest = uniqueDates.sort().at(-1);
+  document.getElementById('distanceDatePicker').value = latest;
+
+  flatpickr("#distanceDatePicker", {
+    dateFormat: "Y-m-d",
+    enable: uniqueDates,
+    defaultDate: latest,
+    onChange: async function([selected]) {
+      if (selected) {
+        await renderDistanceChart(selected.toISOString().split("T")[0]);
+      }
+    }
+  });
+
+  await renderDistanceChart(latest);
+}
+fetchAvailableDistanceDates();
 
 
 let sleepSegments = [];
