@@ -239,7 +239,7 @@ app.get("/register", (req, res) => {
     pageJS: "/js/register.js",
     showNav: false,
     showFooter: false,
-          mobileNavVisible: false,
+    mobileNavVisible: false,
 
   });
   res.render("register", settings);
