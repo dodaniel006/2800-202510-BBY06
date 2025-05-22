@@ -2,24 +2,28 @@ Chart.register(window.ChartZoom);
 
   let sleepChartInstance = null;
 
-function getZoomOptions() {
+function getZoomOptions(min, max) {
   return {
     pan: {
       enabled: true,
-      mode: 'x'
+      mode: 'x',
+      limits: {
+        x: { min, max, minRange: 60 * 60 * 1000 } // at least 1 hour range
+      }
     },
     zoom: {
-      wheel: {
-        enabled: true,
-        modifierKey: 'ctrl' // ✅ Only wheel zoom requires Ctrl
-      },
-      pinch: {
-        enabled: true // ✅ Allows two-finger pinch on touch devices
-      },
-      mode: 'x'
+      wheel: { enabled: true, modifierKey: 'ctrl' },
+      pinch: { enabled: true },
+      mode: 'x',
+      limits: {
+        x: { min, max, minRange: 60 * 60 * 1000 }
+      }
     }
   };
 }
+
+
+
 
   
 function resetZoom(chartId) {
@@ -27,14 +31,56 @@ function resetZoom(chartId) {
   if (chart) chart.resetZoom();
 }
 
-async function fetchData() {
+async function fetchData(selectedDate) {
   const res = await fetch('/api/db/data/steps');
   if (!res.ok) throw new Error("Failed to fetch steps data");
-  return await res.json();
+
+  const all = await res.json();
+  if (!selectedDate) return [];
+
+  const dayStart = new Date(selectedDate);
+  dayStart.setHours(0, 0, 0, 0);
+  const dayEnd = new Date(dayStart);
+  dayEnd.setHours(23, 59, 59, 999);
+
+  return all.filter(item => {
+    const t = new Date(item.start);
+    return t >= dayStart && t <= dayEnd;
+  });
 }
 
+async function fetchAvailableStepDates() {
+  const res = await fetch('/api/db/data/steps');
+  if (!res.ok) throw new Error("Failed to fetch steps data");
+
+  const all = await res.json();
+  const dates = Array.from(new Set(
+    all.map(item => new Date(item.start).toISOString().split('T')[0])
+  ));
+
+  const latest = dates.sort().at(-1);
+  document.getElementById('stepsDatePicker').value = latest;
+
+  flatpickr("#stepsDatePicker", {
+    dateFormat: "Y-m-d",
+    enable: dates,
+    defaultDate: latest,
+    onChange: function(selectedDates) {
+      if (selectedDates.length > 0) {
+        const selectedDate = selectedDates[0].toISOString().split("T")[0];
+        renderChart(selectedDate);
+      }
+    }
+  });
+
+  renderChart(latest);
+}
+
+fetchAvailableStepDates();
+
+
 function transformData(data) {
-  const bucketMinutes = 5;
+  const bucketMinutes = 15;
   const buckets = {};
   for (const item of data) {
     const date = new Date(item.start);
@@ -64,76 +110,67 @@ labels.push(new Date(key));
     }]
   };
 }
-async function renderChart() {
-  const rawData = await fetchData();
+let stepsChartInstance = null;
+
+async function renderChart(date) {
+  const rawData = await fetchData(date);
   const chartData = transformData(rawData);
-  new Chart(document.getElementById('fitnessChart').getContext('2d'), {
+
+  const min = new Date(date); min.setHours(0, 0, 0, 0);
+  const max = new Date(date); max.setHours(23, 59, 59, 999);
+  const totalSteps = chartData.datasets[0].data.reduce((a, b) => a + b, 0);
+
+  // 🟢 Show total in UI
+  document.getElementById('totalSteps').innerText = `Total Steps: ${totalSteps}`;
+
+  if (stepsChartInstance) stepsChartInstance.destroy();
+
+  stepsChartInstance = new Chart(document.getElementById('fitnessChart').getContext('2d'), {
     type: 'bar',
     data: chartData,
     options: {
+      clip: true,
       responsive: true,
-  maintainAspectRatio: false, 
+      maintainAspectRatio: false,
       animation: false,
       interaction: { mode: 'index', intersect: false, axis: 'x' },
       plugins: {
         legend: { display: true },
         tooltip: { enabled: true },
-        title: { display: true, text: 'Steps Over Time' },
-        zoom: getZoomOptions()
+        zoom: getZoomOptions(min.getTime(), max.getTime())
       },
-scales: {
-  x: {
-    title: {
-      display: true,
-      text: 'Time'
-    },
-    type: 'time',
-    time: {
-      unit: 'hour',
-      displayFormats: {
-        hour: 'HH:mm'
+      scales: {
+        x: {
+          type: 'time',
+          min,
+          max,
+          time: {
+            unit: 'hour',
+            displayFormats: { hour: 'HH:mm' }
+          },
+          ticks: {
+            maxTicksLimit: 10,
+            callback: function(value) {
+              const d = new Date(value);
+              return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            }
+          },
+          title: { display: true, text: 'Time' },
+          grace: '0%'
+        },
+        y: {
+          beginAtZero: true,
+          suggestedMax: 300,
+          title: { display: true, text: 'Steps per 15-Minute Interval' }
+        }
       }
-    },
-    ticks: {
-      maxTicksLimit: 10,
-      callback: function(value) {
-        const date = new Date(value);
-        return date.toLocaleString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        });
-      }
-    },
-    // 👇 Default zoom to current day
-    min: (() => {
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-      return now;
-    })(),
-    max: (() => {
-      const now = new Date();
-      now.setHours(23, 59, 59, 999);
-      return now;
-    })()
-  },
-  y: {
-    beginAtZero: true,
-    title: {
-      display: true,
-      text: 'Steps per 5-Minute Interval'
-    }
-  }
-}
-
     }
   });
 }
 
 
-    renderChart();
+
+
 
 async function fetchHeartData() {
   const res = await fetch('/api/db/data/heartRate');
@@ -189,153 +226,6 @@ async function renderHeartRateChart() {
 
     renderHeartRateChart();
 
-
-async function fetchCaloriesData() {
-  const res = await fetch('/api/db/data/energy');
-  if (!res.ok) throw new Error('Failed to fetch energy data');
-  const raw = await res.json();
-
-  // Parse JSON strings if necessary
-  return raw.map(entry => {
-    const energyObj = JSON.parse(entry.data.energy);
-    return {
-      time: new Date(entry.startTime),
-      calories: energyObj.inCalories
-    };
-  });
-}
-
-function transformCaloriesData(data) {
-  data.sort((a, b) => a.time - b.time);
-
-  // Downsample if too dense
-  const STEP = Math.ceil(data.length / 300);
-  const sampled = data.filter((_, i) => i % STEP === 0);
-
-  return {
-    labels: sampled.map(d => d.time.toLocaleTimeString()),
-    datasets: [{
-      label: 'Calories Burned',
-      data: sampled.map(d => d.calories),
-      fill: true,
-      backgroundColor: 'rgba(255, 206, 86, 0.4)',
-      borderColor: 'rgb(255, 206, 86)',
-      tension: 0.4,
-      pointRadius: 0,
-    }]
-  };
-}
-
-async function renderCaloriesChart() {
-  const raw = await fetchCaloriesData();
-  console.log('📦 Raw energy data:', raw); // 👈 log raw data
-
-  const chartData = transformCaloriesData(raw);
-  console.log('📊 Transformed chart data:', chartData); // 👈 log processed chart data
-
-  new Chart(document.getElementById('caloriesChart').getContext('2d'), {
-    type: 'line',
-    data: chartData,
-    options: {
-      responsive: true,
-  maintainAspectRatio: false, 
-      animation: false,
-      interaction: { mode: 'index', intersect: false, axis: 'x' },
-      plugins: {
-        legend: { display: true },
-        tooltip: { enabled: true },
-        title: { display: true, text: 'Calories Burned Over Time' },
-        zoom: getZoomOptions()
-      },
-      scales: {
-        x: { title: { display: true, text: 'Time' }, ticks: { maxTicksLimit: 10 } },
-        y: { beginAtZero: true, title: { display: true, text: 'Calories' } }
-      }
-    }
-  });
-}
-
-renderCaloriesChart();
-
-
-async function fetchExerciseData() {
-  const res = await fetch('/api/db/data/exercise'); // update if endpoint is different
-  if (!res.ok) throw new Error('Failed to fetch exercise data');
-  const raw = await res.json();
-
-  return raw.map(entry => {
-    const parsedData = typeof entry.data === 'string' ? JSON.parse(entry.data) : entry.data;
-    return {
-      title: parsedData.title || 'Untitled Exercise',
-      start: new Date(entry.start),
-      end: new Date(entry.end)
-    };
-  });
-}
-
-function transformExerciseData(sessions) {
-  return {
-    labels: ['Sessions'],
-    datasets: sessions.map((s, index) => ({
-      label: s.title,
-      data: [{
-        x: [s.start, s.end],
-        y: 'Sessions'
-      }],
-      backgroundColor: `hsl(${index * 30 % 360}, 60%, 60%)`,
-      borderSkipped: false,
-      borderRadius: 3
-    }))
-  };
-}
-
-async function renderExerciseChart() {
-  const sessions = await fetchExerciseData();
-  console.log('📦 Raw Exercise Sessions:', sessions); // Log raw sessions
-
-  const chartData = transformExerciseData(sessions);
-  console.log('📊 Transformed Chart Data:', chartData); // Log data passed to Chart.js
-
-  new Chart(document.getElementById('exerciseChart').getContext('2d'), {
-    type: 'bar',
-    data: chartData,
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-  maintainAspectRatio: false, 
-      animation: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const range = context.raw.x;
-              return `${context.dataset.label}: ${new Date(range[0]).toLocaleTimeString()} - ${new Date(range[1]).toLocaleTimeString()}`;
-            }
-          }
-        },
-        title: {
-          display: true,
-          text: 'Exercise Sessions Over Time'
-        },
-        zoom: getZoomOptions()
-      },
-      parsing: false,
-      scales: {
-        x: {
-          type: 'time',
-          time: {
-            displayFormats: { minute: 'h:mm a' }
-          },
-          title: { display: true, text: 'Time' }
-        },
-        y: { title: { display: false } }
-      }
-    }
-  });
-}
-
-renderExerciseChart();
 
 async function fetchSpeedData() {
   const res = await fetch('/api/db/data/speed');
@@ -519,27 +409,48 @@ async function renderWeightChart() {
   new Chart(document.getElementById('weightChart').getContext('2d'), {
     type: 'line',
     data: chartData,
-    options: {
-      responsive: true,
-  maintainAspectRatio: false, 
-      animation: false,
-      plugins: {
-        legend: { display: true },
-        tooltip: { enabled: true },
-        title: { display: true, text: 'Weight Over Time (kg)' },
-        zoom: getZoomOptions()
-      },
-      scales: {
-        x: {
-          title: { display: true, text: 'Date' },
-          ticks: { maxTicksLimit: 10 }
+   options: {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: false,
+  interaction: {
+    mode: 'index',
+    intersect: false,
+    axis: 'x'
+  },
+  plugins: {
+    legend: { display: true },
+    tooltip: {
+      enabled: true,
+      callbacks: {
+        label: function(ctx) {
+          const kg = ctx.raw;
+          const lb = (kg * 2.20462).toFixed(1);
+          return `Weight: ${kg} kg (${lb} lb)`;
         },
-        y: {
-          beginAtZero: false,
-          title: { display: true, text: 'Weight (kg)' }
+        title: function(tooltipItems) {
+          return `Time: ${tooltipItems[0].label}`;
         }
       }
+    },
+    title: {
+      display: true,
+      text: 'Weight Over Time (kg)'
+    },
+    zoom: getZoomOptions()
+  },
+  scales: {
+    x: {
+      title: { display: true, text: 'Date' },
+      ticks: { maxTicksLimit: 10 }
+    },
+    y: {
+      beginAtZero: false,
+      title: { display: true, text: 'Weight (kg)' }
     }
+  }
+}
+
   });
 }
 
@@ -605,37 +516,97 @@ async function renderDistanceChart() {
   new Chart(document.getElementById('distanceChart').getContext('2d'), {
     type: 'line',
     data: chartData,
-    options: {
-      responsive: true,
-  maintainAspectRatio: false, 
-      animation: false,
-      plugins: {
-        legend: { display: true },
-        tooltip: { enabled: true },
-        title: { display: true, text: 'Distance Over Time (meters)' },
-        zoom: getZoomOptions()
-      },
-      scales: {
-        x: {
-          title: { display: true, text: 'Time' },
-          ticks: { maxTicksLimit: 10 }
-        },
-        y: {
-          beginAtZero: true,
-          title: { display: true, text: 'Distance (m)' }
+  options: {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: false,
+  interaction: {
+    mode: 'index',
+    intersect: false,
+    axis: 'x'
+  },
+  plugins: {
+    legend: { display: true },
+    tooltip: {
+      enabled: true,
+      callbacks: {
+label: function(ctx) {
+  const kg = ctx.raw.toFixed(1);
+  const lb = (ctx.raw * 2.20462).toFixed(1);
+  return `Weight: ${kg} kg (${lb} lb)`;
+},
+        title: function(tooltipItems) {
+          return `Time: ${tooltipItems[0].label}`;
         }
       }
+    },
+    title: {
+      display: true,
+      text: 'Weight Over Time (kg)'
+    },
+    zoom: getZoomOptions()
+  },
+  scales: {
+    x: {
+      title: { display: true, text: 'Date' },
+      ticks: { maxTicksLimit: 10 }
+    },
+    y: {
+      beginAtZero: false,
+      title: { display: true, text: 'Weight (kg)' }
     }
+  }
+}
+
   });
 }
 
 renderDistanceChart();
+
+
+let sleepSegments = [];
 
 function timeToFractionOfDay(date) {
   const h = date.getHours();
   const m = date.getMinutes();
   const s = date.getSeconds();
   return (h * 3600 + m * 60 + s) / 86400; // 86400 = seconds in day
+}
+
+function createSleepSegments(stages) {
+  const arcSegments = [];
+
+  stages.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
+  let last = null;
+
+  for (const s of stages) {
+    const start = new Date(s.startTime);
+    const end = new Date(s.endTime);
+
+    const startFrac = timeToFractionOfDay(start);
+    const endFrac = timeToFractionOfDay(end);
+    let duration = endFrac - startFrac;
+    if (duration < 0) duration += 1;
+
+    if (last && last.label === s.stage) {
+      // merge duration
+      last.endTime = end;
+      last.value += duration * 100;
+    } else {
+      // new arc segment
+      last = {
+        label: s.stage,
+        value: duration * 100,
+        backgroundColor: getStageColor2(s.stage),
+        startTime: start,
+        endTime: end
+      };
+      arcSegments.push(last);
+    }
+  }
+
+  return arcSegments;
 }
 
 
@@ -650,58 +621,86 @@ function getStageColor2(stage) {
   return map[stage] ?? '#95a5a6';
 }
 
-async function fetchSleepClockData() {
+async function fetchSleepClockData(selectedDate = null) {
   const res = await fetch('/api/db/data/sleepsessions');
   if (!res.ok) throw new Error('Failed to fetch sleep data');
-const sessions = (await res.json())
-  .filter(s => !!s.start)
-  .sort((a, b) => new Date(b.start) - new Date(a.start))
-  .slice(0, 1); // ✅ Keep only the latest session
-const arcSegments = [];
 
-const latestSession = sessions
-  .filter(s => !!s.start)
-  .sort((a, b) => new Date(b.start) - new Date(a.start))[0];
+  const sessions = await res.json();
 
-if (!latestSession) return [];
+  // Sort by date descending
+  const sorted = sessions
+    .filter(s => !!s.start)
+    .sort((a, b) => new Date(b.start) - new Date(a.start));
 
-let stages = [];
+  let session = null;
 
-try {
-  const parsed = typeof latestSession.data.stages === 'string'
-    ? JSON.parse(latestSession.data.stages)
-    : latestSession.data.stages;
-
-  stages = parsed.map(s => typeof s === 'string' ? JSON.parse(s) : s);
-} catch (e) {
-  console.warn('Stage parsing failed:', e);
-  return [];
+if (selectedDate) {
+  const formatDate = (d) => new Date(d).toISOString().split('T')[0];
+  session = sorted.find(s => formatDate(s.start) === selectedDate);
 }
 
-for (const s of stages) {
-  const start = new Date(s.startTime);
-  const end = new Date(s.endTime);
-  const startFrac = timeToFractionOfDay(start);
-  const endFrac = timeToFractionOfDay(end);
 
-  let duration = endFrac - startFrac;
-  if (duration < 0) duration += 1; // handles sleep across midnight
+  if (!session) return [];
 
-  arcSegments.push({
-    label: s.stage,
-    value: duration * 100,
-    backgroundColor: getStageColor2(s.stage)
+  let stages = [];
+  try {
+    const parsed = typeof session.data.stages === 'string'
+      ? JSON.parse(session.data.stages)
+      : session.data.stages;
+
+    stages = parsed.map(s => typeof s === 'string' ? JSON.parse(s) : s);
+  } catch (e) {
+    console.warn('Stage parsing failed:', e);
+    return [];
+  }
+
+  return createSleepSegments(stages);
+}
+async function fetchAvailableSleepDates() {
+  const res = await fetch('/api/db/data/sleepsessions');
+  if (!res.ok) throw new Error('Failed to fetch sleep data');
+
+  const sessions = await res.json();
+  const uniqueDates = Array.from(new Set(
+    sessions
+      .filter(s => !!s.start)
+      .map(s => new Date(s.start).toISOString().split('T')[0])
+  ));
+
+  const latest = uniqueDates.sort().at(-1); // 🟢 latest available date
+  document.getElementById('sleepDatePicker').value = latest;
+
+  flatpickr("#sleepDatePicker", {
+    dateFormat: "Y-m-d",
+    enable: uniqueDates,
+    defaultDate: latest,
+    onChange: function(selectedDates) {
+      if (selectedDates.length > 0) {
+        const selectedDate = selectedDates[0].toISOString().split("T")[0];
+        renderSleepClock(selectedDate); // 🔁 re-render chart with chosen date
+      }
+    }
   });
+
+  // 🔁 Render chart with latest date immediately
+  renderSleepClock(latest);
 }
 
-return arcSegments;
 
-}
 
-async function renderSleepClock() {
-  const data = await fetchSleepClockData();
+sleepChartInstance = null;
 
-  new Chart(document.getElementById('sleepClock').getContext('2d'), {
+async function renderSleepClock(date = null) {
+  const data = await fetchSleepClockData(date);
+  sleepSegments = data;
+
+  const ctx = document.getElementById('sleepClock').getContext('2d');
+
+  if (sleepChartInstance) {
+    sleepChartInstance.destroy(); // 🔁 destroy old chart
+  }
+
+  sleepChartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: data.map(d => d.label),
@@ -715,27 +714,32 @@ async function renderSleepClock() {
     options: {
       cutout: '70%',
       responsive: true,
-  maintainAspectRatio: false, 
+      maintainAspectRatio: false,
       layout: { padding: 20 },
       plugins: {
         legend: { display: false },
         tooltip: {
           callbacks: {
             label: function (ctx) {
-              const percent = ctx.raw.toFixed(2);
-              return `Stage ${ctx.label}: ${percent}% of day`;
+              const segment = sleepSegments[ctx.dataIndex];
+              const stage = ctx.label;
+              const formatTime = t => {
+                const date = new Date(t);
+                return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+              };
+              return `Stage ${stage}: ${formatTime(segment.startTime)}–${formatTime(segment.endTime)}`;
             }
           }
         },
         title: {
           display: true,
-          text: '🛌 Sleep Clock – 24h Radial Timeline'
+          text: 'Sleep Stages',
         }
       },
       rotation: -90,
       circumference: 360
     },
-    plugins: [sleepClockCenterLabelPlugin, radialClockLabelsPlugin, sleepClockBackgroundArcPlugin] // ✅ Scoped here only
+    plugins: [sleepClockCenterLabelPlugin]
   });
 }
 
@@ -743,58 +747,36 @@ async function renderSleepClock() {
 const sleepClockCenterLabelPlugin = {
   id: 'centerText',
   beforeDraw(chart) {
-    const {ctx, width, height} = chart;
-    const centerX = width / 2;
-    const centerY = height / 2;
+    const { ctx, chartArea } = chart;
 
-    // Total % of full circle used for sleep
-    const total = chart.data.datasets[0].data.reduce((sum, val) => sum + val, 0);
-    const totalSeconds = (total / 100) * 86400; // convert back to seconds
+    let centerX = chart.width / 2;
+    let centerY = chart.height / 2;
+
+    // ✅ Try using the arc metadata center if available
+    const meta = chart.getDatasetMeta(0);
+    if (meta && meta.data && meta.data.length > 0) {
+      const arc = meta.data[0];
+      centerX = arc.x;
+      centerY = arc.y;
+    }
+
+    const dataset = chart.data.datasets[0];
+    const total = dataset.data.reduce((sum, val) => sum + val, 0);
+    const totalSeconds = (total / 100) * 86400;
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const text = `Total: ${hours}h ${minutes}m`;
 
     ctx.save();
     ctx.font = 'bold 16px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#444';
-    ctx.fillText(`Total: ${hours}h ${minutes}m`, centerX, centerY);
+    ctx.fillText(text, centerX, centerY);
     ctx.restore();
   }
 };
 
-
-const radialClockLabelsPlugin = {
-  id: 'radialClockLabels',
-  afterDraw(chart) {
-    const {ctx, chartArea: {left, right, top, bottom}, width, height} = chart;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = chart._metasets[0].data[0].outerRadius + 10;
-
-    ctx.save();
-    ctx.fillStyle = '#555';
-    ctx.font = '12px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    const positions = [
-      { text: '0:00', angle: -90 },
-      { text: '6:00', angle: 0 },
-      { text: '12:00', angle: 90 },
-      { text: '18:00', angle: 180 },
-    ];
-
-    positions.forEach(p => {
-      const rad = p.angle * Math.PI / 180;
-      const x = centerX + radius * Math.cos(rad);
-      const y = centerY + radius * Math.sin(rad);
-      ctx.fillText(p.text, x, y);
-    });
-
-    ctx.restore();
-  }
-};
 
 const sleepClockBackgroundArcPlugin = {
   id: 'sleepArcBackground',
@@ -838,5 +820,10 @@ const sleepClockBackgroundArcPlugin = {
   }
 };
 
+document.getElementById('sleepDatePicker').addEventListener('change', (e) => {
+  const selectedDate = e.target.value;
+  renderSleepClock(selectedDate);
+});
 
-renderSleepClock();
+fetchAvailableSleepDates();
+
