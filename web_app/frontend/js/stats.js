@@ -31,6 +31,7 @@ function getZoomOptions(min, max) {
 
 
 
+console.log(Chart.registry.plugins);
 
   
 function resetZoom(chartId) {
