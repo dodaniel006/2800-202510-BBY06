@@ -100,6 +100,7 @@ async function renderChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       interaction: { mode: 'index', intersect: false, axis: 'x' },
       plugins: {
@@ -167,6 +168,7 @@ async function renderHeartRateChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       interaction: { mode: 'index', intersect: false, axis: 'x' },
       plugins: {
@@ -237,6 +239,7 @@ async function renderCaloriesChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       interaction: { mode: 'index', intersect: false, axis: 'x' },
       plugins: {
@@ -297,6 +300,7 @@ async function renderExerciseChart() {
     options: {
       indexAxis: 'y',
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       plugins: {
         legend: { display: false },
@@ -401,6 +405,7 @@ async function renderSpeedChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       interaction: {
         mode: 'index',
@@ -510,6 +515,7 @@ async function renderWeightChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       plugins: {
         legend: { display: true },
@@ -593,6 +599,7 @@ async function renderDistanceChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       plugins: {
         legend: { display: true },
@@ -699,6 +706,7 @@ async function renderSleepClock() {
     options: {
       cutout: '70%',
       responsive: true,
+  maintainAspectRatio: false, 
       layout: { padding: 20 },
       plugins: {
         legend: { display: false },
