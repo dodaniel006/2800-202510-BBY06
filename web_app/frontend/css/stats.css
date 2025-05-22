@@ -1,0 +1,61 @@
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  touch-action: pan-y !important;
+
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 40px;
+
+  box-sizing: border-box;
+}
+
+#fitnessChart, #heartRateChart, #sleepChart {
+  max-width: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 1rem;
+  margin-bottom: 20px;
+}
+.button {
+  margin-bottom: 40px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.chart-canvas{
+    height: 300pt;
+}
+.sleep-clock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.sleepchart-wrapper {
+  width: 90%;
+  max-width: 500pt;
+  aspect-ratio: 1 / 1;
+  position: relative;
+}
+#sleepDatePicker {
+  width: 240px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+  h2 {
+    text-align: center;
+  }

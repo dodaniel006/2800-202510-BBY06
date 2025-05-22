@@ -5,6 +5,7 @@
     padding: 0; 
     height: 41vw;
     width: 40vw;
+
     overflow: hidden 
 }
     .resizer > .resized { 
@@ -12,9 +13,39 @@
         border: 0 
     }
 
+    #generateRecommendations {
+    z-index: 0 !important;
+    }
+
 @media only screen and (max-width: 740px) {
     .resizer {
         height: 51vw;
         width: 50vw;
     }
+}
+
+body {
+    background-color: var(--color-black);
+}
+
+.card, .modal-content {
+    background-color: var(--bg-surface);
+    color: var(--color-white);
+}
+.modal-content .hr {
+    color: var(--color-black);
+}
+
+.scrollspy-example, .form-control {
+    background-color: var(--bg-primary);
+    border-color: var(--bg-primary);
+    color: var(--color-white);
+}
+
+.btn-success, .red {
+    background-color: var(--gooby-red);
+}
+
+.btn-success:hover {
+    background-color: var(--gooby-dark-red);
 }

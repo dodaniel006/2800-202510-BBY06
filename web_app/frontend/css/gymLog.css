@@ -6,7 +6,37 @@ body {
   height: 100%;
 }
 
+.btn {
+  max-height: 50px;
+}
+
+
+#dailyContainer {
+  height: 62px;
+}
+
+#dailyCheckin {
+  width: 200px;
+}
+
 #map {
   height: 60vh;
   width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  #daily {
+    margin-top: 16px;
+  }
+
+  #map {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+
+  #map {
+    margin-bottom: 20px;
+  }
 }

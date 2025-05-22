@@ -1,43 +1,77 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-<style>
-    canvas {
-      touch-action: pan-y;
-    }
-    .chart-container {
-      margin-bottom: 40px;
-    }
-    #fitnessChart, #heartRateChart, #sleepChart {
-      max-width: 100%;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 1rem;
-      margin-bottom: 20px;
-    }
-    button {
-      margin-bottom: 40px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: none;
-      background-color: #eee;
-      cursor: pointer;
-    }
-  </style>
-  <div class="chart-container">
-    <h2>Steps Over Time</h2>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<div class="chart-container">
+  <h2>Steps Over Time</h2>
+
+  <h2 id="totalSteps" class="mx-auto" style="text-align:center;font-size:2rem; font-weight:bold;"></h2>
+
+  <!-- Centered selector -->
+  <div style="text-align: center;">
+    <input type="date" id="stepsDatePicker" />
+  </div>
+
+  <div class="chart-canvas">
     <canvas id="fitnessChart" height="100"></canvas>
-    <button onclick="resetZoom('fitnessChart')">Reset Zoom</button>
   </div>
+
+  <button class="button" onclick="resetZoom('fitnessChart')">Reset Zoom</button>
+</div>
+
   
-  <div class="chart-container">
-    <h2>Heart Rate Over Time</h2>
+<div class="chart-container">
+  <h2>Heart Rate Over Time</h2>
+<div style="text-align: center;">
+  <input type="date" id="heartDatePicker" />
+</div>
+  <div class="chart-canvas">
     <canvas id="heartRateChart" height="100"></canvas>
-    <button onclick="resetZoom('heartRateChart')">Reset Zoom</button>
   </div>
-  
-  <div class="chart-container">
-    <h2>Sleep Stages Over Time</h2>
-    <canvas id="sleepChart" height="100"></canvas>
+  <button class="button" onclick="resetZoom('heartRateChart')">Reset Zoom</button>
+</div>
+
+<div class="chart-container">
+  <h2>Speed Over Time</h2>
+<div style="text-align: center;">
+  <input type="date" id="speedDatePicker" />
+</div>
+
+  <div class="chart-canvas">
+    <canvas id="speedChart" height="100"></canvas>
   </div>
+  <button class="button" onclick="resetZoom('speedChart')">Reset Zoom</button>
+</div>
+
+<div class="chart-container">
+  <h2>Weight Over Time</h2>
+  <div class="chart-canvas">
+    <canvas id="weightChart" height="100"></canvas>
+  </div>
+  <button class="button" onclick="resetZoom('weightChart')">Reset Zoom</button>
+</div>
+
+<div class="chart-container">
+  <h2>Distance Over Time</h2>
+  <div style="text-align: center;">
+    <input id="distanceDatePicker" type="date" />
+  </div>
+  <div class="chart-canvas">
+    <canvas id="distanceChart" height="100"></canvas>
+  </div>
+  <button class="button" onclick="resetZoom('distanceChart')">Reset Zoom</button>
+</div>
+
+
+<div class="chart-container sleep-clock-container">
+  <h2>Sleep Phases</h2>
+
+  <!-- Date Picker -->
+<input type="text" id="sleepDatePicker" placeholder="Select date with sleep data" readonly>
+
+  <div class="sleepchart-wrapper">
+    <canvas id="sleepClock"></canvas>
+  </div>
+</div>

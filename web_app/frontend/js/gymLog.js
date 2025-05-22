@@ -3,6 +3,8 @@
 // =========================
 console.log("Gym Log JS loaded");
 
+document.getElementById("body").style.visibility = "hidden";
+
 const geolocation = new ol.Geolocation({
   tracking: true,
   projection: "EPSG:3857",
@@ -16,6 +18,7 @@ const geolocation = new ol.Geolocation({
 let map = null; // Declare map variable outside the function
 let lon, lat; // Declare lon and lat variables outside the function
 let gymEntered = false; // Flag to check if gym is entered
+let dailyReady = false; // Flag to check if the daily check-in is ready
 
 // =========================
 // 2. Map Initialization
@@ -82,14 +85,37 @@ async function checkDistance(lon, lat) {
       return response.json();
     })
     .then((data) => {
-      console.log("Gym found within radius!", data);
-      let message = `${data.message}<br>You are currently ${data.distance.toFixed(3)} km away from the gym.`;
-      document.getElementById("checkDistance").innerHTML = message;
+
+      if (data.distance) {
+        console.log("Gym found within radius!", data);
+        let distanceMessage = `${data.distanceMessage}<br>You are currently ${data.distance.toFixed(2)} km away from the gym.`;
+        document.getElementById("checkDistance").innerHTML = distanceMessage;
+      }
+
+      document.getElementById("daily").innerHTML = data.dailyMessage;
+      if (data.dailyReady) {
+        document.getElementById("dailyCheckin").disabled = false;
+        dailyReady = true;
+      }
 
     })
     .catch((error) => {
       console.error("No gym found in radius", error);
     });
+
+  document.getElementById("body").style.visibility = "visible";
+}
+
+function dailyCheckin() {
+  if (dailyReady) {
+    fetch(`/api/gym/dailyCheckin`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok ${response.status} ${response.error}`);
+        }
+        location.reload();
+      })
+  }
 }
 
 // =========================
@@ -130,30 +156,37 @@ async function submitUserInfo() {
   const gymName = document.getElementById("gymName").value;
   const place = document.getElementById("place").value;
   const userLocation = document.getElementById("userArea").innerText;
-  // Send the user info to the server
-  fetch("/api/gym/submitGymInfo", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      gymName,
-      place,
-      userLocation,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Network response was not ok ${response.status} ${response.error}`);
-      }
-      return response.json();
+
+  if (gymName == "") {
+    alert("Gym Name is required!");
+  } else if (place == "") {
+    alert("Location is required!");
+  } else {
+    // Send the user info to the server
+    fetch("/api/gym/submitGymInfo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        gymName,
+        place,
+        userLocation,
+      }),
     })
-    .then((data) => {
-      console.log("Location Successfully Parsed", data.data[0]);
-      document.getElementById("gymLocation").innerHTML = data.data[0].display_name;
-      checkDistance(lon, lat); // Check distance to gym after submitting user info
-    })
-    .catch((error) => {
-      console.error("Error submitting user info:", error.message);
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok ${response.status} ${response.error}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Location Successfully Parsed", data.data[0]);
+        document.getElementById("gymLocation").innerHTML = data.data[0].display_name;
+        checkDistance(lon, lat); // Check distance to gym after submitting user info
+      })
+      .catch((error) => {
+        console.error("Error submitting user info:", error.message);
+      });
+  }
 }
 
 // =========================
@@ -194,6 +227,10 @@ document.getElementById("updateLocation").addEventListener("click", () => {
 
 document.getElementById("submitUserInfo").addEventListener("click", () => {
   submitUserInfo();
+});
+
+document.getElementById("dailyCheckin").addEventListener("click", () => {
+  dailyCheckin();
 });
 
 // =========================

@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const loginButton = document.getElementById("login");
   const loginForm = document.getElementById("login-form"); // Get form by ID
   const errorMessageElement = document.getElementById("loginErrorMessage");
 
@@ -18,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  if (loginButton && loginForm) { // Check for loginForm instead of input fields
-    loginButton.addEventListener("click", async (event) => { // Listen for click on button
+  if (loginForm) { // Check for loginForm instead of input fields
+    loginForm.addEventListener("submit", async (event) => { // Listen for submit on button
       event.preventDefault(); // Prevent default form submission
       hideLoginError();
 
