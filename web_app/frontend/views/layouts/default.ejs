@@ -35,10 +35,9 @@
       include('partials/header') %> <% } %>
 
       
-<main class="<%= locals.showMobileNav === true ? 'mobileNavSpace' : '' %>">
+<main class="<%= (typeof locals.showMobileNav === 'undefined' || locals.showMobileNav) ? 'mobileNavSpace' : '' %>">
   <%- body %>
 </main>
-
 
       <% const showMobileNav = (typeof mobileNavVisible !== 'undefined') ? mobileNavVisible : true; %>
       <% if (showMobileNav) { %>

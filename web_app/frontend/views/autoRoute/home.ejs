@@ -55,3 +55,17 @@
             </div>
         </div>
     </div>
+
+    <div class="card text-center text-bg-secondary m-2 p-2">
+    <h3>Task Recommendations</h3>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="recommendationPrompt"
+            placeholder="Describe what kind of tasks you'd like...">
+        <button class="btn btn-primary" type="button" id="generateRecommendations">Generate</button>
+    </div>
+    <div id="recommendationsContainer" class="text-start" style="display: none;">
+        <h4>Recommended Tasks:</h4>
+        <div id="recommendationsList" class="p-3 bg-dark text-light rounded"></div>
+    </div>
+</div>
+<script defer src="/js/taskRecommendations.js"></script>
