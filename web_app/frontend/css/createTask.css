@@ -1,0 +1,25 @@
+body {
+    background-color: var(--color-black);
+}
+
+.card, .modal-content {
+    background-color: var(--bg-surface);
+    color: var(--color-white);
+}
+.modal-content .hr {
+    color: var(--color-black);
+}
+
+.scrollspy-example, .form-control {
+    background-color: var(--bg-primary);
+    border-color: var(--bg-primary);
+    color: var(--color-white);
+}
+
+.btn-success, .red {
+    background-color: var(--gooby-red);
+}
+
+.btn-success:hover {
+    background-color: var(--gooby-dark-red);
+}
