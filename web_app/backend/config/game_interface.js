@@ -93,7 +93,7 @@ function add_user(user) {
 
 // Unused
 function get_ws() {
-    return socket.address();
+    return socket;
 }
 
 export { get_ws, add_user, send_data };
