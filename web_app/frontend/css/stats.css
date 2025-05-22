@@ -1,9 +1,18 @@
-    canvas {
-      touch-action: pan-y;
-    }
-    .chart-container {
-      margin-bottom: 40px;
-    }
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  touch-action: pan-y;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 40px;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
     #fitnessChart, #heartRateChart, #sleepChart {
       max-width: 100%;
       background: white;

@@ -2,16 +2,25 @@ Chart.register(window.ChartZoom);
 
   let sleepChartInstance = null;
 
-  function getZoomOptions() {
-    return {
-      pan: { enabled: true, mode: 'x' },
-      zoom: {
-        wheel: { enabled: true, modifierKey: 'ctrl' },
-        pinch: { enabled: true },
-        mode: 'x'
-      }
-    };
-  }
+function getZoomOptions() {
+  return {
+    pan: {
+      enabled: true,
+      mode: 'x'
+    },
+    zoom: {
+      wheel: {
+        enabled: true,
+        modifierKey: 'ctrl' // ✅ Only wheel zoom requires Ctrl
+      },
+      pinch: {
+        enabled: true // ✅ Allows two-finger pinch on touch devices
+      },
+      mode: 'x'
+    }
+  };
+}
+
   
 function resetZoom(chartId) {
   const chart = Chart.getChart(chartId);
