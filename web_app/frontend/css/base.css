@@ -38,7 +38,8 @@
 
 main {
   flex: 1;
-  margin-bottom: 70px;
+  margin-bottom: 64px;
+
 }
 
 footer {
@@ -153,6 +154,9 @@ footer {
 @media screen and (min-width: 1000px) {
   .mobile-nav {
   display: none;
+  }
+  main{
+      margin-bottom: 0px;
   }
 }
 
