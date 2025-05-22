@@ -42,7 +42,7 @@ socket.on('error', (err) => {
 
 socket.on('connection', async (ws) => {
   ws.on('message', async (data) => {
-    // console.log('received: %s', data);
+    console.log('received: %s', data);
     if (JSON.parse(data).hasOwnProperty("Score")) { // Score updating
       // console.log('updating roadScore')
       let wsIndex = 0;
