@@ -1,4 +1,4 @@
-import { add_user, send_data } from "../config/game_interface.js";
+import { get_ws, add_user, send_data } from "../../app.js";
 import { Router } from 'express';
 
 const router = Router();
@@ -12,6 +12,8 @@ router.post('/points', (req, res) => {
 router.post('/send', (req, res) => {
   const { data } = req.body;
   console.log("Sending user", req.session.email);
+  console.log("test")
+  console.log(get_ws());
   add_user(req.session.email);
 });
 
