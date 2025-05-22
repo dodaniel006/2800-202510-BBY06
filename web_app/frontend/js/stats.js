@@ -1,27 +1,25 @@
 Chart.register(window.ChartZoom);
 
-  document.addEventListener('gesturestart', e => e.preventDefault());
-  document.addEventListener('gesturechange', e => e.preventDefault());
-  document.addEventListener('gestureend', e => e.preventDefault());
-
   let sleepChartInstance = null;
 
-function getZoomOptions(min = -Infinity, max = Infinity) {
+function getZoomOptions(min, max) {
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
   return {
     pan: {
       enabled: true,
       mode: 'x',
       limits: {
-        x: { min, max, minRange: 60 * 60 * 1000 }
+        x: { min, max, minRange: 60 * 60 * 1000 } // 1 hour
       }
     },
     zoom: {
       wheel: {
-        enabled: true,
-        modifierKey: 'ctrl'
+        enabled: !isTouchDevice, // ⛔️ disable scroll zoom on touch devices
+        modifierKey: 'ctrl'       // ✅ allow ctrl+scroll on PC
       },
       pinch: {
-        enabled: true
+        enabled: true             // ✅ always allow pinch zoom
       },
       mode: 'x',
       limits: {
@@ -30,7 +28,6 @@ function getZoomOptions(min = -Infinity, max = Infinity) {
     }
   };
 }
-
 
 
 
