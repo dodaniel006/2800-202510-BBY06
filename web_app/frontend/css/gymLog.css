@@ -10,6 +10,7 @@ body {
   max-height: 50px;
 }
 
+
 #dailyContainer {
   height: 62px;
 }
@@ -21,4 +22,15 @@ body {
 #map {
   height: 60vh;
   width: 100%;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 767px) {
+  #daily {
+    margin-top: 16px;
+  }
+
+  #map {
+    margin-bottom: 80px;
+  }
 }
