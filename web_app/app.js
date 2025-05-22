@@ -159,6 +159,7 @@ const defaultSettings = {
   showNav: true,
   showFooter: true,
   mapPage: false,
+  mobileNavVisible: true,
 };
 
 function createSettings(userSettings) {
@@ -213,6 +214,7 @@ app.get("/", (req, res) => {
     title: "Index",
     showNav: false,
     showFooter: false,
+      mobileNavVisible: false,
   });
   res.render("index", settings);
 });
@@ -224,6 +226,8 @@ app.get("/login", (req, res) => {
     pageJS: "/js/login.js",
     showNav: false,
     showFooter: false,
+    mobileNavVisible: false,
+
   });
   res.render("login", settings);
 });
@@ -235,6 +239,8 @@ app.get("/register", (req, res) => {
     pageJS: "/js/register.js",
     showNav: false,
     showFooter: false,
+          mobileNavVisible: false,
+
   });
   res.render("register", settings);
 });

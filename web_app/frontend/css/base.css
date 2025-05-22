@@ -41,7 +41,6 @@
 
 main {
   flex: 1;
-  margin-bottom: 64px;
 
 }
 
@@ -152,14 +151,18 @@ footer {
   color: black;
 }
 
+.mobileNavSpace{
+    margin-bottom: 64px;
 
+}
 
 @media screen and (min-width: 1000px) {
   .mobile-nav {
   display: none;
   }
-  main{
-      margin-bottom: 0px;
+  .mobileNavSpace{
+  margin-bottom: 0px;
+
   }
 }
 

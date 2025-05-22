@@ -13,19 +13,23 @@ canvas {
   box-sizing: border-box;
 }
 
-    #fitnessChart, #heartRateChart, #sleepChart {
-      max-width: 100%;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 1rem;
-      margin-bottom: 20px;
-    }
-    .button {
-      margin-bottom: 40px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: none;
-      background-color: #eee;
-      cursor: pointer;
-    }
+#fitnessChart, #heartRateChart, #sleepChart {
+  max-width: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 1rem;
+  margin-bottom: 20px;
+}
+.button {
+  margin-bottom: 40px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.chart-canvas{
+    height: 300px;
+}

@@ -34,8 +34,9 @@
       showFooter : true; %> <% if (navVisible) { %> <%-
       include('partials/header') %> <% } %>
 
-      <main><%- body %>
       
+    <main class="<%= (typeof locals.showMobileNav === 'undefined' || locals.showMobileNav) ? 'mobileNavSpace' : '' %>">
+        <%- body %>
       </main>
 
       <% const showMobileNav = (typeof mobileNavVisible !== 'undefined') ? mobileNavVisible : true; %>

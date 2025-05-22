@@ -64,34 +64,6 @@ labels.push(new Date(key));
     }]
   };
 }
-
-async function fetchHeartData() {
-  const res = await fetch('/api/db/data/heartRate');
-  if (!res.ok) throw new Error("Failed to fetch heart rate data");
-  const raw = await res.json();
-  const samples = raw.flatMap(entry => entry.data.samples);
-  samples.sort((a, b) => new Date(a.time) - new Date(b.time));
-  const STEP = Math.ceil(samples.length / 300);
-  return samples.filter((_, i) => i % STEP === 0);
-}
-
-function transformHeartRateData(samples) {
-  return {
-    labels: samples.map(s => new Date(s.time).toLocaleTimeString()),
-    datasets: [{
-      label: 'Heart Rate (BPM)',
-      data: samples.map(s => s.beatsPerMinute),
-      fill: false,
-      borderColor: 'rgb(255, 99, 132)',
-      tension: 0.4,
-      cubicInterpolationMode: 'monotone',
-      pointRadius: 0.1,
-      pointHitRadius: 10,
-      pointHoverRadius: 4
-    }]
-  };
-}
-
 async function renderChart() {
   const rawData = await fetchData();
   const chartData = transformData(rawData);
@@ -100,6 +72,7 @@ async function renderChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       interaction: { mode: 'index', intersect: false, axis: 'x' },
       plugins: {
@@ -159,6 +132,36 @@ scales: {
   });
 }
 
+
+    renderChart();
+
+async function fetchHeartData() {
+  const res = await fetch('/api/db/data/heartRate');
+  if (!res.ok) throw new Error("Failed to fetch heart rate data");
+  const raw = await res.json();
+  const samples = raw.flatMap(entry => entry.data.samples);
+  samples.sort((a, b) => new Date(a.time) - new Date(b.time));
+  const STEP = Math.ceil(samples.length / 300);
+  return samples.filter((_, i) => i % STEP === 0);
+}
+
+function transformHeartRateData(samples) {
+  return {
+    labels: samples.map(s => new Date(s.time).toLocaleTimeString()),
+    datasets: [{
+      label: 'Heart Rate (BPM)',
+      data: samples.map(s => s.beatsPerMinute),
+      fill: false,
+      borderColor: 'rgb(255, 99, 132)',
+      tension: 0.4,
+      cubicInterpolationMode: 'monotone',
+      pointRadius: 0.1,
+      pointHitRadius: 10,
+      pointHoverRadius: 4
+    }]
+  };
+}
+
 async function renderHeartRateChart() {
   const samples = await fetchHeartData();
   const chartData = transformHeartRateData(samples);
@@ -167,6 +170,7 @@ async function renderHeartRateChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       interaction: { mode: 'index', intersect: false, axis: 'x' },
       plugins: {
@@ -182,11 +186,8 @@ async function renderHeartRateChart() {
     }
   });
 }
-  
 
-
-
-
+    renderHeartRateChart();
 
 
 async function fetchCaloriesData() {
@@ -237,6 +238,7 @@ async function renderCaloriesChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       interaction: { mode: 'index', intersect: false, axis: 'x' },
       plugins: {
@@ -252,6 +254,9 @@ async function renderCaloriesChart() {
     }
   });
 }
+
+renderCaloriesChart();
+
 
 async function fetchExerciseData() {
   const res = await fetch('/api/db/data/exercise'); // update if endpoint is different
@@ -297,6 +302,7 @@ async function renderExerciseChart() {
     options: {
       indexAxis: 'y',
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       plugins: {
         legend: { display: false },
@@ -328,6 +334,8 @@ async function renderExerciseChart() {
     }
   });
 }
+
+renderExerciseChart();
 
 async function fetchSpeedData() {
   const res = await fetch('/api/db/data/speed');
@@ -401,6 +409,7 @@ async function renderSpeedChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       interaction: {
         mode: 'index',
@@ -453,6 +462,8 @@ async function renderSpeedChart() {
     }
   });
 }
+
+renderSpeedChart();
 
 
 async function fetchWeightData() {
@@ -510,6 +521,7 @@ async function renderWeightChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       plugins: {
         legend: { display: true },
@@ -530,6 +542,9 @@ async function renderWeightChart() {
     }
   });
 }
+
+renderWeightChart();
+
 
 async function fetchDistanceData() {
   const res = await fetch('/api/db/data/distance'); // adjust route as needed
@@ -583,7 +598,6 @@ function transformDistanceData(data) {
   return result;
 }
 
-
 async function renderDistanceChart() {
   const distanceData = await fetchDistanceData();
   const chartData = transformDistanceData(distanceData);
@@ -593,6 +607,7 @@ async function renderDistanceChart() {
     data: chartData,
     options: {
       responsive: true,
+  maintainAspectRatio: false, 
       animation: false,
       plugins: {
         legend: { display: true },
@@ -614,235 +629,5 @@ async function renderDistanceChart() {
   });
 }
 
-
-function timeToFractionOfDay(date) {
-  const h = date.getHours();
-  const m = date.getMinutes();
-  const s = date.getSeconds();
-  return (h * 3600 + m * 60 + s) / 86400; // 86400 = seconds in day
-}
-
-
-
-function getStageColor2(stage) {
-  const map = {
-    1: '#f39c12', // Awake
-    4: '#3498db', // Light
-    5: '#9b59b6', // REM
-    6: '#2ecc71'  // Deep
-  };
-  return map[stage] ?? '#95a5a6';
-}
-
-async function fetchSleepClockData() {
-  const res = await fetch('/api/db/data/sleepsessions');
-  if (!res.ok) throw new Error('Failed to fetch sleep data');
-const sessions = (await res.json())
-  .filter(s => !!s.start)
-  .sort((a, b) => new Date(b.start) - new Date(a.start))
-  .slice(0, 1); // ✅ Keep only the latest session
-const arcSegments = [];
-
-const latestSession = sessions
-  .filter(s => !!s.start)
-  .sort((a, b) => new Date(b.start) - new Date(a.start))[0];
-
-if (!latestSession) return [];
-
-let stages = [];
-
-try {
-  const parsed = typeof latestSession.data.stages === 'string'
-    ? JSON.parse(latestSession.data.stages)
-    : latestSession.data.stages;
-
-  stages = parsed.map(s => typeof s === 'string' ? JSON.parse(s) : s);
-} catch (e) {
-  console.warn('Stage parsing failed:', e);
-  return [];
-}
-
-for (const s of stages) {
-  const start = new Date(s.startTime);
-  const end = new Date(s.endTime);
-  const startFrac = timeToFractionOfDay(start);
-  const endFrac = timeToFractionOfDay(end);
-
-  let duration = endFrac - startFrac;
-  if (duration < 0) duration += 1; // handles sleep across midnight
-
-  arcSegments.push({
-    label: s.stage,
-    value: duration * 100,
-    backgroundColor: getStageColor2(s.stage)
-  });
-}
-
-return arcSegments;
-
-}
-
-async function renderSleepClock() {
-  const data = await fetchSleepClockData();
-
-  new Chart(document.getElementById('sleepClock').getContext('2d'), {
-    type: 'doughnut',
-    data: {
-      labels: data.map(d => d.label),
-      datasets: [{
-        data: data.map(d => d.value),
-        backgroundColor: data.map(d => d.backgroundColor),
-        borderWidth: 1,
-        borderColor: '#fff'
-      }]
-    },
-    options: {
-      cutout: '70%',
-      responsive: true,
-      layout: { padding: 20 },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: function (ctx) {
-              const percent = ctx.raw.toFixed(2);
-              return `Stage ${ctx.label}: ${percent}% of day`;
-            }
-          }
-        },
-        title: {
-          display: true,
-          text: '🛌 Sleep Clock – 24h Radial Timeline'
-        }
-      },
-      rotation: -90,
-      circumference: 360
-    },
-    plugins: [sleepClockCenterLabelPlugin, radialClockLabelsPlugin, sleepClockBackgroundArcPlugin] // ✅ Scoped here only
-  });
-}
-
-
-const sleepClockCenterLabelPlugin = {
-  id: 'centerText',
-  beforeDraw(chart) {
-    const {ctx, width, height} = chart;
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    // Total % of full circle used for sleep
-    const total = chart.data.datasets[0].data.reduce((sum, val) => sum + val, 0);
-    const totalSeconds = (total / 100) * 86400; // convert back to seconds
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-
-    ctx.save();
-    ctx.font = 'bold 16px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#444';
-    ctx.fillText(`Total: ${hours}h ${minutes}m`, centerX, centerY);
-    ctx.restore();
-  }
-};
-
-
-const radialClockLabelsPlugin = {
-  id: 'radialClockLabels',
-  afterDraw(chart) {
-    const {ctx, chartArea: {left, right, top, bottom}, width, height} = chart;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = chart._metasets[0].data[0].outerRadius + 10;
-
-    ctx.save();
-    ctx.fillStyle = '#555';
-    ctx.font = '12px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    const positions = [
-      { text: '0:00', angle: -90 },
-      { text: '6:00', angle: 0 },
-      { text: '12:00', angle: 90 },
-      { text: '18:00', angle: 180 },
-    ];
-
-    positions.forEach(p => {
-      const rad = p.angle * Math.PI / 180;
-      const x = centerX + radius * Math.cos(rad);
-      const y = centerY + radius * Math.sin(rad);
-      ctx.fillText(p.text, x, y);
-    });
-
-    ctx.restore();
-  }
-};
-
-const sleepClockBackgroundArcPlugin = {
-  id: 'sleepArcBackground',
-  beforeDatasetsDraw(chart, args, options) {
-    const {ctx, chartArea: {width, height}} = chart;
-    const dataset = chart.data.datasets[0];
-    if (!dataset) return;
-
-    const meta = chart.getDatasetMeta(0);
-    if (!meta || !meta.data.length) return;
-
-    // Find earliest start and latest end angles
-    let startAngle = Infinity, endAngle = -Infinity;
-    const total = dataset.data.reduce((s, v) => s + v, 0);
-
-    let angleSoFar = chart.options.rotation * Math.PI / 180;
-
-    for (let i = 0; i < dataset.data.length; i++) {
-      const value = dataset.data[i];
-      const angle = (value / total) * 2 * Math.PI;
-      const arcStart = angleSoFar;
-      const arcEnd = angleSoFar + angle;
-
-      if (arcStart < startAngle) startAngle = arcStart;
-      if (arcEnd > endAngle) endAngle = arcEnd;
-
-      angleSoFar += angle;
-    }
-
-    const outerRadius = meta.data[0].outerRadius;
-    const innerRadius = meta.data[0].innerRadius;
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(chart.width / 2, chart.height / 2, outerRadius, startAngle, endAngle);
-    ctx.arc(chart.width / 2, chart.height / 2, innerRadius, endAngle, startAngle, true);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(0,0,0,0.05)';
-    ctx.fill();
-    ctx.restore();
-  }
-};
-
-
-renderSleepClock();
-
-
-
 renderDistanceChart();
-
-
-renderWeightChart();
-
-
-
-renderSpeedChart();
-
-
-renderExerciseChart();
-
-renderCaloriesChart();
-
-
-    renderChart();
-
-
-    renderHeartRateChart();
 
