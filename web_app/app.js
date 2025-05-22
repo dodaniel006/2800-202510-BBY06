@@ -245,6 +245,22 @@ app.get("/register", (req, res) => {
   res.render("register", settings);
 });
 
+app.get("/forgor", (req, res) => {
+
+  let settings = createSettings({
+    title: "Forgot Password",
+    pageCSS: "/css/forgor.css",
+    pageJS: "/js/forgor.js",
+    showNav: false,
+    showFooter: false,
+    mobileNavVisible: false,
+  });
+  
+  res.render("forgor", settings);
+
+});
+
+
 app.get("/diary", async (req, res) => {
   // Connect to MongoDB and fetch food list
   await connectToMongo();
