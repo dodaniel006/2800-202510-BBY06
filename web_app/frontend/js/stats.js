@@ -8,12 +8,17 @@ function getZoomOptions(min, max) {
       enabled: true,
       mode: 'x',
       limits: {
-        x: { min, max, minRange: 60 * 60 * 1000 } // at least 1 hour range
+        x: { min, max, minRange: 60 * 60 * 1000 }
       }
     },
     zoom: {
-      wheel: { enabled: true, modifierKey: 'ctrl' },
-      pinch: { enabled: true },
+      wheel: {
+        enabled: true,
+        modifierKey: 'ctrl'
+      },
+      pinch: {
+        enabled: true
+      },
       mode: 'x',
       limits: {
         x: { min, max, minRange: 60 * 60 * 1000 }

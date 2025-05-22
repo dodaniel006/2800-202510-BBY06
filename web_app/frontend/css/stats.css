@@ -3,6 +3,8 @@ canvas {
   height: auto !important;
   display: block;
   touch-action: pan-y;
+    touch-action: none; /* ⬅️ Required for pinch to work */
+
 }
 
 .chart-container {
