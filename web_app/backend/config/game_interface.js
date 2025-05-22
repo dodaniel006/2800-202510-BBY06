@@ -93,7 +93,7 @@ function add_user(user) {
 
 // Unused
 function get_ws() {
-    return "loading websocket server", socket.address();
+    return socket.address();
 }
 
 export { get_ws, add_user, send_data };
