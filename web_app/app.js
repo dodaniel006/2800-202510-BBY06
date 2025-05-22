@@ -186,6 +186,8 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
           layout: "layouts/default",
           pageCSS: `/css/${name}.css`,
           pageJS: `/js/${name}.js`,
+         mobileNavVisible: true,
+
         });
         res.render(`autoRoute/${name}`, settings);
       });
@@ -204,6 +206,7 @@ app.get('/view-logs', (req, res) => {
     showNav: false,
     showFooter: false,
     mapPage: false,
+    mobileNavVisible: true,
   });
 });
 
@@ -214,7 +217,7 @@ app.get("/", (req, res) => {
     title: "Index",
     showNav: false,
     showFooter: false,
-      mobileNavVisible: false,
+    mobileNavVisible: false,
   });
   res.render("index", settings);
 });
@@ -268,6 +271,7 @@ app.get("/diary", async (req, res) => {
     pageCSS: "/css/diary.css",
     pageJS: "/js/diary.js",
     foodList: foodList,
+    mobileNavVisible: true,
   });
   res.render("diary", settings);
 });
@@ -278,6 +282,7 @@ app.get("/gymLog", (req, res) => {
     pageCSS: "/css/gymLog.css",
     pageJS: "/js/gymLog.js",
     mapPage: true,
+      mobileNavVisible: true,
   });
   res.render("gymLog", settings);
 });

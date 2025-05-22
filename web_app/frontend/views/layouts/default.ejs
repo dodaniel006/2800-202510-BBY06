@@ -34,16 +34,18 @@
       showFooter : true; %> <% if (navVisible) { %> <%-
       include('partials/header') %> <% } %>
 
-      
-<main class="<%= (typeof locals.showMobileNav === 'undefined' || locals.showMobileNav) ? 'mobileNavSpace' : '' %>">
-  <%- body %>
-</main>
 
+
+      
+      <main class="<%= mobileNavVisible ? 'mobileNavSpace' : '' %>">
+       <%- body %>
+      </main>
+
+      
       <% const showMobileNav = (typeof mobileNavVisible !== 'undefined') ? mobileNavVisible : true; %>
       <% if (showMobileNav) { %>
         <%- include('partials/mobile-nav') %>
       <% } %>
-
 
       <% if (footerVisible) { %> <%- include('partials/footer') %> <% } %>
     </div>
