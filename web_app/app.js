@@ -21,7 +21,8 @@ import authRouter from "./backend/routes/authentication.js"; // Import authRoute
 import magicAI from "./backend/routes/magicAI.js"; // Import magicAI route
 
 // Import game interface
-// import gameInterface from './backend/config/game_interface.js'; 
+import {get_ws} from './backend/config/game_interface.js'; 
+console.log(get_ws());
 
 // Model imports
 import { connectToMongo } from "./backend/config/db.js";
