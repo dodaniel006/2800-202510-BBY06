@@ -24,6 +24,15 @@ router.post("/", async (req, res) => {
 
     const user = await User.findOne({ email });
 
+    if (user) {
+    console.log("User found:", user);
+    
+
+
+
+    } else {
+      console.log("User not found:", email);
+    };
     // For security reasons (to prevent email enumeration), always return a generic success message.
     // The actual email sending logic with a unique token would go here if the user exists.
     // For now, we just simulate the first part of the process.
@@ -36,7 +45,7 @@ router.post("/", async (req, res) => {
     //   console.log(`Password reset requested for non-existing user: ${email}`);
     // }
 
-    res.status(200).json({ message: "If an account with that email exists, a password reset link has been sent." });
+    res.status(200).json({ message: `If an account with the email "${email}" exists, a password reset link has been sent.` });
 
   } catch (error) {
     console.error("Error in /forgor route:", error);
