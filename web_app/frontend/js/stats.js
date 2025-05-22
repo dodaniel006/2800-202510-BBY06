@@ -1,8 +1,12 @@
 Chart.register(window.ChartZoom);
 
+  document.addEventListener('gesturestart', e => e.preventDefault());
+  document.addEventListener('gesturechange', e => e.preventDefault());
+  document.addEventListener('gestureend', e => e.preventDefault());
+
   let sleepChartInstance = null;
 
-function getZoomOptions(min, max) {
+function getZoomOptions(min = -Infinity, max = Infinity) {
   return {
     pan: {
       enabled: true,
@@ -26,6 +30,7 @@ function getZoomOptions(min, max) {
     }
   };
 }
+
 
 
 
