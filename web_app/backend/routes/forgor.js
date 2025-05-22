@@ -2,6 +2,12 @@ import { Router } from "express";
 import User from "../config/db_schemas/User.js"; // Import User model
 import { connectToMongo } from "../config/db.js"; // Import connectToMongo
 
+import crypto from "crypto"; 
+import User from "../config/db_schemas/User.js"; // Import User model
+import PasswordResetToken from "../config/db_schemas/PasswordResetToken.js"; // Import PasswordResetToken model
+import { connectToMongo } from "../config/db.js"; // Import connectToMongo
+// TODO: import mailgun
+
 const router = Router();
 
 // Basic email validation regex
@@ -27,6 +33,20 @@ router.post("/", async (req, res) => {
     if (user) {
     console.log("User found:", user);
     
+    // 1. Generate a cryptographically secure random token (this will be sent to the user)
+      const rawToken = crypto.randomBytes(32).toString('hex');
+
+      // 2. Create a new PasswordResetToken document
+      // The 'token' field will be hashed by the pre('save') hook in PasswordResetToken.js
+      const newPasswordResetToken = new PasswordResetToken({
+        userId: user._id,
+        token: rawToken, // Store the raw token here; it gets hashed before saving
+      });
+
+      // 3. Save the new token document
+      await newPasswordResetToken.save();
+
+      // TODO: Mail stuff
 
 
 
