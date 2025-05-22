@@ -1,4 +1,6 @@
 // Send this user to the mail room to be added to the end of a list
+import "../../config/game_interface.js";
+
 const response1 = fetch(`/api/game/send`, {
     method: 'POST',
     headers: {

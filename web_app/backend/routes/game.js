@@ -1,4 +1,4 @@
-import { get_ws, add_user, send_data } from "../config/game_interface.js";
+import { get_ws, add_user, send_data } from "../../app.js";
 import { Router } from 'express';
 
 const router = Router();
