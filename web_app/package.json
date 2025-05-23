@@ -17,12 +17,14 @@
   "scripts": {
     "start": "node app.js",
     "server": "nodemon app.js",
-    "client": "browser-sync start --proxy localhost:8100 --files \"frontend/views/**/*.ejs, frontend/js/**/*.js, frontend/css/**/*.css\" --port 3000",
+    "client": "browser-sync start --proxy localhost:8101 --files \"frontend/views/**/*.ejs, frontend/js/**/*.js, frontend/css/**/*.css\" --port 3000",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
+    "deno": "^2.2.13",
+    "dgram": "^1.0.1",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
@@ -34,7 +36,8 @@
     "nodemon": "^3.1.10",
     "ol": "^10.5.0",
     "ollama": "^0.5.15",
-    "parse-address": "^1.1.2"
+    "parse-address": "^1.1.2",
+    "ws": "^8.18.2"
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",

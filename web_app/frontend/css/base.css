@@ -1,3 +1,4 @@
+
 :root {
 
   --color-black: #000000;
@@ -5,6 +6,8 @@
   --color-gray-dark: #1a1f1a;   
   --color-gray-light: #e4f2e6;  
 
+  --gooby-red: #a82837;
+  --gooby-dark-red: #7c2149;
 
   --wallet-green: #6ef07f;            
   --wallet-green-dark: #3ca856;       
@@ -38,6 +41,7 @@
 
 main {
   flex: 1;
+
 }
 
 footer {
@@ -96,6 +100,79 @@ nav {
 footer {
   text-align: center;
   padding: 0.5rem 1rem;
+}
+
+
+.mobile-nav {
+  background: #2f6644;
+  position: fixed;
+  bottom: 0;
+  height: 65px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+    text-decoration: none;
+}
+
+.bloc-icon {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--text-primary);
+  background: transparent !important;
+  text-decoration: none;
+  font-size: 22pt;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* active = draw a circle behind the icon */
+.bloc-icon.active-link::before {
+  content: "";
+  position: absolute;
+  width: 62px;
+  height: 52px;
+  border-radius: 20%;
+  background-color: var(--color-white);
+  z-index: 0;
+  
+}
+
+/* elevate icon above background */
+.bloc-icon i {
+  z-index: 1;
+
+}
+
+/* active = icon turns black */
+.bloc-icon.active-link i {
+  color: black;
+}
+
+.mobileNavSpace{
+    padding-bottom: 64px;
+
+}
+
+@media screen and (min-width: 1000px) {
+  .mobile-nav {
+  display: none;
+  }
+  .mobileNavSpace{
+  margin-bottom: 0px;
+
+  }
+}
+
+@media screen and (max-width: 999px) {
+  header {
+  display: none;
+  }
+  footer{
+    display: none;
+  }
 }
 
 /* === TEXT COLORS === */

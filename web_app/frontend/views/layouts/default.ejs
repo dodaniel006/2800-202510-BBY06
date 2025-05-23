@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title><%= title %></title>
     <link rel="icon" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/base.css" />
@@ -34,7 +34,18 @@
       showFooter : true; %> <% if (navVisible) { %> <%-
       include('partials/header') %> <% } %>
 
-      <main><%- body %></main>
+
+
+      
+      <main class="<%= mobileNavVisible ? 'mobileNavSpace' : '' %>">
+       <%- body %>
+      </main>
+
+      
+      <% const showMobileNav = (typeof mobileNavVisible !== 'undefined') ? mobileNavVisible : true; %>
+      <% if (showMobileNav) { %>
+        <%- include('partials/mobile-nav') %>
+      <% } %>
 
       <% if (footerVisible) { %> <%- include('partials/footer') %> <% } %>
     </div>

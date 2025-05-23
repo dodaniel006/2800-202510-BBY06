@@ -41,6 +41,12 @@ const userSchema = new mongoose.Schema({
     taskList: {
         type: Array
     },
+    ws: {
+        type: Number
+    },
+    roadScore: {
+        type: Number
+    },
     phoneNumber: {
         type: String,
         trim: true

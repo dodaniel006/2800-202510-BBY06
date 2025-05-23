@@ -90,6 +90,8 @@ authRouter.post("/register", async (req, res) => {
       email,
       password, // Password will be hashed by the pre-save hook in User.js schema
       taskList: [],
+      roadScore: 0, 
+      ws: 0,
     });
 
     await newUser.save();

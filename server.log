@@ -1,0 +1,1474 @@
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+Server Send Data
+connected websocket 0
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Sending user wa@aw.com
+added user  wa@aw.com,wa@aw.com
+Server Send Data
+connected websocket -1
+Server Send Data
+added ws to user db -1
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 1
+Server Send Data
+added ws to user db 1
+received: %s {
+  "Score": 142
+}
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 2
+Server Send Data
+added ws to user db 2
+received: %s {
+  "Score": 142
+}
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 3
+Server Send Data
+added ws to user db 3
+received: %s {
+  "Score": 142
+}
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+updating roadScore
+updated roadScore in db to 142
+Sending data [object Object] to 
+Server Send Data
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+updating roadScore
+updated roadScore in db to 142
+Sending data [object Object] to wa@aw.com
+Server Send Data
+received: %s {
+  "Score": 200
+}
+updating roadScore
+updated roadScore in db to 200
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 1
+Server Send Data
+added ws to user db 1
+received: %s {
+  "Score": 142
+}
+updating roadScore
+updated roadScore in db to 142
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 142,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0
+}
+updated roadScore in db to 142
+Sending data [object Object] to wa@aw.com
+Server Send Data
+received: %s {
+  "Score": 200
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 142,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0
+}
+updated roadScore in db to 200
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 142,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0
+}
+updated roadScore in db to 142
+Sending data [object Object] to wa@aw.com
+Server Send Data
+received: %s {
+  "Score": 200
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 142,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0
+}
+updated roadScore in db to 200
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 1
+Server Send Data
+added ws to user db 1
+received: %s {
+  "Score": 142
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 142,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 1
+}
+updated roadScore in db to 142
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Sending user wa@aw.com
+added user  wa@aw.com,wa@aw.com
+Server Send Data
+connected websocket 0
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 0
+Server Send Data
+added ws to user db 0
+received: %s {
+  "Score": 142
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 142,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0
+}
+updated roadScore in db to 142
+Sending data [object Object] to wa@aw.com
+Server Send Data
+received: %s {
+  "Score": 200
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 142,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0
+}
+updated roadScore in db to 200
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 1
+Server Send Data
+added ws to user db 1
+received: %s {
+  "Score": 200
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 200,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 1
+}
+updated roadScore in db to 200
+Sending data [object Object] to wa@aw.com
+Server Send Data
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 2
+Server Send Data
+added ws to user db 2
+received: %s {
+  "Score": 200
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 200,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 2,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 200
+Sending data [object Object] to wa@aw.com
+Server Send Data
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 200,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 2,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 3
+Server Send Data
+added ws to user db 3
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 3,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 4
+Server Send Data
+added ws to user db 4
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 4,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 5
+Server Send Data
+added ws to user db 5
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 5,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 6
+Server Send Data
+added ws to user db 6
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 6,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 7
+Server Send Data
+added ws to user db 7
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 7,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 8
+Server Send Data
+added ws to user db 8
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 8,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 9
+Server Send Data
+added ws to user db 9
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 9,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 10
+Server Send Data
+added ws to user db 10
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 10,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 11
+Server Send Data
+added ws to user db 11
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 11,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 12
+Server Send Data
+added ws to user db 12
+received: %s {
+  "Score": 258
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 12,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 258
+Sending data [object Object] to wa@aw.com
+Server Send Data
+received: %s {
+  "Score": 316
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 258,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 12,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 316
+Sending data [object Object] to wa@aw.com
+Server Send Data
+Sending user wa@aw.com
+added user  wa@aw.com
+Server Send Data
+connected websocket 13
+Server Send Data
+added ws to user db 13
+received: %s {
+  "Score": 316
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 316,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 13,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 316
+Sending data [object Object] to wa@aw.com
+Server Send Data
+received: %s {
+  "Score": 338
+}
+updating roadScore
+ws user {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 316,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 13,
+  isHealthAppLinked: true
+}
+updated roadScore in db to 338
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Sending data  to wa@aw.com
+Sending user wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending data  to wa@aw.com
+Sending data [object Object] to wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Sending data  to wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Sending data  to wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+something fucked up
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+something fucked up
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending data  to wa@aw.com
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending user wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending data  to wa@aw.com
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending data [object Object] to wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send') 
+Sending user wa@aw.com
+Sending user wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send') 
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending data [object Object] to wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')   {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 558,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0,
+  isHealthAppLinked: true
+}
+Sending user wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+682664e425a5208683203f76
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+682664e425a5208683203f76
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending data [object Object] to wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')   {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 580,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 1,
+  isHealthAppLinked: true
+}
+Sending user wa@aw.com
+Sending user wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')  [object Object] {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [
+    new ObjectId('68255be3a1ba018c704fd75e'),
+    new ObjectId('682562d08912c64786fa3094'),
+    new ObjectId('682562fa8912c64786fa3097'),
+    new ObjectId('682664e425a5208683203f76')
+  ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 580,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 1,
+  isHealthAppLinked: true
+}
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+682664e425a5208683203f76
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+6826cc64f5f3d8ca0b789c0a
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+6826cd87f5f3d8ca0b789c2a
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending data [object Object] to wa@aw.com
+6826cdd4f5f3d8ca0b789c43
+something fucked up TypeError: Cannot read properties of undefined (reading 'ws')  [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] 
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')  [object Object] {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 751,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 7,
+  isHealthAppLinked: true
+}
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')   {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 751,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0,
+  isHealthAppLinked: true
+}
+Sending user wa@aw.com
+Sending user wa@aw.com
+6826d3c4e43997be77d5a538
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+6826d9c4e43997be77d5a558
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+6826dd1ce43997be77d5a587
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+6826e224e43997be77d5a5a5
+Sending data [object Object] to wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+Example app listening on port 8101
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user goo@bert.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')  [object Object],[object Object],[object Object] {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [ new ObjectId('6826fcab8b85eb14ae7239c6') ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 441,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 5,
+  isHealthAppLinked: true
+}
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')   {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [ new ObjectId('6826fcab8b85eb14ae7239c6') ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 441,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 2,
+  isHealthAppLinked: true
+}
+6826fcab8b85eb14ae7239c6
+Sending data [object Object] to wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')   {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [ new ObjectId('6826fcab8b85eb14ae7239c6') ],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 441,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 2,
+  isHealthAppLinked: true
+}
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')  [object Object] {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 441,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 2,
+  isHealthAppLinked: true
+}
+something fucked up TypeError: Cannot read properties of undefined (reading 'send')   {
+  _id: new ObjectId('682510b29d5eb1d406cdc140'),
+  email: 'wa@aw.com',
+  username: 'wawaw',
+  password: '$2b$10$np/CBepDD35T7qrCNqw.k.5p5XImxho1PsePBt8bPW5mHQt9iBGZC',
+  taskList: [],
+  createdAt: 2025-05-14T21:52:50.210Z,
+  updatedAt: 2025-05-14T21:52:50.210Z,
+  __v: 0,
+  roadScore: 441,
+  lastSyncedAt: 2025-05-15T08:47:45.814Z,
+  ws: 0,
+  isHealthAppLinked: true
+}
+Loaded: about.ejs
+Loaded: account.ejs
+Loaded: createTask.ejs
+Loaded: healthConnectInstructions.ejs
+Loaded: healthConnectTest.ejs
+Loaded: home.ejs
+Loaded: settings.ejs
+Loaded: stats.ejs
+WebSocket server is running... [object Object]
+Example app listening on port 8101
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+Sending user wa@aw.com
+6826fd9fdbd4f09859523d12
+Sending data [object Object] to wa@aw.com
+Sending user wa@aw.com

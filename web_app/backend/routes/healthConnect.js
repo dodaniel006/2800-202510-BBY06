@@ -89,7 +89,7 @@ export async function fetchAllHealthData({ userId, queries = {}, lastSyncedAt })
 
   for (const method of methods) {
     try {
-      const { data, status } = await fetchHealthData({ method, userId, queries, lastSyncedAt });
+      const { data, status } = await fetchHealthData({ method, userId, queries, undefined });
       results[method] = { status, data };
     } catch (error) {
       console.error(`Error fetching ${method}:`, error);

@@ -7,6 +7,7 @@ import expressLayouts from "express-ejs-layouts";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+
 //route imports
 import healthConnect from "./backend/routes/healthConnect.js";
 import db from "./backend/routes/db.js";
@@ -19,16 +20,112 @@ import gym from "./backend/routes/gym.js";
 import authRouter from "./backend/routes/authentication.js"; // Import authRouter
 import magicAI from "./backend/routes/magicAI.js"; // Import magicAI route
 
-// Model imports
+// Import game interface
+import { WebSocketServer } from "ws";
+const socket = new WebSocketServer({ port: 8080 });
+
+// Model importsn
 import { connectToMongo } from "./backend/config/db.js";
 import Food from "./backend/config/db_schemas/Food.js";
 import Task from "./backend/config/db_schemas/Task.js";
+import User from "./backend/config/db_schemas/User.js";
+
+var userList = [];
+var wsList = [];
+var allWS = [];
+var currentIndex = 0;
+
+socket.on('error', (err) => {
+  console.error(`Server error:\n${err.stack}`);
+  socket.close();
+});
+
+socket.on('connection', async (ws) => {
+  ws.on('message', async (data) => {
+    console.log('received: %s', data);
+    if (JSON.parse(data).hasOwnProperty("Score")) { // Score updating
+      // console.log('updating roadScore')
+      let wsIndex = 0;
+      for (let i = 0; i < allWS.length; i++) {
+        if (allWS[i] == ws) {
+          wsIndex = i;
+        }
+      }
+
+      const array = await User.find({
+        ws: wsIndex
+      })    
+      // console.log("ws user", array)
+
+      await User.updateOne(
+          { ws: wsIndex },
+          { $set: { roadScore: JSON.parse(data).Score } }
+      );
+
+      // console.log("updated roadScore in db to", JSON.parse(data).Score);
+    }
+  });
+
+  wsList.push(ws);
+  var wsIndex = currentIndex;
+  currentIndex++;
+
+  allWS.push(wsList[0]);
+  send_data({ Connect: "Hello" }, userList[0]);
+  // console.log("connected websocket", wsIndex);
+
+  await User.updateOne(
+      { email: userList[0] },
+      { $set: { ws: wsIndex } }
+  );
+
+  const array = await User.find({
+    email: userList[0]
+  })
+  send_data({"roadScore": array[0].roadScore}, userList[0]);
+  wsList.pop();
+  userList.pop();
+  // console.log("added ws to user db", wsIndex);
+  
+});
+
+socket.on('listening', () => {
+  console.log('WebSocket server is running...', socket.address());
+});
+
+async function send_data(data, user) {
+  // console.log('Server Send Data');
+  const array = await User.find({
+    email: user
+  })
+  try {
+    var ws = allWS[array[0].ws];
+
+    // Respond to the client
+    ws.send(JSON.stringify(data));
+  } catch (err) {
+    console.log('something fucked up', err, ws, allWS, array);
+    allWS = [];
+    currentIndex = 0;
+  }
+
+}
+
+function add_user(user) {
+  userList.push(user);
+  // console.log("added user", wsList, userList);
+}
+
+// Unused
+function get_ws() {
+    return socket;
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 8100;
+const port = process.env.PORT || 8101;
 
 const TTL = 60 * 60;
 
@@ -120,6 +217,17 @@ if (!["dev", "server"].includes(lifecycle)) {
   );
 }
 
+const logFile = path.join(__dirname, 'server.log');
+const logStream = fs.createWriteStream(logFile, { flags: 'a' });
+
+const origConsoleLog = console.log;
+console.log = (...args) => {
+  const msg = args.join(' ') + '\n';
+  logStream.write(msg);
+  origConsoleLog(...args);
+};
+
+
 async function startServer() {
   try {
     await connectToMongo(); // Connect to MongoDB
@@ -144,6 +252,7 @@ const defaultSettings = {
   showNav: true,
   showFooter: true,
   mapPage: false,
+  mobileNavVisible: true,
 };
 
 function createSettings(userSettings) {
@@ -170,6 +279,8 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
           layout: "layouts/default",
           pageCSS: `/css/${name}.css`,
           pageJS: `/js/${name}.js`,
+         mobileNavVisible: true,
+
         });
         res.render(`autoRoute/${name}`, settings);
       });
@@ -178,12 +289,28 @@ fs.readdirSync(autoRouteDir).forEach((file) => {
   }
 });
 
+// Game - Server interface
+
+app.get('/view-logs', (req, res) => {
+  res.render("viewLogs", {
+    title: "Server Logs",
+    pageCSS: false,
+    pageJS: "/js/viewLogs.js",
+    showNav: false,
+    showFooter: false,
+    mapPage: false,
+    mobileNavVisible: true,
+  });
+});
+
+
 //Manual param routes
 app.get("/", (req, res) => {
   let settings = createSettings({
     title: "Index",
     showNav: false,
     showFooter: false,
+    mobileNavVisible: false,
   });
   res.render("index", settings);
 });
@@ -195,6 +322,8 @@ app.get("/login", (req, res) => {
     pageJS: "/js/login.js",
     showNav: false,
     showFooter: false,
+    mobileNavVisible: false,
+
   });
   res.render("login", settings);
 });
@@ -206,6 +335,8 @@ app.get("/register", (req, res) => {
     pageJS: "/js/register.js",
     showNav: false,
     showFooter: false,
+    mobileNavVisible: false,
+
   });
   res.render("register", settings);
 });
@@ -233,6 +364,7 @@ app.get("/diary", async (req, res) => {
     pageCSS: "/css/diary.css",
     pageJS: "/js/diary.js",
     foodList: foodList,
+    mobileNavVisible: true,
   });
   res.render("diary", settings);
 });
@@ -243,9 +375,18 @@ app.get("/gymLog", (req, res) => {
     pageCSS: "/css/gymLog.css",
     pageJS: "/js/gymLog.js",
     mapPage: true,
+      mobileNavVisible: true,
   });
   res.render("gymLog", settings);
 });
+
+app.get('/logs', (req, res) => {
+  fs.readFile(logFile, 'utf8', (err, data) => {
+    if (err) return res.status(500).send('Could not read log file.');
+    res.type('text/plain').send(data);
+  });
+});
+
 
 app.get("/*dummy404", (req, res) => {
   let body = `<div class=\"h-100 d-flex flex-column justify-content-center text-center\"><h1 class=\"mb-0\">Error: 404 Page not found</h1><br>
@@ -256,3 +397,5 @@ app.get("/*dummy404", (req, res) => {
   });
   res.render("./layouts/default", settings);
 });
+
+export { get_ws, add_user, send_data };
