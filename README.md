@@ -256,7 +256,9 @@
 ## Acknowledgments
 
 - Health Connect API from [HealthConnect](https://github.com/shuchirj/HCGateway).
-- Select icons and elements sourced from [Bootstrap](https://getbootstrap.com/) and [Bootstrap Icons](https://icons.getbootstrap.com/). Branded icons made by our very own Chell Jacques.
+- Select icons and elements sourced from [Bootstrap](https://getbootstrap.com/) and [Bootstrap Icons](https://icons.getbootstrap.com/).
+- Map API from [OpenLayers](https://github.com/openlayers/openlayers).
+- Geolocation API from [Nominatim](https://github.com/osm-search/Nominatim);
 
 
 ## Limitations and Future Work
