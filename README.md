@@ -265,7 +265,7 @@
 
 ### Limitations
 
-- The game websocket needs to be manually configured for every different deployed location
+- The game websocket needs to be manually configured for every different deployed location, it is currently listening for the tailscale test site
 
 ### Future Work
 
