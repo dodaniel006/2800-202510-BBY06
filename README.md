@@ -16,14 +16,14 @@
 - Task creation (options for either user generated and AI assisted)
 - In-app game to encourage continued healthy habits through point generation
 - Food diary and calorie tracker
-- AI assited Recipe generator
+- AI assisted Recipe generator
 - Connect to Health Connect API to share fitness data and generate various health charts
-- User can setup a gym 'homebase' and checkin to gain more points
+- User can setup a gym 'homebase' and check in to gain more points
 - Profiles
 
 ## Technologies Used
 
-- **Frontend**: HTML, Bootstrap, CSS, JavaScript
+- **Frontend**: HTML, Bootstrap, CSS, JavaScript, GMS2
 - **Backend**: NodeJS, ExpressJS, EJS, Mongoose, WebSockets
 - **Database**: MongoDB
 - **API**: Health Connect API, DeepSeek API
@@ -263,7 +263,7 @@
 
 ### Limitations
 
-- 
+- The game websocket needs to be manually configured for every different deployed location
 
 ### Future Work
 
