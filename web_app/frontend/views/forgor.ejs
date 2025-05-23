@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <section class="vh-100 bb-bg-surface-tr">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-xl-10">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-5 d-none d-md-block" style="margin: -1pt;">
+                <img src="images/login_banner.jpg"
+                  class="img-fluid w-100 h-100 object-fit-cover rounded-start"
+                  alt="login form" style="border-radius: 1rem 0 0 1rem;" />
+              </div>
+              <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                <div class="card-body p-4 p-lg-5 text-black">
+                  <form id="forgor-form">
+                    <div class="d-flex align-items-center m-0">
+                      <span class="h1 fw-bold mb-0"><img class="logo" src="/images/logo.png"></span>
+                    </div>
+                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Forgot your password?</h5>
+                    <p class="mb-3">Enter your email address and we'll send you a link to reset your password.</p>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <label class="form-label" for="forgorEmail">Email address</label>
+                      <input type="email" id="forgorEmail" name="email" class="form-control form-control-lg" required />
+                    </div>
+                    <div class="pt-1 mb-4">
+                      <button id="sendResetLink" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-lg btn-block"
+                        type="submit">Send Reset Link</button>
+                    </div>
+                    <div id="forgorErrorMessage" class="alert alert-danger d-none" role="alert">
+                      <!-- Error messages will be displayed here -->
+                    </div>
+                    <p class="mb-2 pb-lg-2 bb-text-surface">Remembered your password? <a href="/login"
+                        class="bb-text-surface">Login here</a></p>
+                    <p class="m-0 pb-lg-2 bb-text-surface">Don't have an account? <a href="/register"
+                        class="bb-text-surface">Register here</a></p>
+                    <a href="#!" class="small text-muted">Terms of use.</a>
+                    <a href="#!" class="small text-muted">Privacy policy</a>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

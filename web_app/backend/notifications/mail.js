@@ -47,7 +47,9 @@ async function sendEmail(recipientEmail, recipientName, subject, contents) {
   }
 
 
-}export default sendEmail;
+}
+
+export default sendEmail;
 
 
 async function sendBareEmail(email, subject, text, html) {
