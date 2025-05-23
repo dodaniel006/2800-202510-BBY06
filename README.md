@@ -34,7 +34,8 @@
 2. cd into `web_app` and run `npm i` to install the required packages
 3. get the required env strings from a trusted dev
 4. run the server with `npm run server` and the server should start listening on localhost:8101
-       SEE LIMITATIONS FOR MORE INFORMATION
+
+- SEE LIMITATIONS FOR MORE INFORMATION
 
 ## Project Structure
 
@@ -267,7 +268,7 @@
 ### Limitations
 
 - The game websocket needs to be manually configured for every different deployed location, it is currently listening for the tailscale test site
-      To use the tailscale test site make a [Tailscale](https://tailscale.com/download) account, download the app, use the [Invite Link](https://login.tailscale.com/admin/invite/r3C4WScg45PRV8rtjvpM11), and then connect to it in your browser under 100.78.233.113:8101
+- To use the tailscale test site make a [Tailscale](https://tailscale.com/download) account, download the app, use the [Invite Link](https://login.tailscale.com/admin/invite/r3C4WScg45PRV8rtjvpM11), and then connect to it in your browser under 100.78.233.113:8101
 
 ### Future Work
 
