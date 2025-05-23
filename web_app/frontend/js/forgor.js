@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const forgorEmailInput = document.getElementById('forgorEmail');
   const forgorErrorMessageDiv = document.getElementById('forgorErrorMessage');
   const sendResetLinkButton = document.getElementById('sendResetLink');
-
+ 
   if (forgorForm) {
     forgorForm.addEventListener('submit', async (event) => {
       event.preventDefault(); // Prevent default form submission
