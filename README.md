@@ -28,6 +28,13 @@
 - **Database**: MongoDB
 - **API**: Health Connect API, DeepSeek API
 
+## Usage
+
+1. git clone the repo
+2. cd into `web_app` and run `npm i` to install the required packages
+3. get the required env strings from a trusted dev
+4. run the server with `npm run server` and the server should start listening on localhost:8101
+
 ## Project Structure
 
 ### Companion App
@@ -251,23 +258,16 @@
 - Health Connect API from [HealthConnect](https://github.com/shuchirj/HCGateway).
 - Select icons and elements sourced from [Bootstrap](https://getbootstrap.com/) and [Bootstrap Icons](https://icons.getbootstrap.com/). Branded icons made by our very own Chell Jacques.
 
----
 
 ## Limitations and Future Work
 
 ### Limitations
 
-- Currently, the app doesn't have many validation for incorrect usage.
 - 
 
 ### Future Work
 
-Example:
-
-- Add event validation.
 - 
-
----
 
 ## License
 
