@@ -7,6 +7,7 @@
 
 import { Router } from "express";
 import User from "../config/db_schemas/User.js";
+import PasswordResetToken from "../config/db_schemas/PasswordResetToken.js";
 import "dotenv/config"; // Load environment variables from .env file
 
 const authRouter = Router();
@@ -155,6 +156,71 @@ authRouter.post("/login", async (req, res) => {
   } catch (error) {
     console.error("Server login error:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Route to handle password reset
+authRouter.post("/reset-password", async (req, res) => {
+  const { tokenId, token, newPassword } = req.body;
+
+  if (!tokenId || !token || !newPassword) {
+    return res.status(400).json({ message: "Missing required fields (tokenId, token, newPassword)." });
+  }
+
+  if (newPassword.length < 8) { // Consistent with client-side validation
+    return res.status(400).json({ message: "Password must be at least 8 characters long." });
+  }
+
+  try {
+    // 1. Find the token document by its ID
+    const passwordResetTokenDoc = await PasswordResetToken.findById(tokenId);
+
+    if (!passwordResetTokenDoc) {
+      return res.status(400).json({ message: "Invalid or expired password reset link. Please request a new one." });
+    }
+
+    // 2. Verify the raw token against the hashed token in the database
+    // The 'verifyToken' method needs to be implemented in the PasswordResetToken schema
+    const isValidToken = await passwordResetTokenDoc.verifyToken(token); 
+
+    if (!isValidToken) {
+      return res.status(400).json({ message: "Invalid or expired password reset token. Please request a new one." });
+    }
+
+    // 3. Check if the token has expired (based on its createdAt field + expiry time)
+    // PasswordResetToken schema has an 'expiresAt' virtual or a pre-save hook to set it.
+    // Or, we can check it here directly if 'expiresAt' is a field.
+    // For this example, let's assume PasswordResetToken has an 'expiresAt' field.
+    if (passwordResetTokenDoc.expiresAt < new Date()) {
+      await PasswordResetToken.deleteOne({ _id: tokenId }); // Clean up expired token
+      return res.status(400).json({ message: "Password reset link has expired. Please request a new one." });
+    }
+
+    // 4. Find the user associated with the token
+    const user = await User.findById(passwordResetTokenDoc.userId);
+    if (!user) {
+      // This case should ideally not happen if the token was valid and linked to a user
+      return res.status(404).json({ message: "User not found for this token." });
+    }
+
+    // 5. Update the user's password
+    // The User model should have a pre-save hook to hash the password
+    user.password = newPassword;
+    await user.save();
+
+    // 6. Delete the used password reset token
+    await PasswordResetToken.deleteOne({ _id: tokenId });
+
+    // 7. Optionally, log the user out of other sessions if desired (more complex)
+
+    res.status(200).json({ message: "Password has been successfully reset. You can now log in with your new password." });
+
+  } catch (error) {
+    console.error("Error in /reset-password route:", error);
+    if (error.name === 'CastError' && error.path === '_id') { // Handle invalid ObjectId format for tokenId
+        return res.status(400).json({ message: "Invalid token ID format." });
+    }
+    res.status(500).json({ message: "Internal server error during password reset." });
   }
 });
 

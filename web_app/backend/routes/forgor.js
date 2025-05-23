@@ -84,8 +84,25 @@ router.post("/", async (req, res) => {
       // TODO: Mail stuff
 
       // 4. Send the email with the reset link
-      // temporary test email
-      sendEmail(email, user.firstName, "Password Reset Request", `here is ya code ${user.firstName}: ${rawToken}`);
+      // Construct the reset link
+      const appURL = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
+      const resetLink = `${appURL}/reset-password?id=${newPasswordResetToken._id}&token=${rawToken}`;
+
+      const emailSubject = "Password Reset Request";
+      // Updated emailBody:
+      // - Removed redundant "Hello..." and "Thanks..." (handled by mail.ejs)
+      // - Made link text more descriptive ("Reset Your Password")
+      // - Added inline style to the link for better visibility
+      // - Included the raw link as a fallback
+      const emailBody = `
+        <p>You requested a password reset for your Japples account. Please click the link below to set a new password:</p>
+        <p><a href="${resetLink}" style="color: #3ca856; text-decoration: underline; font-weight: bold;">Reset Your Password</a></p>
+        <p>If the button above doesn\\'t work, you can copy and paste the following URL into your browser:</p>
+        <p>${resetLink}</p>
+        <p>This link is valid for 1 hour.</p>
+      `;
+
+      sendEmail(email, user.firstName || 'User', emailSubject, emailBody, undefined); // Pass undefined for the 5th html param as per mail.js
 
     } else {
       console.log("User not found:", email);

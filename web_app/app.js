@@ -262,6 +262,29 @@ app.get("/forgor", (req, res) => {
 
 });
 
+app.get("/reset-password", (req, res) => {
+  const { id, token } = req.query; // Get token and id from query parameters
+
+  if (!id || !token) {
+    // Optionally, redirect to an error page or the forgot password page
+    // For now, just sending a simple error or redirecting to forgor
+    return res.redirect('/forgor?error=invalidlink'); 
+  }
+
+  let settings = createSettings({
+    title: "Reset Password",
+    pageCSS: "/css/login.css", // Or a new CSS file if needed: /css/reset-password.css
+    pageJS: "/js/reset-password.js",
+    showNav: false,
+    showFooter: false,
+    mobileNavVisible: false,
+    tokenId: id, // Pass token and id to the EJS template
+    token: token
+  });
+  
+  res.render("reset-password", settings);
+});
+
 
 app.get("/diary", async (req, res) => {
   // Connect to MongoDB and fetch food list

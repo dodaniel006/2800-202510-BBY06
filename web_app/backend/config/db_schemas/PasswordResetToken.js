@@ -35,6 +35,14 @@ passwordResetTokenSchema.pre('save', async function(next) {
     next();
 });
 
+passwordResetTokenSchema.methods.verifyToken = async function(candidateToken) {
+  try {
+    return await bcrypt.compare(candidateToken, this.token);
+  } catch (error) {
+    throw error; // Or handle more gracefully
+  }
+};
+
 const PasswordResetToken = mongoose.model('PasswordResetToken', passwordResetTokenSchema);
 
 export default PasswordResetToken;
